@@ -1,0 +1,55 @@
+
+INFORMATION VITAL POUR SS02ROOM.EXE
+
+LIAISON DE LIEN:
+
+SS02ROOM.ASM 94REPV2.ASM 94STATV2.ASM
+
+============================================
+MODIFICATION DU CODE SOURCE:
+============================================
+Effacer ...
+
+LIBRAIRY SEGMENT 'LIBRAIRY' PUBLIC
+LIBRAIRY ENDS
+
+FONT SEGMENT 'FONT' PUBLIC
+FONT ENDS
+
+STATICS SEGMENT 'STATICS' PUBLIC
+STATICS ENDS
+
+SCREEN SEGMENT 'SCREEN' PUBLIC
+SCREEN ENDS
+
+
+============================================
+Changer ...
+
+
+                HLoadIms offset NameOfIms		  ; Charge en
+                                           		  ; memoire un
+                                                          ; fichier
+                                                          ; format .IMS
+
+pour
+
+                mov dx,offset NameOfIms
+                call LoadIms
+
+
+============================================
+
+Changer ...
+
+
+		INCLUDE \MASM61\LISTING\SSFSMAC.INC
+
+pour
+
+		INCLUDE \MASM61\LISTING\SSFSM95.INC
+
+============================================
+
+En cas de difficultés: 
+fusionner 94STATV2.ASM avec SS02ROOM.ASM.
