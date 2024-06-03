@@ -5,6 +5,9 @@
 #include <string>
 
 #include "imswrap.h"
+#include "shared/FrameSet.h"
+#include "shared/Frame.h"
+#include "shared/FileWrap.h"
 
 typedef struct
 {
@@ -40,18 +43,38 @@ const filedef_t filedefs[] = {
     {"oldvla.ims", "_leva7.scr", "***whoops!"},
 };
 
-int main(int argc, char *args[])
+void exportIms()
 {
     CImsWrap ims;
-    //  ims.readIMS("data/caves.ims");
-    // ims.readSCR("data/_lev21.scr");
+    CFileWrap file;
+    CFrameSet frameSet;
+    std::string tilesets[] = {
+        "jungle",
+        "ocean",
+        "caves",
+        "oldvla"};
 
-    /*
-        ims.readIMS("data/jungle.ims");
-        ims.readSCR("data/_lev01.scr");
-        ims.debug("jungle1.txt");
-        */
+    for (int i = 0; i < 4; ++i)
+    {
+        std::string oblFile = "out/" + tilesets[i] + ".obl";
+        std::string imsFile = "data/" + tilesets[i] + ".ims";
+        std::string mapFile = "out/" + tilesets[i] + ".map";
+        if (file.open(oblFile.c_str(), "wb"))
+        {
+            ims.readIMS(imsFile.c_str());
+            FILE *tfileMap = fopen(mapFile.c_str(), "wb");
+            ims.toFrameSet(frameSet, tfileMap);
+            frameSet.write(file);
+            file.close();
+            fclose(tfileMap);
+            printf("%s -> %d images\n", oblFile.c_str(), frameSet.getSize());
+        }
+    }
+}
 
+void debugScr()
+{
+    CImsWrap ims;
     size_t count = sizeof(filedefs) / sizeof(filedef_t);
     for (size_t i = 0; i < count; ++i)
     {
@@ -60,4 +83,72 @@ int main(int argc, char *args[])
         ims.readSCR(scrName.c_str());
         printf("%s %s %s\n", def.scrFile, def.imsFile, ims.stoName());
     }
+}
+
+bool compositeLevel(std::string imsFile, std::string scrFile, std::string outFile)
+{
+    CImsWrap ims;
+    if (!ims.readIMS(imsFile.c_str()))
+    {
+        printf("readims %s failed\n", imsFile.c_str());
+        return true;
+    }
+    if (!ims.readSCR(scrFile.c_str()))
+    {
+        printf("readscr %s failed\n", scrFile.c_str());
+        return true;
+    }
+    CFrameSet frameSet;
+    // CFrame screen = CFrame(320, 240);
+    CFrame screen = CFrame(1024, 1024);
+    ims.toFrameSet(frameSet, nullptr);
+    ims.drawScreen(screen, frameSet);
+    CFileWrap file;
+    if (file.open(outFile.c_str(), "wb"))
+    {
+        uint8_t *png = nullptr;
+        int size;
+        screen.toPng(png, size);
+        file.write(png, size);
+        file.close();
+        delete[] png;
+    }
+
+    return true;
+}
+
+void compositeAll()
+{
+    size_t count = sizeof(filedefs) / sizeof(filedef_t);
+    for (size_t i = 0; i < count; ++i)
+    {
+        const filedef_t &def = filedefs[i];
+        const std::string scrFile = std::string("data/") + def.scrFile;
+        const std::string imsFile = std::string("data/") + def.imsFile;
+        char pngName[16];
+        strcpy(pngName, def.scrFile);
+        char *p = strstr(pngName, ".");
+        if (p)
+        {
+            strcpy(p, ".png");
+        }
+        else
+        {
+            strcat(pngName, ".png");
+        }
+        const std::string outFile = std::string("out/") + pngName;
+        compositeLevel(imsFile.c_str(), scrFile.c_str(), outFile.c_str());
+    }
+}
+
+int main(int argc, char *args[])
+{
+    /*
+        ims.readIMS("data/jungle.ims");
+        ims.readSCR("data/_lev01.scr");
+        ims.debug("jungle1.txt");
+        */
+
+    // exportIms();
+    compositeAll();
 }

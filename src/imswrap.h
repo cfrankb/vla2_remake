@@ -3,6 +3,10 @@
 
 #include <cstdint>
 #include <string>
+
+class CFrameSet;
+class CFrame;
+
 class CImsWrap
 {
 public:
@@ -12,7 +16,8 @@ public:
     bool readIMS(const char *imsFilename);
     bool readSCR(const char *scrFilename);
     bool readSTO(const char *stoFilename);
-
+    void toFrameSet(CFrameSet &frameSet, FILE *mapFile);
+    void drawScreen(CFrame &screen, CFrameSet &frameSet);
     void debug(const char *filename);
     const char *stoName();
 
@@ -25,7 +30,7 @@ protected:
     typedef struct
     {
         uint8_t task;
-        uint8_t objclass;
+        uint8_t objtype;
         uint16_t imageID;
     } stoEntry_t;
 
@@ -46,7 +51,7 @@ protected:
     typedef struct
     {
         uint8_t attr;
-        uint8_t stat; // objClass
+        uint8_t stat; // objType
         uint8_t u1;
         uint8_t u2;
         uint16_t imageId;
@@ -73,7 +78,7 @@ protected:
     void freeIms();
     void freeScr();
     void freeSto();
-    inline const char *getClassName(int classId);
+    inline const char *getTypeName(int typeId);
     inline const char *getImageName(int imageID);
     inline const rgba_t &paletteColor(int i);
 
@@ -89,6 +94,7 @@ protected:
     scriptEntry_t *m_script;
     stoEntry_t *m_stoData;
     uint8_t *m_imsTable;
+    const int fntBlockSize = 8;
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include <string>
 #include "imswrap.h"
 #include "defs.h"
+#include "shared/FrameSet.h"
+#include "shared/Frame.h"
 
 #define _C(cl)  \
     {           \
@@ -13,9 +15,9 @@
 
 typedef struct
 {
-    int classId;
-    const char *className;
-} classDef_t;
+    int typeId;
+    const char *typeName;
+} typeDef_t;
 
 CImsWrap::CImsWrap()
 {
@@ -163,7 +165,7 @@ bool CImsWrap::readSTO(const char *stoFilename)
             stoEntry_t &entry = m_stoData[i];
             printf("%d > task:0x%x class:0x%.2x (%s) imageId:%d\n",
                    i, entry.task,
-                   entry.objclass, getClassName(entry.objclass),
+                   entry.objtype, getTypeName(entry.objtype),
                    entry.imageID);
         }
         return true;
@@ -209,9 +211,9 @@ const char *CImsWrap::getImageName(int imageID)
     return imageID < m_imgCount ? m_imsLookup[imageID].name.c_str() : "UNKNOWN";
 }
 
-const char *CImsWrap::getClassName(int classId)
+const char *CImsWrap::getTypeName(int typeId)
 {
-    const static classDef_t classDefs[] = {
+    const static typeDef_t typeDefs[] = {
         _C(TYPE_BLANK),
         _C(TYPE_PLAYER),
         _C(TYPE_OXYGEN),
@@ -244,12 +246,12 @@ const char *CImsWrap::getClassName(int classId)
         _C(TYPE_LAVA),
     };
 
-    const size_t maxClasses = sizeof(classDefs) / sizeof(classDef_t);
-    for (size_t i = 0; i < maxClasses; ++i)
+    const size_t maxTypes = sizeof(typeDefs) / sizeof(typeDef_t);
+    for (size_t i = 0; i < maxTypes; ++i)
     {
-        if (classDefs[i].classId == classId)
+        if (typeDefs[i].typeId == typeId)
         {
-            return classDefs[i].className;
+            return typeDefs[i].typeName;
         }
     }
     return "TYPE_UNKNOWN";
@@ -345,9 +347,87 @@ void CImsWrap::debug(const char *filename)
         for (int i = 0; i < m_entryCount; ++i)
         {
             scriptEntry_t &entry = m_script[i];
-            fprintf(tfile, "#%d attr %x stat %.2x (%s)\n", i, entry.attr, entry.stat, getClassName(entry.stat));
+            fprintf(tfile, "#%d attr %x stat %.2x (%s)\n", i, entry.attr, entry.stat, getTypeName(entry.stat));
             fprintf(tfile, "    u1 %x u2 %x imageId %d (%s)\n", entry.u1, entry.u2, entry.imageId, getImageName(entry.imageId));
             fprintf(tfile, "    x:%d y:%d \n\n", entry.x, entry.y);
+        }
+    }
+}
+
+void CImsWrap::toFrameSet(CFrameSet &frameSet, FILE *mapFile)
+{
+    frameSet.forget();
+    for (int i = 0; i < m_imgCount; ++i)
+    {
+        auto lookup = m_imsLookup[i];
+        if (lookup.name[0] == '+')
+        {
+            break;
+        }
+        if (mapFile)
+        {
+            fprintf(mapFile, "%.4x %s\n", i, lookup.name.c_str());
+        }
+
+        auto entry = lookup.ptrEntry;
+        uint16_t *fntData = &entry->fntData;
+        CFrame *frame = new CFrame(fntBlockSize * entry->len, fntBlockSize * entry->hei);
+        for (int y = 0; y < entry->hei; ++y)
+        {
+            for (int x = 0; x < entry->len; ++x)
+            {
+                auto fntBlock = *fntData;
+                auto tile = m_tileData[fntBlock];
+                auto pixels = tile.pixels;
+                for (int yy = 0; yy < fntBlockSize; ++yy)
+                {
+                    for (int xx = 0; xx < fntBlockSize; ++xx)
+                    {
+                        auto &rgba = frame->at(x * fntBlockSize + xx, y * fntBlockSize + yy);
+                        const rgba_t &color = paletteColor(*pixels++);
+                        rgba = *(reinterpret_cast<const uint32_t *>(&color));
+                    }
+                }
+                ++fntData;
+            }
+        }
+        frameSet.add(frame);
+    }
+}
+
+void CImsWrap::drawScreen(CFrame &screen, CFrameSet &frameSet)
+{
+    screen.fill(0xff000000);
+    for (int i = 0; i < m_entryCount; ++i)
+    {
+        auto entry = m_script[i];
+        int x = entry.x * fntBlockSize;
+        int y = entry.y * fntBlockSize;
+        if (entry.imageId >= frameSet.getSize())
+        {
+            printf("imageID out of bound: %d [%s]\n", entry.imageId, getTypeName(entry.stat));
+            continue;
+        }
+        CFrame *frame = frameSet[entry.imageId];
+        for (int yy = 0; yy < frame->hei(); ++yy)
+        {
+            if (yy + y >= screen.hei())
+            {
+                break;
+            }
+            uint32_t *rgba = &screen.at(x, y + yy);
+            for (int xx = 0; xx < frame->len(); ++xx)
+            {
+                if (xx + x >= screen.len())
+                {
+                    break;
+                }
+                const uint32_t &pixel = frame->at(xx, yy);
+                if (pixel)
+                {
+                    rgba[xx] = pixel;
+                }
+            }
         }
     }
 }
