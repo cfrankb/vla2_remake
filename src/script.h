@@ -1,0 +1,56 @@
+#ifndef __SCRIPT_H
+#define __SCRIPT_H
+#include <string>
+#include <cstdint>
+#include <cstdio>
+
+typedef struct
+{
+    uint8_t attr;
+    uint8_t stat; // objType
+    uint8_t u1;
+    uint8_t u2;
+    uint16_t imageId;
+    uint8_t x;
+    uint8_t y;
+} scriptEntry_t;
+
+class CScript
+{
+public:
+    CScript();
+    CScript(scriptEntry_t *script, uint32_t size);
+    ~CScript();
+
+    void forget();
+    void copy(scriptEntry_t *script, int count);
+    bool write(FILE *tfile);
+    bool read(FILE *sfile);
+    std::string name();
+    void setName(const std::string &name);
+    std::string tileset();
+    void setTileSet(const std::string &tileset);
+    int getSize();
+    inline scriptEntry_t &operator[](int i);
+    static inline uint16_t toKey(const uint8_t x, const uint8_t y);
+    static inline bool isBackgroundType(uint8_t type);
+    int add(const scriptEntry_t &entry);
+    int insertAt(int i, const scriptEntry_t &entry);
+    int removeAt(int i);
+    inline scriptEntry_t &at(int i);
+
+private:
+    std::string m_name;
+    std::string m_tileset;
+    scriptEntry_t *m_script;
+    uint32_t m_size;
+    uint32_t m_max;
+    enum
+    {
+        TILESET_NAME_MAX = 8,
+        SCRIPTNAME_MAX = 255,
+        GROWBY = 16
+    };
+};
+
+#endif

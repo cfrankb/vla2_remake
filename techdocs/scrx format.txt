@@ -1,0 +1,28 @@
+file header
+=====================================================================
+4 signature      "SCRX"
+2 version         
+2 script count
+4 index offset
+
+
+scripts 0...n 
+=====================================================================
+4 script size 
+8 tilesetname
+
+0..n
+    8 script entry data
+    ...
+
+1 name lenght
+n script name (padded to an offset multiple of 4)
+
+
+
+index
+=====================================================================
+0...n
+    4 script index
+    ...
+

@@ -62,7 +62,6 @@ void CImsWrap::createImsIndex(uint8_t *imsTable, imsEntry_t **imsIndex)
     imsEntry_t *entry = reinterpret_cast<imsEntry_t *>(imsTable);
     do
     {
-        //   printf("%d len=%d hei=%d\n", i, entry->len, entry->hei);
         imsIndex[i++] = entry;
         entry = reinterpret_cast<imsEntry_t *>(imsTable + entry->offsetNext);
     } while (entry->offsetNext);
@@ -90,7 +89,6 @@ void CImsWrap::createImsIndex(uint8_t *imsTable, char *imsNames, imsLookup_t *im
             *next = 0;
             ++next;
         }
-        //        printf("%d len=%d hei=%d %s\n", i, imsIndex[i].ptrEntry->len, imsIndex[i].ptrEntry->hei, s);
         imsIndex[i++].name = s;
         s = next;
     }
@@ -275,11 +273,10 @@ bool CImsWrap::readSCR(const char *scrFilename)
         fclose(sfileSCR);
         return true;
     }
-
     return false;
 }
 
-const CImsWrap::rgba_t &CImsWrap::paletteColor(int i)
+const CImsWrap::rgba_t &CImsWrap::getPaletteColor(int i)
 {
     // original color palette
     static const uint32_t colors[] = {
@@ -384,7 +381,7 @@ void CImsWrap::toFrameSet(CFrameSet &frameSet, FILE *mapFile)
                     for (int xx = 0; xx < fntBlockSize; ++xx)
                     {
                         auto &rgba = frame->at(x * fntBlockSize + xx, y * fntBlockSize + yy);
-                        const rgba_t &color = paletteColor(*pixels++);
+                        const rgba_t &color = getPaletteColor(*pixels++);
                         rgba = *(reinterpret_cast<const uint32_t *>(&color));
                     }
                 }

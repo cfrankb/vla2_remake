@@ -8,6 +8,8 @@
 #include "shared/FrameSet.h"
 #include "shared/Frame.h"
 #include "shared/FileWrap.h"
+#include "script.h"
+#include "scriptarch.h"
 
 typedef struct
 {
@@ -113,7 +115,6 @@ bool compositeLevel(std::string imsFile, std::string scrFile, std::string outFil
         file.close();
         delete[] png;
     }
-
     return true;
 }
 
@@ -141,6 +142,79 @@ void compositeAll()
     }
 }
 
+bool createScriptArch()
+{
+    CScriptArch arch;
+    CImsWrap ims;
+    size_t count = sizeof(filedefs) / sizeof(filedef_t);
+    for (size_t i = 0; i < count; ++i)
+    {
+        const filedef_t &def = filedefs[i];
+        const std::string scrFile = std::string("data/") + def.scrFile;
+        printf("file:%s\n", scrFile.c_str());
+
+        FILE *sfileSCR = fopen(scrFile.c_str(), "rb");
+        if (sfileSCR)
+        {
+            uint16_t dataLenght;
+            fread(&dataLenght, 2, 1, sfileSCR);
+            fseek(sfileSCR, 16, SEEK_CUR);
+            auto entryCount = dataLenght / sizeof(scriptEntry_t);
+            scriptEntry_t *scriptData = new scriptEntry_t[entryCount];
+            fread(scriptData, dataLenght, 1, sfileSCR);
+            fclose(sfileSCR);
+            CScript *script = new CScript(scriptData, entryCount);
+            std::string tileset = def.imsFile;
+            auto j = tileset.find(".");
+            if (j != std::string::npos)
+            {
+                //  printf("j=%d\n", j);
+                tileset.resize(j);
+            }
+            tileset.resize(8);
+            script->setName(def.name);
+            script->setTileSet(tileset); // def.imsFile);
+            arch.add(script);
+        }
+        else
+        {
+            printf("readscr %s failed\n", scrFile.c_str());
+            return false;
+        }
+    }
+
+    const char *archfile = "out/levels.scrx";
+    printf("writing archfile: %s\n", archfile);
+    if (!arch.write(archfile))
+    {
+        printf("failed to create: %s\n", archfile);
+        return false;
+    }
+    return true;
+}
+
+bool testArch()
+{
+    CScriptArch arch;
+    const char *archfileS = "out/levels.scrx";
+    const char *archfileT = "out/levels1.scrx";
+    printf("reading %s\n", archfileS);
+    if (!arch.read(archfileS))
+    {
+        printf("failed to read: %s\n", archfileS);
+        return false;
+    }
+
+    printf("writing archfile: %s\n", archfileT);
+    if (!arch.write(archfileT))
+    {
+        printf("failed to create: %s\n", archfileT);
+        return false;
+    }
+
+    return true;
+}
+
 int main(int argc, char *args[])
 {
     /*
@@ -150,5 +224,7 @@ int main(int argc, char *args[])
         */
 
     // exportIms();
-    compositeAll();
+    // compositeAll();
+    createScriptArch();
+    testArch();
 }

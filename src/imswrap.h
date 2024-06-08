@@ -80,7 +80,7 @@ protected:
     void freeSto();
     inline const char *getTypeName(int typeId);
     inline const char *getImageName(int imageID);
-    inline const rgba_t &paletteColor(int i);
+    inline const rgba_t &getPaletteColor(int i);
 
     std::string m_stoName;
     std::string m_imsName;
