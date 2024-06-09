@@ -1,0 +1,1896 @@
+tiles: 885
+imsLenght: 5002
+imsCount: 299
+0 len=2 hei=2 _ LES VLAMITS II (C) 1995 FRANCOIS BLANCHETTE.
+1 len=1 hei=1 Champignon Rouge
+2 len=1 hei=1 Champignon Vert
+3 len=1 hei=1 Champignon Bleu
+4 len=1 hei=1 Champignon Mauve
+5 len=1 hei=1 SKULL
+6 len=1 hei=1 DIAMANT
+7 len=1 hei=2 FLOWER
+8 len=2 hei=1 Champignon II
+9 len=4 hei=3 ROCKP1
+10 len=4 hei=2 ROCKP2
+11 len=2 hei=2 ROCKP3
+12 len=6 hei=2 ROCKP4
+13 len=2 hei=2 RCKTILE01
+14 len=3 hei=2 RCKTILE02
+15 len=2 hei=2 RCKTILE03
+16 len=2 hei=2 RCKTILE04
+17 len=4 hei=3 RCKTILE06
+18 len=2 hei=2 DEADPLANT1
+19 len=2 hei=2 DEADPLANT2
+20 len=6 hei=1 LAVA1
+21 len=6 hei=2 LAVA2
+22 len=2 hei=2 LADDER 02
+23 len=1 hei=1 BONE1
+24 len=1 hei=1 BONE2
+25 len=2 hei=2 MOSA1
+26 len=3 hei=3 MOSA2
+27 len=4 hei=4 MOSA3
+28 len=1 hei=1 MOUSSE
+29 len=3 hei=1 GAZON#1
+30 len=2 hei=1 GAZON#2
+31 len=1 hei=1 GAZON#3
+32 len=1 hei=1 GAZON#4
+33 len=1 hei=1 BONE3
+34 len=1 hei=1 BONE3
+35 len=1 hei=4 FIL D'ARAIGNEE
+36 len=15 hei=11 TOILE
+37 len=10 hei=4 CAGE
+38 len=1 hei=1 DEADLY MUSHROOM
+39 len=5 hei=4 MARMITTE CHAUDE
+40 len=2 hei=2 \CANIBAL UP1
+41 len=2 hei=2 CANIBAL UP2
+42 len=2 hei=2 CANIBAL UP3
+43 len=2 hei=2 CANIBAL UP1
+44 len=2 hei=2 CANIBAL DN1
+45 len=2 hei=2 CANIBAL DN2
+46 len=2 hei=2 CANIBAL DN3
+47 len=2 hei=2 CANIBAL DN1
+48 len=2 hei=2 CANIBAL LF1
+49 len=2 hei=2 CANIBAL LF2
+50 len=2 hei=2 CANIBAL LF3
+51 len=2 hei=2 CANIBAL LF1
+52 len=2 hei=2 CANIBAL RG1
+53 len=2 hei=2 CANIBAL RG2
+54 len=2 hei=2 CANIBAL RG3
+55 len=2 hei=2 CANIBAL RG1
+56 len=1 hei=1 !STOP
+57 len=1 hei=1 #Bloquer
+58 len=9 hei=7 ±INMANGEA-LF1
+59 len=9 hei=7 INMANGEA-LF2
+60 len=9 hei=7 INMANGEA-RG1
+61 len=9 hei=7 INMANGEA-RG2
+62 len=1 hei=1 @SLUGER DN1
+63 len=1 hei=1 SLUGER DN2
+64 len=1 hei=1 @SLUGER DN1
+65 len=1 hei=1 SLUGER DN2
+66 len=1 hei=1 SLUGER LF1
+67 len=1 hei=1 SLUGER LF2
+68 len=1 hei=1 SLUGER RG1
+69 len=1 hei=1 SLUGER RG2
+70 len=1 hei=1 +10
+71 len=1 hei=1 15
+72 len=1 hei=1 25
+73 len=1 hei=1 50
+74 len=2 hei=1 100
+75 len=2 hei=1 200
+76 len=2 hei=1 400
+77 len=2 hei=1 500
+78 len=2 hei=1 1000
+79 len=2 hei=2 *Annie A
+80 len=2 hei=2  B
+81 len=2 hei=2  C
+82 len=2 hei=2  D
+83 len=2 hei=2  E
+84 len=2 hei=2  F
+85 len=2 hei=2  G
+86 len=2 hei=2  H
+87 len=2 hei=2  I
+88 len=2 hei=2  J
+89 len=2 hei=2  K
+90 len=2 hei=2  L
+91 len=2 hei=2  M
+92 len=2 hei=2  N
+93 len=2 hei=2  O
+94 len=2 hei=2  P
+95 len=2 hei=2  Q
+96 len=2 hei=2  R
+97 len=2 hei=2  S
+98 len=2 hei=2  T
+99 len=2 hei=2 Corrine Desfosses A
+100 len=2 hei=2  B
+101 len=2 hei=2  C
+102 len=2 hei=2  D
+103 len=2 hei=2  E
+104 len=2 hei=2  F
+105 len=2 hei=2  G
+106 len=2 hei=2  H
+107 len=2 hei=2  I
+108 len=2 hei=2  J
+109 len=2 hei=2  K
+110 len=2 hei=2  L
+111 len=2 hei=2  M
+112 len=2 hei=2  N
+113 len=2 hei=2  O
+114 len=2 hei=2  P
+115 len=2 hei=2  Q
+116 len=2 hei=2  R
+117 len=2 hei=2  S
+118 len=2 hei=2  T
+119 len=2 hei=2 Julie Jean A
+120 len=2 hei=2  B
+121 len=2 hei=2  C
+122 len=2 hei=2  D
+123 len=2 hei=2  E
+124 len=2 hei=2  F
+125 len=2 hei=2  G
+126 len=2 hei=2  H
+127 len=2 hei=2  I
+128 len=2 hei=2  J
+129 len=2 hei=2  K
+130 len=2 hei=2  L
+131 len=2 hei=2  M
+132 len=2 hei=2  N
+133 len=2 hei=2  O
+134 len=2 hei=2  P
+135 len=2 hei=2  Q
+136 len=2 hei=2  R
+137 len=2 hei=2  S
+138 len=2 hei=2  T
+139 len=2 hei=2 Melanie Leclerc A
+140 len=2 hei=2  B
+141 len=2 hei=2  C
+142 len=2 hei=2  D
+143 len=2 hei=2  E
+144 len=2 hei=2  F
+145 len=2 hei=2  G
+146 len=2 hei=2  H
+147 len=2 hei=2  I
+148 len=2 hei=2  J
+149 len=2 hei=2  K
+150 len=2 hei=2  L
+151 len=2 hei=2  M
+152 len=2 hei=2  N
+153 len=2 hei=2  O
+154 len=2 hei=2  P
+155 len=2 hei=2  Q
+156 len=2 hei=2  R
+157 len=2 hei=2  S
+158 len=2 hei=2  T
+159 len=2 hei=2 Melanie Drien A
+160 len=2 hei=2  B
+161 len=2 hei=2  C
+162 len=2 hei=2  D
+163 len=2 hei=2  E
+164 len=2 hei=2  F
+165 len=2 hei=2  G
+166 len=2 hei=2  H
+167 len=2 hei=2  I
+168 len=2 hei=2  J
+169 len=2 hei=2  K
+170 len=2 hei=2  L
+171 len=2 hei=2  M
+172 len=2 hei=2  N
+173 len=2 hei=2  O
+174 len=2 hei=2  P
+175 len=2 hei=2  Q
+176 len=2 hei=2  R
+177 len=2 hei=2  S
+178 len=2 hei=2  T
+179 len=2 hei=2 Nancy Priscella A
+180 len=2 hei=2  B
+181 len=2 hei=2  C
+182 len=2 hei=2  D
+183 len=2 hei=2  E
+184 len=2 hei=2  F
+185 len=2 hei=2  G
+186 len=2 hei=2  H
+187 len=2 hei=2  I
+188 len=2 hei=2  J
+189 len=2 hei=2  K
+190 len=2 hei=2  L
+191 len=2 hei=2  M
+192 len=2 hei=2  N
+193 len=2 hei=2  O
+194 len=2 hei=2  P
+195 len=2 hei=2  Q
+196 len=2 hei=2  R
+197 len=2 hei=2  S
+198 len=2 hei=2  T
+199 len=2 hei=2 Sonia Lalonde A
+200 len=2 hei=2  B
+201 len=2 hei=2  C
+202 len=2 hei=2  D
+203 len=2 hei=2  E
+204 len=2 hei=2  F
+205 len=2 hei=2  G
+206 len=2 hei=2  H
+207 len=2 hei=2  I
+208 len=2 hei=2  J
+209 len=2 hei=2  K
+210 len=2 hei=2  L
+211 len=2 hei=2  M
+212 len=2 hei=2  N
+213 len=2 hei=2  O
+214 len=2 hei=2  P
+215 len=2 hei=2  Q
+216 len=2 hei=2  R
+217 len=2 hei=2  S
+218 len=2 hei=2  T
+219 len=2 hei=2 Melanie Sauveur A
+220 len=2 hei=2  B
+221 len=2 hei=2  C
+222 len=2 hei=2  D
+223 len=2 hei=2  E
+224 len=2 hei=2  F
+225 len=2 hei=2  G
+226 len=2 hei=2  H
+227 len=2 hei=2  I
+228 len=2 hei=2  J
+229 len=2 hei=2  K
+230 len=2 hei=2  L
+231 len=2 hei=2  M
+232 len=2 hei=2  N
+233 len=2 hei=2  O
+234 len=2 hei=2  P
+235 len=2 hei=2  Q
+236 len=2 hei=2  R
+237 len=2 hei=2  S
+238 len=2 hei=2  T
+239 len=2 hei=2 Nathalie Veillette 
+240 len=2 hei=2 Nv12
+241 len=2 hei=2 Nv13
+242 len=2 hei=2 Nv11b
+243 len=2 hei=2 Nv12b
+244 len=2 hei=2 Nv21
+245 len=2 hei=2 Nv22
+246 len=2 hei=2 Nv23
+247 len=2 hei=2 Nv21a
+248 len=2 hei=2 Nv22b
+249 len=2 hei=2 Nv31
+250 len=2 hei=2 Nv32
+251 len=2 hei=2 Nv33
+252 len=2 hei=2 Nv31b
+253 len=2 hei=2 Nv32b
+254 len=2 hei=2 Nv41
+255 len=2 hei=2 Nv42
+256 len=2 hei=2 Nv43
+257 len=2 hei=2 Nv41b
+258 len=2 hei=2 Nv42b
+259 len=2 hei=2 Melanie Leclerc II 
+260 len=2 hei=2 Ml12
+261 len=2 hei=2 Ml13
+262 len=2 hei=2 Ml11b
+263 len=2 hei=2 Ml12b
+264 len=2 hei=2 Ml21
+265 len=2 hei=2 Ml22
+266 len=2 hei=2 Ml23
+267 len=2 hei=2 Ml21a
+268 len=2 hei=2 Ml22b
+269 len=2 hei=2 Ml31
+270 len=2 hei=2 Ml32
+271 len=2 hei=2 Ml33
+272 len=2 hei=2 Ml31b
+273 len=2 hei=2 Ml32b
+274 len=2 hei=2 Ml41
+275 len=2 hei=2 Ml42
+276 len=2 hei=2 Ml43
+277 len=2 hei=2 Ml41b
+278 len=2 hei=2 Ml42b
+279 len=2 hei=2 Jymmy (Par Helene Blanchette)
+280 len=2 hei=2 Jymy12
+281 len=2 hei=2 Jymy13
+282 len=2 hei=2 Jymy11b
+283 len=2 hei=2 Jymy12b
+284 len=2 hei=2 Jymy12b
+285 len=2 hei=2 Jymy12
+286 len=2 hei=2 Jymy12
+287 len=2 hei=2 Jymy12
+288 len=2 hei=2 Jymy12
+289 len=2 hei=2 Jymy12
+290 len=2 hei=2 Jymy12
+291 len=2 hei=2 Jymy12
+292 len=2 hei=2 Jymy12
+293 len=2 hei=2 Jymy12
+294 len=2 hei=2 Jymy12
+295 len=2 hei=2 Jymy12
+296 len=2 hei=2 Jymy12
+297 len=2 hei=2 Jymy12
+298 len=2 hei=2 Jymy12
+dataLenght:2544
+stoName:caves.STO
+m_entryCount: 318
+m_entryCount * size: 2544
+#0 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:5 y:5 
+
+#1 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:4 y:7 
+
+#2 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:4 y:9 
+
+#3 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:5 y:10 
+
+#4 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:2 y:5 
+
+#5 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:0 y:3 
+
+#6 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:15 y:0 
+
+#7 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:16 y:2 
+
+#8 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:18 y:1 
+
+#9 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:19 y:2 
+
+#10 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:0 y:1 
+
+#11 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:0 y:0 
+
+#12 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:3 y:0 
+
+#13 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:3 y:3 
+
+#14 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:3 y:2 
+
+#15 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:6 y:3 
+
+#16 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:6 y:1 
+
+#17 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:6 y:0 
+
+#18 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:9 y:0 
+
+#19 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:12 y:2 
+
+#20 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:12 y:0 
+
+#21 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:9 y:2 
+
+#22 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:17 y:4 
+
+#23 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:18 y:4 
+
+#24 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:17 y:6 
+
+#25 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:16 y:7 
+
+#26 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:18 y:0 
+
+#27 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:21 y:0 
+
+#28 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:24 y:0 
+
+#29 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:22 y:1 
+
+#30 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:20 y:2 
+
+#31 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:27 y:0 
+
+#32 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:30 y:0 
+
+#33 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:27 y:2 
+
+#34 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:29 y:3 
+
+#35 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:31 y:4 
+
+#36 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:33 y:0 
+
+#37 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:36 y:1 
+
+#38 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:36 y:0 
+
+#39 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:39 y:0 
+
+#40 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:42 y:0 
+
+#41 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:42 y:1 
+
+#42 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:45 y:2 
+
+#43 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:45 y:0 
+
+#44 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:48 y:0 
+
+#45 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:48 y:2 
+
+#46 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:0 y:18 
+
+#47 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:4 y:18 
+
+#48 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:8 y:19 
+
+#49 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:12 y:19 
+
+#50 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:16 y:19 
+
+#51 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:11 y:18 
+
+#52 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:13 y:18 
+
+#53 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:15 y:18 
+
+#54 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:17 y:18 
+
+#55 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:18 y:22 
+
+#56 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:16 y:22 
+
+#57 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:14 y:22 
+
+#58 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:12 y:22 
+
+#59 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:10 y:22 
+
+#60 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:8 y:22 
+
+#61 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:6 y:21 
+
+#62 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:4 y:21 
+
+#63 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:2 y:21 
+
+#64 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:0 y:21 
+
+#65 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:0 y:16 
+
+#66 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:3 y:17 
+
+#67 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:7 y:18 
+
+#68 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:0 y:23 
+
+#69 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:2 y:22 
+
+#70 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:5 y:22 
+
+#71 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:8 y:23 
+
+#72 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:11 y:23 
+
+#73 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:13 y:22 
+
+#74 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 16 (RCKTILE04)
+  x:18 y:18 
+
+#75 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 16 (RCKTILE04)
+  x:19 y:19 
+
+#76 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 16 (RCKTILE04)
+  x:20 y:20 
+
+#77 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 16 (RCKTILE04)
+  x:21 y:21 
+
+#78 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 16 (RCKTILE04)
+  x:22 y:22 
+
+#79 attr 0 stat c2 (CLASS_VAMPIREPLANT)
+  u1 0 u2 0
+  imageId 18 (DEADPLANT1)
+  x:10 y:17 
+
+#80 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:23 y:23 
+
+#81 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:25 y:24 
+
+#82 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:27 y:23 
+
+#83 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:29 y:24 
+
+#84 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:31 y:23 
+
+#85 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:33 y:24 
+
+#86 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:27 y:25 
+
+#87 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:31 y:25 
+
+#88 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:29 y:26 
+
+#89 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:33 y:26 
+
+#90 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:35 y:25 
+
+#91 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:35 y:23 
+
+#92 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:37 y:25 
+
+#93 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:37 y:24 
+
+#94 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:37 y:26 
+
+#95 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:39 y:25 
+
+#96 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:39 y:23 
+
+#97 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:41 y:24 
+
+#98 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:41 y:26 
+
+#99 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:43 y:25 
+
+#100 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:43 y:23 
+
+#101 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:45 y:24 
+
+#102 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:45 y:26 
+
+#103 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:47 y:25 
+
+#104 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:47 y:23 
+
+#105 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 31 (GAZON#3)
+  x:46 y:23 
+
+#106 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 32 (GAZON#4)
+  x:45 y:23 
+
+#107 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 32 (GAZON#4)
+  x:25 y:23 
+
+#108 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 32 (GAZON#4)
+  x:30 y:23 
+
+#109 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 32 (GAZON#4)
+  x:33 y:23 
+
+#110 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 32 (GAZON#4)
+  x:38 y:23 
+
+#111 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 32 (GAZON#4)
+  x:41 y:23 
+
+#112 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:33 y:23 
+
+#113 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:42 y:23 
+
+#114 attr 0 stat c5 (CLASS_CANNIBAL)
+  u1 0 u2 0
+  imageId 44 (CANIBAL DN1)
+  x:29 y:22 
+
+#115 attr 0 stat c5 (CLASS_CANNIBAL)
+  u1 0 u2 0
+  imageId 44 (CANIBAL DN1)
+  x:33 y:22 
+
+#116 attr 0 stat c5 (CLASS_CANNIBAL)
+  u1 0 u2 0
+  imageId 44 (CANIBAL DN1)
+  x:37 y:22 
+
+#117 attr 0 stat c5 (CLASS_CANNIBAL)
+  u1 0 u2 0
+  imageId 44 (CANIBAL DN1)
+  x:41 y:22 
+
+#118 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:2 y:15 
+
+#119 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:8 y:17 
+
+#120 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:14 y:17 
+
+#121 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:18 y:17 
+
+#122 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:46 y:22 
+
+#123 attr 0 stat 11 (CLASS_FLOWER)
+  u1 0 u2 0
+  imageId 7 (FLOWER)
+  x:36 y:21 
+
+#124 attr 0 stat 01 (CLASS_PLAYER)
+  u1 0 u2 0
+  imageId 72 (25)
+  x:25 y:22 
+
+#125 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:19 y:33 
+
+#126 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:23 y:18 
+
+#127 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:28 y:17 
+
+#128 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:59 y:17 
+
+#129 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:49 y:24 
+
+#130 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:49 y:25 
+
+#131 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:52 y:23 
+
+#132 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:54 y:22 
+
+#133 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:56 y:22 
+
+#134 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:58 y:22 
+
+#135 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:59 y:20 
+
+#136 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:31 y:33 
+
+#137 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:25 y:33 
+
+#138 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:13 y:33 
+
+#139 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:7 y:33 
+
+#140 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:1 y:33 
+
+#141 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:0 y:33 
+
+#142 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:37 y:33 
+
+#143 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:43 y:33 
+
+#144 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 12 (ROCKP4)
+  x:49 y:33 
+
+#145 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:50 y:31 
+
+#146 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:45 y:31 
+
+#147 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:40 y:31 
+
+#148 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:35 y:31 
+
+#149 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:30 y:31 
+
+#150 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:25 y:31 
+
+#151 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:20 y:31 
+
+#152 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:15 y:31 
+
+#153 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:10 y:31 
+
+#154 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:5 y:31 
+
+#155 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:0 y:31 
+
+#156 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:0 y:29 
+
+#157 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:5 y:29 
+
+#158 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:10 y:29 
+
+#159 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:15 y:29 
+
+#160 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:20 y:29 
+
+#161 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:25 y:29 
+
+#162 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:30 y:29 
+
+#163 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:35 y:29 
+
+#164 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:41 y:29 
+
+#165 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:46 y:29 
+
+#166 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 21 (LAVA2)
+  x:50 y:29 
+
+#167 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:50 y:28 
+
+#168 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:44 y:28 
+
+#169 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:38 y:28 
+
+#170 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:32 y:28 
+
+#171 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:26 y:28 
+
+#172 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:20 y:28 
+
+#173 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:14 y:28 
+
+#174 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:8 y:28 
+
+#175 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:2 y:28 
+
+#176 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:0 y:28 
+
+#177 attr 0 stat ff (CLASS_LAVA)
+  u1 0 u2 0
+  imageId 20 (LAVA1)
+  x:9 y:28 
+
+#178 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 25 (MOSA1)
+  x:49 y:22 
+
+#179 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 26 (MOSA2)
+  x:0 y:13 
+
+#180 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:13 y:17 
+
+#181 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:26 y:23 
+
+#182 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:40 y:22 
+
+#183 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:46 y:23 
+
+#184 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:52 y:22 
+
+#185 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:46 y:23 
+
+#186 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:37 y:23 
+
+#187 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:29 y:23 
+
+#188 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:12 y:17 
+
+#189 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:7 y:17 
+
+#190 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:24 y:22 
+
+#191 attr 0 stat 10 (CLASS_DIAMONDS)
+  u1 0 u2 0
+  imageId 6 (DIAMANT)
+  x:27 y:22 
+
+#192 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:62 y:17 
+
+#193 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:65 y:17 
+
+#194 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:68 y:17 
+
+#195 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:62 y:18 
+
+#196 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:60 y:19 
+
+#197 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:69 y:18 
+
+#198 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:71 y:17 
+
+#199 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:72 y:18 
+
+#200 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:73 y:19 
+
+#201 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:75 y:20 
+
+#202 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:77 y:21 
+
+#203 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:79 y:22 
+
+#204 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 10 (ROCKP2)
+  x:81 y:23 
+
+#205 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:84 y:23 
+
+#206 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:86 y:23 
+
+#207 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:88 y:23 
+
+#208 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:90 y:23 
+
+#209 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:92 y:23 
+
+#210 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:94 y:23 
+
+#211 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:96 y:23 
+
+#212 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:98 y:23 
+
+#213 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:99 y:23 
+
+#214 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 11 (ROCKP3)
+  x:100 y:23 
+
+#215 attr 0 stat c6 (CLASS_INMANGA)
+  u1 0 u2 0
+  imageId 58 (±INMANGEA-LF1)
+  x:117 y:16 
+
+#216 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:102 y:23 
+
+#217 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:106 y:23 
+
+#218 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:110 y:23 
+
+#219 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:114 y:23 
+
+#220 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:118 y:23 
+
+#221 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:122 y:23 
+
+#222 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:126 y:23 
+
+#223 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:130 y:23 
+
+#224 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:134 y:23 
+
+#225 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:138 y:23 
+
+#226 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:142 y:23 
+
+#227 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:146 y:23 
+
+#228 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:150 y:23 
+
+#229 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:154 y:23 
+
+#230 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:158 y:23 
+
+#231 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:162 y:23 
+
+#232 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:166 y:23 
+
+#233 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:169 y:23 
+
+#234 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:169 y:20 
+
+#235 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:169 y:17 
+
+#236 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:169 y:14 
+
+#237 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 9 (ROCKP1)
+  x:169 y:12 
+
+#238 attr 0 stat 11 (CLASS_FLOWER)
+  u1 0 u2 0
+  imageId 7 (FLOWER)
+  x:168 y:21 
+
+#239 attr 0 stat 11 (CLASS_FLOWER)
+  u1 0 u2 0
+  imageId 7 (FLOWER)
+  x:167 y:21 
+
+#240 attr 0 stat 11 (CLASS_FLOWER)
+  u1 0 u2 0
+  imageId 7 (FLOWER)
+  x:166 y:21 
+
+#241 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:117 y:22 
+
+#242 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:107 y:22 
+
+#243 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:103 y:22 
+
+#244 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:100 y:22 
+
+#245 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 26 (MOSA2)
+  x:104 y:20 
+
+#246 attr 0 stat 00 (CLASS_BLANK)
+  u1 0 u2 0
+  imageId 27 (MOSA3)
+  x:81 y:19 
+
+#247 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:99 y:22 
+
+#248 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:102 y:22 
+
+#249 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:103 y:21 
+
+#250 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:108 y:22 
+
+#251 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:109 y:22 
+
+#252 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:120 y:22 
+
+#253 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:128 y:22 
+
+#254 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:132 y:22 
+
+#255 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:135 y:22 
+
+#256 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:138 y:22 
+
+#257 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 33 (BONE3)
+  x:141 y:22 
+
+#258 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:57 y:20 
+
+#259 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:57 y:18 
+
+#260 attr 0 stat f0 (CLASS_STOPCLASS)
+  u1 0 u2 0
+  imageId 56 (!STOP)
+  x:73 y:16 
+
+#261 attr 0 stat f0 (CLASS_STOPCLASS)
+  u1 0 u2 0
+  imageId 56 (!STOP)
+  x:73 y:15 
+
+#262 attr 0 stat f0 (CLASS_STOPCLASS)
+  u1 0 u2 0
+  imageId 56 (!STOP)
+  x:73 y:14 
+
+#263 attr 0 stat f0 (CLASS_STOPCLASS)
+  u1 0 u2 0
+  imageId 56 (!STOP)
+  x:73 y:13 
+
+#264 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:56 y:28 
+
+#265 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:55 y:30 
+
+#266 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:53 y:32 
+
+#267 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:55 y:26 
+
+#268 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:54 y:24 
+
+#269 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:55 y:23 
+
+#270 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:58 y:23 
+
+#271 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:60 y:22 
+
+#272 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:51 y:34 
+
+#273 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:48 y:34 
+
+#274 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:45 y:33 
+
+#275 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:56 y:25 
+
+#276 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:59 y:21 
+
+#277 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:61 y:20 
+
+#278 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:124 y:21 
+
+#279 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:124 y:19 
+
+#280 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 17 (RCKTILE06)
+  x:125 y:17 
+
+#281 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:125 y:16 
+
+#282 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:124 y:15 
+
+#283 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:123 y:14 
+
+#284 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:122 y:13 
+
+#285 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:121 y:12 
+
+#286 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:120 y:13 
+
+#287 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:119 y:14 
+
+#288 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:118 y:13 
+
+#289 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:117 y:12 
+
+#290 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:116 y:13 
+
+#291 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:115 y:14 
+
+#292 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:114 y:13 
+
+#293 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:113 y:12 
+
+#294 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:112 y:13 
+
+#295 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:111 y:14 
+
+#296 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+  u1 0 u2 0
+  imageId 13 (RCKTILE01)
+  x:128 y:16 
+
+#297 attr 0 stat c2 (CLASS_VAMPIREPLANT)
+  u1 0 u2 0
+  imageId 18 (DEADPLANT1)
+  x:133 y:21 
+
+#298 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:130 y:21 
+
+#299 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:130 y:19 
+
+#300 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:130 y:17 
+
+#301 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:130 y:15 
+
+#302 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:109 y:14 
+
+#303 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:109 y:16 
+
+#304 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:109 y:18 
+
+#305 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:109 y:20 
+
+#306 attr 0 stat d0 (CLASS_LADDER)
+  u1 0 u2 0
+  imageId 22 (LADDER 02)
+  x:109 y:21 
+
+#307 attr 0 stat 15 (CLASS_DEADLYITEM)
+  u1 0 u2 0
+  imageId 38 (DEADLY MUSHROOM)
+  x:136 y:22 
+
+#308 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:160 y:22 
+
+#309 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:158 y:22 
+
+#310 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:156 y:22 
+
+#311 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:154 y:22 
+
+#312 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:127 y:16 
+
+#313 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:128 y:15 
+
+#314 attr 0 stat cf (CLASS_GREENFLEA)
+  u1 0 u2 0
+  imageId 62 (@SLUGER DN1)
+  x:129 y:15 
+
+#315 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:139 y:22 
+
+#316 attr 0 stat 14 (CLASS_MISC)
+  u1 0 u2 0
+  imageId 5 (SKULL)
+  x:142 y:22 
+
+#317 attr 0 stat c5 (CLASS_CANNIBAL)
+  u1 0 u2 0
+  imageId 44 (CANIBAL DN1)
+  x:161 y:21 
+

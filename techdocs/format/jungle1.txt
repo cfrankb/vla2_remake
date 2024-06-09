@@ -1,0 +1,1816 @@
+imsfilename: data/jungle.ims
+tiles: 643
+imsLenght: 4062
+imsCount: 266
+
+0 len=1 hei=1 \FRUIT1
+1 len=1 hei=1 ±FRUIT2
+2 len=1 hei=1 FRUIT3
+3 len=1 hei=1 DIAM
+4 len=1 hei=2 FLOWER
+5 len=4 hei=2 VEGET1
+6 len=4 hei=2 VEGET2
+7 len=4 hei=4 VEGET3
+8 len=5 hei=10 TREE1
+9 len=5 hei=7 TREE4
+10 len=5 hei=7 TREE6
+11 len=2 hei=2 ROCK
+12 len=2 hei=2 ROCK2
+13 len=2 hei=2 ROCK3
+14 len=4 hei=3 ROOT1
+15 len=5 hei=4 FULLMOON
+16 len=1 hei=1 STAR1
+17 len=1 hei=1 STAR2
+18 len=1 hei=1 STAR3
+19 len=1 hei=1 STAR4
+20 len=2 hei=3 LADDER
+21 len=2 hei=2 Algue
+22 len=2 hei=2 Eau de surface 
+23 len=2 hei=2 Eau de surface 2
+24 len=2 hei=2 Eau profonde
+25 len=2 hei=2 Deadly plant #1a
+26 len=2 hei=2 Deadly plant #1b
+27 len=1 hei=1 LFISH
+28 len=1 hei=1 RFISH
+29 len=2 hei=2 Tombe
+30 len=2 hei=2 VCrea1
+31 len=2 hei=2 VCrea2
+32 len=1 hei=1 !STOP
+33 len=2 hei=2 _LES VLAMITS II: (c) 1995 Francois Blanchette
+34 len=4 hei=4 Water4
+35 len=8 hei=8 Water16
+36 len=1 hei=1 #Bloquer
+37 len=1 hei=1 +10
+38 len=1 hei=1 15
+39 len=1 hei=1 25
+40 len=1 hei=1 50
+41 len=2 hei=1 100
+42 len=2 hei=1 200
+43 len=2 hei=1 400
+44 len=2 hei=1 500
+45 len=2 hei=1 1000
+46 len=2 hei=2 *Annie A
+47 len=2 hei=2  B
+48 len=2 hei=2  C
+49 len=2 hei=2  D
+50 len=2 hei=2  E
+51 len=2 hei=2  F
+52 len=2 hei=2  G
+53 len=2 hei=2  H
+54 len=2 hei=2  I
+55 len=2 hei=2  J
+56 len=2 hei=2  K
+57 len=2 hei=2  L
+58 len=2 hei=2  M
+59 len=2 hei=2  N
+60 len=2 hei=2  O
+61 len=2 hei=2  P
+62 len=2 hei=2  Q
+63 len=2 hei=2  R
+64 len=2 hei=2  S
+65 len=2 hei=2  T
+66 len=2 hei=2 Corrine Desfosses A
+67 len=2 hei=2  B
+68 len=2 hei=2  C
+69 len=2 hei=2  D
+70 len=2 hei=2  E
+71 len=2 hei=2  F
+72 len=2 hei=2  G
+73 len=2 hei=2  H
+74 len=2 hei=2  I
+75 len=2 hei=2  J
+76 len=2 hei=2  K
+77 len=2 hei=2  L
+78 len=2 hei=2  M
+79 len=2 hei=2  N
+80 len=2 hei=2  O
+81 len=2 hei=2  P
+82 len=2 hei=2  Q
+83 len=2 hei=2  R
+84 len=2 hei=2  S
+85 len=2 hei=2  T
+86 len=2 hei=2 Julie Jean A
+87 len=2 hei=2  B
+88 len=2 hei=2  C
+89 len=2 hei=2  D
+90 len=2 hei=2  E
+91 len=2 hei=2  F
+92 len=2 hei=2  G
+93 len=2 hei=2  H
+94 len=2 hei=2  I
+95 len=2 hei=2  J
+96 len=2 hei=2  K
+97 len=2 hei=2  L
+98 len=2 hei=2  M
+99 len=2 hei=2  N
+100 len=2 hei=2  O
+101 len=2 hei=2  P
+102 len=2 hei=2  Q
+103 len=2 hei=2  R
+104 len=2 hei=2  S
+105 len=2 hei=2  T
+106 len=2 hei=2 Melanie Leclerc A
+107 len=2 hei=2  B
+108 len=2 hei=2  C
+109 len=2 hei=2  D
+110 len=2 hei=2  E
+111 len=2 hei=2  F
+112 len=2 hei=2  G
+113 len=2 hei=2  H
+114 len=2 hei=2  I
+115 len=2 hei=2  J
+116 len=2 hei=2  K
+117 len=2 hei=2  L
+118 len=2 hei=2  M
+119 len=2 hei=2  N
+120 len=2 hei=2  O
+121 len=2 hei=2  P
+122 len=2 hei=2  Q
+123 len=2 hei=2  R
+124 len=2 hei=2  S
+125 len=2 hei=2  T
+126 len=2 hei=2 Melanie Drien A
+127 len=2 hei=2  B
+128 len=2 hei=2  C
+129 len=2 hei=2  D
+130 len=2 hei=2  E
+131 len=2 hei=2  F
+132 len=2 hei=2  G
+133 len=2 hei=2  H
+134 len=2 hei=2  I
+135 len=2 hei=2  J
+136 len=2 hei=2  K
+137 len=2 hei=2  L
+138 len=2 hei=2  M
+139 len=2 hei=2  N
+140 len=2 hei=2  O
+141 len=2 hei=2  P
+142 len=2 hei=2  Q
+143 len=2 hei=2  R
+144 len=2 hei=2  S
+145 len=2 hei=2  T
+146 len=2 hei=2 Nancy Priscella A
+147 len=2 hei=2  B
+148 len=2 hei=2  C
+149 len=2 hei=2  D
+150 len=2 hei=2  E
+151 len=2 hei=2  F
+152 len=2 hei=2  G
+153 len=2 hei=2  H
+154 len=2 hei=2  I
+155 len=2 hei=2  J
+156 len=2 hei=2  K
+157 len=2 hei=2  L
+158 len=2 hei=2  M
+159 len=2 hei=2  N
+160 len=2 hei=2  O
+161 len=2 hei=2  P
+162 len=2 hei=2  Q
+163 len=2 hei=2  R
+164 len=2 hei=2  S
+165 len=2 hei=2  T
+166 len=2 hei=2 Sonia Lalonde A
+167 len=2 hei=2  B
+168 len=2 hei=2  C
+169 len=2 hei=2  D
+170 len=2 hei=2  E
+171 len=2 hei=2  F
+172 len=2 hei=2  G
+173 len=2 hei=2  H
+174 len=2 hei=2  I
+175 len=2 hei=2  J
+176 len=2 hei=2  K
+177 len=2 hei=2  L
+178 len=2 hei=2  M
+179 len=2 hei=2  N
+180 len=2 hei=2  O
+181 len=2 hei=2  P
+182 len=2 hei=2  Q
+183 len=2 hei=2  R
+184 len=2 hei=2  S
+185 len=2 hei=2  T
+186 len=2 hei=2 Melanie Sauveur A
+187 len=2 hei=2  B
+188 len=2 hei=2  C
+189 len=2 hei=2  D
+190 len=2 hei=2  E
+191 len=2 hei=2  F
+192 len=2 hei=2  G
+193 len=2 hei=2  H
+194 len=2 hei=2  I
+195 len=2 hei=2  J
+196 len=2 hei=2  K
+197 len=2 hei=2  L
+198 len=2 hei=2  M
+199 len=2 hei=2  N
+200 len=2 hei=2  O
+201 len=2 hei=2  P
+202 len=2 hei=2  Q
+203 len=2 hei=2  R
+204 len=2 hei=2  S
+205 len=2 hei=2  T
+206 len=2 hei=2 Nathalie Veillette 
+207 len=2 hei=2 Nv12
+208 len=2 hei=2 Nv13
+209 len=2 hei=2 Nv11b
+210 len=2 hei=2 Nv12b
+211 len=2 hei=2 Nv21
+212 len=2 hei=2 Nv22
+213 len=2 hei=2 Nv23
+214 len=2 hei=2 Nv21a
+215 len=2 hei=2 Nv22b
+216 len=2 hei=2 Nv31
+217 len=2 hei=2 Nv32
+218 len=2 hei=2 Nv33
+219 len=2 hei=2 Nv31b
+220 len=2 hei=2 Nv32b
+221 len=2 hei=2 Nv41
+222 len=2 hei=2 Nv42
+223 len=2 hei=2 Nv43
+224 len=2 hei=2 Nv41b
+225 len=2 hei=2 Nv42b
+226 len=2 hei=2 Melanie Leclerc II 
+227 len=2 hei=2 Ml12
+228 len=2 hei=2 Ml13
+229 len=2 hei=2 Ml11b
+230 len=2 hei=2 Ml12b
+231 len=2 hei=2 Ml21
+232 len=2 hei=2 Ml22
+233 len=2 hei=2 Ml23
+234 len=2 hei=2 Ml21a
+235 len=2 hei=2 Ml22b
+236 len=2 hei=2 Ml31
+237 len=2 hei=2 Ml32
+238 len=2 hei=2 Ml33
+239 len=2 hei=2 Ml31b
+240 len=2 hei=2 Ml32b
+241 len=2 hei=2 Ml41
+242 len=2 hei=2 Ml42
+243 len=2 hei=2 Ml43
+244 len=2 hei=2 Ml41b
+245 len=2 hei=2 Ml42b
+246 len=2 hei=2 Jymmy (Par Helene Blanchette)
+247 len=2 hei=2 Jymy12
+248 len=2 hei=2 Jymy13
+249 len=2 hei=2 Jymy11b
+250 len=2 hei=2 Jymy12b
+251 len=2 hei=2 Jymy12b
+252 len=2 hei=2 Jymy12
+253 len=2 hei=2 Jymy12
+254 len=2 hei=2 Jymy12
+255 len=2 hei=2 Jymy12
+256 len=2 hei=2 Jymy12
+257 len=2 hei=2 Jymy12
+258 len=2 hei=2 Jymy12
+259 len=2 hei=2 Jymy12
+260 len=2 hei=2 Jymy12
+261 len=2 hei=2 Jymy12
+262 len=2 hei=2 Jymy12
+263 len=2 hei=2 Jymy12
+264 len=2 hei=2 Jymy12
+265 len=2 hei=2 Jymy12
+
+stoName: jungle.STO
+    m_entryCount: 385
+    m_entryCount * size: 3080
+
+#0 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:22 y:38 
+
+#1 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:19 y:38 
+
+#2 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:16 y:38 
+
+#3 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:13 y:38 
+
+#4 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:12 y:35 
+
+#5 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:19 y:31 
+
+#6 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:16 y:31 
+
+#7 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:16 y:28 
+
+#8 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:28 y:34 
+
+#9 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:30 y:33 
+
+#10 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:30 y:36 
+
+#11 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:30 y:39 
+
+#12 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:30 y:42 
+
+#13 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:29 y:45 
+
+#14 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:26 y:45 
+
+#15 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:24 y:47 
+
+#16 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:21 y:48 
+
+#17 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:18 y:49 
+
+#18 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:26 y:39 
+
+#19 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:26 y:42 
+
+#20 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:26 y:36 
+
+#21 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:14 y:32 
+
+#22 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:14 y:29 
+
+#23 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:14 y:26 
+
+#24 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:16 y:26 
+
+#25 attr 0 stat d1 (UNKNOWN)
+    u1 0 u2 0 imageId 9 (TREE4)
+    x:19 y:25 
+
+#26 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:20 y:27 
+
+#27 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:22 y:28 
+
+#28 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:21 y:25 
+
+#29 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:20 y:29 
+
+#30 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:22 y:30 
+
+#31 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:23 y:26 
+
+#32 attr 0 stat 01 (CLASS_PLAYER)
+    u1 0 u2 0 imageId 37 (+10)
+    x:16 y:24 
+
+#33 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:13 y:41 
+
+#34 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:12 y:44 
+
+#35 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:12 y:47 
+
+#36 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:9 y:47 
+
+#37 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:6 y:47 
+
+#38 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:2 y:46 
+
+#39 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:43 
+
+#40 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:40 
+
+#41 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:37 
+
+#42 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:34 
+
+#43 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:31 
+
+#44 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:3 y:30 
+
+#45 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:5 y:28 
+
+#46 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:8 y:28 
+
+#47 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:10 y:26 
+
+#48 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:33 y:33 
+
+#49 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:36 y:33 
+
+#50 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:0 y:30 
+
+#51 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:7 y:27 
+
+#52 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:2 y:29 
+
+#53 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:10 y:46 
+
+#54 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:3 y:46 
+
+#55 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:10 y:35 
+
+#56 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:10 y:38 
+
+#57 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:10 y:41 
+
+#58 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:10 y:44 
+
+#59 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 21 (Algue)
+    x:6 y:45 
+
+#60 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:10 y:25 
+
+#61 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:7 y:26 
+
+#62 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:10 y:22 
+
+#63 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:9 y:21 
+
+#64 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:7 y:22 
+
+#65 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:33 y:34 
+
+#66 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:30 y:45 
+
+#67 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:5 y:23 
+
+#68 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:3 y:33 
+
+#69 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:6 y:31 
+
+#70 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:1 y:34 
+
+#71 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:4 y:45 
+
+#72 attr 0 stat 11 (CLASS_FLOWER)
+    u1 0 u2 0 imageId 4 (FLOWER)
+    x:29 y:43 
+
+#73 attr 0 stat 11 (CLASS_FLOWER)
+    u1 0 u2 0 imageId 4 (FLOWER)
+    x:29 y:32 
+
+#74 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:42 y:33 
+
+#75 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:45 y:33 
+
+#76 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:48 y:33 
+
+#77 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:41 y:36 
+
+#78 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:40 y:38 
+
+#79 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:39 y:40 
+
+#80 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:49 y:35 
+
+#81 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:48 y:37 
+
+#82 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:47 y:39 
+
+#83 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:32 y:47 
+
+#84 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:35 y:48 
+
+#85 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:38 y:48 
+
+#86 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:41 y:48 
+
+#87 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:44 y:48 
+
+#88 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:47 y:48 
+
+#89 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:50 y:47 
+
+#90 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:53 y:47 
+
+#91 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:54 y:45 
+
+#92 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:55 y:43 
+
+#93 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:45 y:36 
+
+#94 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:45 y:39 
+
+#95 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:45 y:42 
+
+#96 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:45 y:45 
+
+#97 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:55 y:40 
+
+#98 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:55 y:37 
+
+#99 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:55 y:34 
+
+#100 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:55 y:31 
+
+#101 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:55 y:28 
+
+#102 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:57 y:28 
+
+#103 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:57 y:31 
+
+#104 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:58 y:33 
+
+#105 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:57 y:35 
+
+#106 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:59 y:37 
+
+#107 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:57 y:39 
+
+#108 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:59 y:41 
+
+#109 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:58 y:44 
+
+#110 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:57 y:43 
+
+#111 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:60 y:44 
+
+#112 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:57 y:45 
+
+#113 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:60 y:40 
+
+#114 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:60 y:36 
+
+#115 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:50 y:50 
+
+#116 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:48 y:51 
+
+#117 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:45 y:51 
+
+#118 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:42 y:51 
+
+#119 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:39 y:51 
+
+#120 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:37 y:51 
+
+#121 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:35 y:51 
+
+#122 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:34 y:50 
+
+#123 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:36 y:52 
+
+#124 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:39 y:52 
+
+#125 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:42 y:52 
+
+#126 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:45 y:52 
+
+#127 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:43 y:53 
+
+#128 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:40 y:53 
+
+#129 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:37 y:53 
+
+#130 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:39 y:54 
+
+#131 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:41 y:54 
+
+#132 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:16 y:43 
+
+#133 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:16 y:46 
+
+#134 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:16 y:49 
+
+#135 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:16 y:51 
+
+#136 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:14 y:51 
+
+#137 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:12 y:51 
+
+#138 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:10 y:51 
+
+#139 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:8 y:51 
+
+#140 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:6 y:51 
+
+#141 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:4 y:51 
+
+#142 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:18 y:51 
+
+#143 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:20 y:51 
+
+#144 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:22 y:51 
+
+#145 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:24 y:51 
+
+#146 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:26 y:51 
+
+#147 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:28 y:51 
+
+#148 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:30 y:51 
+
+#149 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:32 y:51 
+
+#150 attr 0 stat de (CLASS_TOPWATER)
+    u1 0 u2 0 imageId 22 (Eau de surface )
+    x:33 y:51 
+
+#151 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:4 y:53 
+
+#152 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:6 y:53 
+
+#153 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:8 y:53 
+
+#154 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:10 y:53 
+
+#155 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:12 y:53 
+
+#156 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:14 y:53 
+
+#157 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:16 y:53 
+
+#158 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:18 y:53 
+
+#159 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:20 y:53 
+
+#160 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:22 y:53 
+
+#161 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:24 y:53 
+
+#162 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:26 y:53 
+
+#163 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:28 y:53 
+
+#164 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:30 y:53 
+
+#165 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:32 y:53 
+
+#166 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:34 y:53 
+
+#167 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:34 y:55 
+
+#168 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:32 y:55 
+
+#169 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:30 y:55 
+
+#170 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:28 y:55 
+
+#171 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:26 y:55 
+
+#172 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:24 y:55 
+
+#173 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:22 y:55 
+
+#174 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:20 y:55 
+
+#175 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:18 y:55 
+
+#176 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:16 y:55 
+
+#177 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:14 y:55 
+
+#178 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:12 y:55 
+
+#179 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:10 y:55 
+
+#180 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:8 y:55 
+
+#181 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:6 y:55 
+
+#182 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:4 y:55 
+
+#183 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:3 y:57 
+
+#184 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:5 y:57 
+
+#185 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:7 y:57 
+
+#186 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:9 y:57 
+
+#187 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:11 y:57 
+
+#188 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:12 y:57 
+
+#189 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:13 y:57 
+
+#190 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:15 y:57 
+
+#191 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:17 y:57 
+
+#192 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:19 y:57 
+
+#193 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:21 y:57 
+
+#194 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:23 y:57 
+
+#195 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:25 y:57 
+
+#196 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:27 y:57 
+
+#197 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:28 y:57 
+
+#198 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:30 y:57 
+
+#199 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:32 y:57 
+
+#200 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:33 y:57 
+
+#201 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:35 y:57 
+
+#202 attr 0 stat df (CLASS_BOTTOMWATER)
+    u1 0 u2 0 imageId 24 (Eau profonde)
+    x:36 y:55 
+
+#203 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:49 
+
+#204 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:52 
+
+#205 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:1 y:55 
+
+#206 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:1 y:58 
+
+#207 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:4 y:59 
+
+#208 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:7 y:59 
+
+#209 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:10 y:59 
+
+#210 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:13 y:58 
+
+#211 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:16 y:58 
+
+#212 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:19 y:58 
+
+#213 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:22 y:58 
+
+#214 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:25 y:58 
+
+#215 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:28 y:58 
+
+#216 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:31 y:58 
+
+#217 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:34 y:58 
+
+#218 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:37 y:57 
+
+#219 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:38 y:55 
+
+#220 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:36 y:53 
+
+#221 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:3 y:49 
+
+#222 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:0 y:47 
+
+#223 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:8 y:58 
+
+#224 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:7 y:58 
+
+#225 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:6 y:58 
+
+#226 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:5 y:58 
+
+#227 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:9 y:58 
+
+#228 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:35 y:57 
+
+#229 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 12 (ROCK2)
+    x:11 y:57 
+
+#230 attr 0 stat c0 (CLASS_FISH)
+    u1 0 u2 0 imageId 27 (LFISH)
+    x:8 y:55 
+
+#231 attr 0 stat c0 (CLASS_FISH)
+    u1 0 u2 0 imageId 27 (LFISH)
+    x:19 y:54 
+
+#232 attr 0 stat c0 (CLASS_FISH)
+    u1 0 u2 0 imageId 27 (LFISH)
+    x:30 y:56 
+
+#233 attr 0 stat c0 (CLASS_FISH)
+    u1 0 u2 0 imageId 27 (LFISH)
+    x:27 y:53 
+
+#234 attr 0 stat c0 (CLASS_FISH)
+    u1 0 u2 0 imageId 27 (LFISH)
+    x:13 y:57 
+
+#235 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 21 (Algue)
+    x:35 y:56 
+
+#236 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:9 y:44 
+
+#237 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:5 y:42 
+
+#238 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:8 y:39 
+
+#239 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:18 y:36 
+
+#240 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:5 y:35 
+
+#241 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:10 y:32 
+
+#242 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:28 y:27 
+
+#243 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:18 y:43 
+
+#244 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:24 y:45 
+
+#245 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:37 y:45 
+
+#246 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:35 y:37 
+
+#247 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:44 y:40 
+
+#248 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:50 y:45 
+
+#249 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:45 y:29 
+
+#250 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:35 y:30 
+
+#251 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:32 y:24 
+
+#252 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:17 y:23 
+
+#253 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:0 y:26 
+
+#254 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:5 y:25 
+
+#255 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:1 y:21 
+
+#256 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:8 y:18 
+
+#257 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:23 y:18 
+
+#258 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:39 y:18 
+
+#259 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:44 y:23 
+
+#260 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:53 y:25 
+
+#261 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:31 y:13 
+
+#262 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:18 y:13 
+
+#263 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:2 y:14 
+
+#264 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:30 y:49 
+
+#265 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:28 y:50 
+
+#266 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:15 y:17 
+
+#267 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 16 (STAR1)
+    x:8 y:11 
+
+#268 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:3 y:27 
+
+#269 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:0 y:16 
+
+#270 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:15 y:14 
+
+#271 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:28 y:20 
+
+#272 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:37 y:26 
+
+#273 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:30 y:30 
+
+#274 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:28 y:41 
+
+#275 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:21 y:44 
+
+#276 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 17 (STAR2)
+    x:4 y:39 
+
+#277 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:23 y:34 
+
+#278 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:36 y:22 
+
+#279 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:42 y:30 
+
+#280 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:53 y:32 
+
+#281 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:47 y:44 
+
+#282 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:35 y:40 
+
+#283 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 18 (STAR3)
+    x:9 y:42 
+
+#284 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 19 (STAR4)
+    x:19 y:47 
+
+#285 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 19 (STAR4)
+    x:24 y:37 
+
+#286 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 19 (STAR4)
+    x:25 y:30 
+
+#287 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 19 (STAR4)
+    x:19 y:19 
+
+#288 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 19 (STAR4)
+    x:14 y:24 
+
+#289 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 19 (STAR4)
+    x:11 y:15 
+
+#290 attr 0 stat 00 (CLASS_BLANK)
+    u1 0 u2 0 imageId 15 (FULLMOON)
+    x:1 y:17 
+
+#291 attr 0 stat d1 (UNKNOWN)
+    u1 0 u2 0 imageId 8 (TREE1)
+    x:51 y:37 
+
+#292 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:52 y:39 
+
+#293 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:51 y:41 
+
+#294 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:53 y:42 
+
+#295 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:52 y:44 
+
+#296 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:53 y:37 
+
+#297 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:51 y:46 
+
+#298 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:53 y:40 
+
+#299 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:51 y:43 
+
+#300 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:47 y:32 
+
+#301 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:45 y:32 
+
+#302 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:44 y:32 
+
+#303 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:40 y:37 
+
+#304 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:39 y:39 
+
+#305 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:57 y:42 
+
+#306 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:55 y:42 
+
+#307 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:26 y:32 
+
+#308 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:27 y:33 
+
+#309 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:19 y:26 
+
+#310 attr 0 stat d1 (UNKNOWN)
+    u1 0 u2 0 imageId 10 (TREE6)
+    x:20 y:41 
+
+#311 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:21 y:42 
+
+#312 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:23 y:43 
+
+#313 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:21 y:44 
+
+#314 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:24 y:45 
+
+#315 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:22 y:45 
+
+#316 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:23 y:46 
+
+#317 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:22 y:47 
+
+#318 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:22 y:41 
+
+#319 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:20 y:48 
+
+#320 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:18 y:48 
+
+#321 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 2 (FRUIT3)
+    x:25 y:46 
+
+#322 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:26 y:33 
+
+#323 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:16 y:34 
+
+#324 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 6 (VEGET2)
+    x:14 y:35 
+
+#325 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:16 y:37 
+
+#326 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:17 y:37 
+
+#327 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 0 (\FRUIT1)
+    x:18 y:37 
+
+#328 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:57 y:25 
+
+#329 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:59 y:24 
+
+#330 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:62 y:25 
+
+#331 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:63 y:23 
+
+#332 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:64 y:21 
+
+#333 attr 0 stat d0 (CLASS_LADDER)
+    u1 0 u2 0 imageId 20 (LADDER)
+    x:55 y:25 
+
+#334 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:58 y:24 
+
+#335 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:57 y:24 
+
+#336 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:58 y:23 
+
+#337 attr 0 stat 11 (CLASS_FLOWER)
+    u1 0 u2 0 imageId 4 (FLOWER)
+    x:35 y:46 
+
+#338 attr 0 stat 11 (CLASS_FLOWER)
+    u1 0 u2 0 imageId 4 (FLOWER)
+    x:47 y:37 
+
+#339 attr 0 stat 11 (CLASS_FLOWER)
+    u1 0 u2 0 imageId 4 (FLOWER)
+    x:48 y:31 
+
+#340 attr 0 stat 11 (CLASS_FLOWER)
+    u1 0 u2 0 imageId 4 (FLOWER)
+    x:10 y:57 
+
+#341 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:63 y:20 
+
+#342 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:62 y:19 
+
+#343 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:61 y:18 
+
+#344 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 5 (VEGET1)
+    x:61 y:24 
+
+#345 attr 0 stat e0 (CLASS_OBSTACLECLASS)
+    u1 0 u2 0 imageId 7 (VEGET3)
+    x:36 y:40 
+
+#346 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:53 y:46 
+
+#347 attr 0 stat 12 (CLASS_FRUIT)
+    u1 0 u2 0 imageId 1 (±FRUIT2)
+    x:49 y:47 
+
+#348 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:35 y:32 
+
+#349 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:34 y:32 
+
+#350 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:33 y:32 
+
+#351 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:36 y:32 
+
+#352 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:37 y:32 
+
+#353 attr 0 stat 10 (CLASS_DIAMONDS)
+    u1 0 u2 0 imageId 3 (DIAM)
+    x:32 y:32 
+
+#354 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:17 y:36 
+
+#355 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:16 y:36 
+
+#356 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:19 y:26 
+
+#357 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:39 y:34 
+
+#358 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:16 y:43 
+
+#359 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:16 y:44 
+
+#360 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:51 y:33 
+
+#361 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:52 y:35 
+
+#362 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:39 y:33 
+
+#363 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:18 y:52 
+
+#364 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:19 y:52 
+
+#365 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:20 y:52 
+
+#366 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:21 y:52 
+
+#367 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:36 y:57 
+
+#368 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:37 y:57 
+
+#369 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:4 y:58 
+
+#370 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:25 y:38 
+
+#371 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:35 y:46 
+
+#372 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:37 y:56 
+
+#373 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:57 y:41 
+
+#374 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:57 y:42 
+
+#375 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:21 y:41 
+
+#376 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:22 y:41 
+
+#377 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:23 y:41 
+
+#378 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:23 y:25 
+
+#379 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:22 y:25 
+
+#380 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:20 y:25 
+
+#381 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:23 y:27 
+
+#382 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:23 y:28 
+
+#383 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:23 y:29 
+
+#384 attr 0 stat f0 (CLASS_STOPCLASS)
+    u1 0 u2 0 imageId 32 (!STOP)
+    x:23 y:30 
+
