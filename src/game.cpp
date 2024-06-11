@@ -3,6 +3,7 @@
 #include "scriptarch.h"
 #include <cstdio>
 #include "imswrap.h"
+#include "framemap.h"
 
 CGame::CGame()
 {
@@ -11,6 +12,7 @@ CGame::CGame()
     m_scriptCount = 0;
     m_script = new CScript;
     m_valid = false;
+    m_frameMap = new CFrameMap;
 
     if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
     {
@@ -39,13 +41,16 @@ bool CGame::loadTileset(const char *tileset)
 {
     std::string tilesetName = "data/" + std::string(tileset) + ".ims";
     CImsWrap ims;
-    if (ims.readIMS(tilesetName.c_str()))
+    if (!ims.readIMS(tilesetName.c_str()))
     {
-        m_lastError = "can't read: " + tilesetName;
-        printf("can't read %s\n", tilesetName.c_str());
+        m_lastError = "can't read tileset: " + tilesetName;
+        printf("can't read tileset %s\n", tilesetName.c_str());
         return false;
     }
     ims.toFrameSet(*m_frameSet, nullptr);
+    m_frameMap->fromFrameSet(*m_frameSet);
+    m_frameMap->write("out/fmap.dat");
+
     return true;
 }
 

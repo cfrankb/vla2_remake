@@ -51,7 +51,7 @@ protected:
     typedef struct
     {
         uint8_t attr;
-        uint8_t stat; // objType
+        uint8_t type; // objType
         uint8_t u1;
         uint8_t u2;
         uint16_t imageId;

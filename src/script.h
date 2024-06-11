@@ -7,7 +7,7 @@
 typedef struct
 {
     uint8_t attr;
-    uint8_t stat; // objType
+    uint8_t type; // objType
     uint8_t u1;
     uint8_t u2;
     uint16_t imageId;
@@ -36,7 +36,7 @@ public:
     static inline bool isBackgroundType(uint8_t type);
     int add(const scriptEntry_t &entry);
     int insertAt(int i, const scriptEntry_t &entry);
-    int removeAt(int i);
+    void removeAt(int i);
     inline scriptEntry_t &at(int i);
 
 private:
@@ -51,6 +51,7 @@ private:
         SCRIPTNAME_MAX = 255,
         GROW_BY = 16
     };
+    inline void growArray();
 };
 
 #endif

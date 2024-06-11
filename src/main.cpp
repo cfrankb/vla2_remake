@@ -10,6 +10,7 @@
 #include "shared/FileWrap.h"
 #include "script.h"
 #include "scriptarch.h"
+#include "game.h"
 
 typedef struct
 {
@@ -217,4 +218,7 @@ int main(int argc, char *args[])
     // compositeAll();
     createScriptArch();
     testArch();
+
+    CGame game;
+    game.loadLevel(0);
 }

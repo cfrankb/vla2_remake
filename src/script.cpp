@@ -133,6 +133,11 @@ scriptEntry_t &CScript::operator[](int i)
     return m_script[i];
 }
 
+scriptEntry_t &CScript::at(int i)
+{
+    return (*this)[i];
+}
+
 uint16_t CScript::toKey(const uint8_t x, const uint8_t y)
 {
     return x + (y << 8);
@@ -143,34 +148,42 @@ bool CScript::isBackgroundType(uint8_t type)
     return type == TYPE_BLANK || type >= TYPE_LADDER;
 }
 
-int CScript::add(const scriptEntry_t &entry)
+void CScript::growArray()
 {
-    // TODO: implement this
     if (m_size == m_max)
     {
+        m_max += GROW_BY;
+        scriptEntry_t *tmp = new scriptEntry_t[m_max];
+        memcpy(tmp, m_script, m_size * sizeof(scriptEntry_t));
+        delete[] m_script;
+        m_script = tmp;
     }
+}
+
+int CScript::add(const scriptEntry_t &entry)
+{
+    growArray();
     m_script[m_size] = entry;
     return m_size++;
 }
 
 int CScript::insertAt(int i, const scriptEntry_t &entry)
 {
-    // TODO: implement this
-    if (m_size == m_max)
+    growArray();
+    for (int j = m_size; j > i; --j)
     {
+        m_script[j] = m_script[j - 1];
     }
     m_script[i] = entry;
     ++m_size;
     return i;
 }
 
-int CScript::removeAt(int i)
+void CScript::removeAt(int i)
 {
-    // TODO: implement this
-    return i;
-}
-
-scriptEntry_t &CScript::at(int i)
-{
-    return m_script[i];
+    for (int j = i; j < m_size - 1; ++j)
+    {
+        m_script[i] = m_script[i + 1];
+    }
+    --m_size;
 }

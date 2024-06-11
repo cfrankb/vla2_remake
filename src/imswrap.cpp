@@ -344,7 +344,7 @@ void CImsWrap::debug(const char *filename)
         for (int i = 0; i < m_entryCount; ++i)
         {
             scriptEntry_t &entry = m_script[i];
-            fprintf(tfile, "#%d attr %x stat %.2x (%s)\n", i, entry.attr, entry.stat, getTypeName(entry.stat));
+            fprintf(tfile, "#%d attr %x type %.2x (%s)\n", i, entry.attr, entry.type, getTypeName(entry.type));
             fprintf(tfile, "    u1 %x u2 %x imageId %d (%s)\n", entry.u1, entry.u2, entry.imageId, getImageName(entry.imageId));
             fprintf(tfile, "    x:%d y:%d \n\n", entry.x, entry.y);
         }
@@ -402,7 +402,7 @@ void CImsWrap::drawScreen(CFrame &screen, CFrameSet &frameSet)
         int y = entry.y * fntBlockSize;
         if (entry.imageId >= frameSet.getSize())
         {
-            printf("imageID out of bound: %d [%s]\n", entry.imageId, getTypeName(entry.stat));
+            printf("imageID out of bound: %d [%s]\n", entry.imageId, getTypeName(entry.type));
             continue;
         }
         CFrame *frame = frameSet[entry.imageId];
