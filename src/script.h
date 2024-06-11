@@ -49,7 +49,7 @@ private:
     {
         TILESET_NAME_MAX = 8,
         SCRIPTNAME_MAX = 255,
-        GROWBY = 16
+        GROW_BY = 16
     };
 };
 

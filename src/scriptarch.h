@@ -18,14 +18,18 @@ public:
     void add(CScript *script);
     void forget();
     int getSize();
-    CScript *operator[](int i);
+    inline CScript *operator[](int i);
+    inline CScript *at(int i);
+    static bool indexFromFile(const char *filename, uint32_t *&index, uint32_t &size);
+    CScript *removeAt(int i);
 
 private:
     enum
     {
         GROW_BY = 16,
         VERSION = 0,
-        INDEXPTR_OFFSET = 8
+        INDEXPTR_OFFSET = 8,
+        COUNT_OFFSET = 6
     };
 
     uint32_t m_size;

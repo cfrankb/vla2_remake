@@ -133,10 +133,10 @@ void CScriptArch::forget()
 {
     if (m_scripts)
     {
-        //  for (int i = 0; i < m_size; ++i)
-        //  {
-        //     delete[] m_scripts[i];
-        // }
+        for (int i = 0; i < m_size; ++i)
+        {
+            delete m_scripts[i];
+        }
         delete[] m_scripts;
     }
     m_scripts = nullptr;
@@ -152,4 +152,49 @@ int CScriptArch::getSize()
 CScript *CScriptArch::operator[](int i)
 {
     return m_scripts[i];
+}
+
+CScript *CScriptArch::at(int i)
+{
+    return (*this)[i];
+}
+
+bool CScriptArch::indexFromFile(const char *filename, uint32_t *&index, uint32_t &size)
+{
+    /*
+   4 signature      "SCRX"
+   2 version
+   2 script count
+   4 index offset
+   */
+    FILE *sfile = fopen(filename, "rb");
+    if (sfile)
+    {
+        char signature[4];
+        uint16_t version;
+        uint16_t dwCount;
+        uint32_t indexOffset = 0;
+        // TODO check signature/version
+        fread(signature, sizeof(signature), 1, sfile);
+        fread(&version, sizeof(version), 1, sfile);
+        fread(&dwCount, sizeof(dwCount), 1, sfile);
+        fread(&indexOffset, sizeof(indexOffset), 1, sfile);
+        fseek(sfile, indexOffset, SEEK_SET);
+        index = new uint32_t[dwCount];
+        fread(index, dwCount * sizeof(uint32_t), 1, sfile);
+        size = dwCount;
+        fclose(sfile);
+    }
+    return sfile != nullptr;
+}
+
+CScript *CScriptArch::removeAt(int i)
+{
+    CScript *t = m_scripts[i];
+    for (int j = i; j < m_size - 1; ++j)
+    {
+        m_scripts[j] = m_scripts[j + 1];
+    }
+    --m_size;
+    return t;
 }

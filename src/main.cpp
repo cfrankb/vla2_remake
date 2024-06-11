@@ -152,7 +152,6 @@ bool createScriptArch()
         const filedef_t &def = filedefs[i];
         const std::string scrFile = std::string("data/") + def.scrFile;
         printf("file:%s\n", scrFile.c_str());
-
         FILE *sfileSCR = fopen(scrFile.c_str(), "rb");
         if (sfileSCR)
         {
@@ -168,12 +167,11 @@ bool createScriptArch()
             auto j = tileset.find(".");
             if (j != std::string::npos)
             {
-                //  printf("j=%d\n", j);
                 tileset.resize(j);
             }
             tileset.resize(8);
             script->setName(def.name);
-            script->setTileSet(tileset); // def.imsFile);
+            script->setTileSet(tileset);
             arch.add(script);
         }
         else
@@ -198,31 +196,23 @@ bool testArch()
     CScriptArch arch;
     const char *archfileS = "out/levels.scrx";
     const char *archfileT = "out/levels1.scrx";
-    printf("reading %s\n", archfileS);
+    printf("reading archfile: %s\n", archfileS);
     if (!arch.read(archfileS))
     {
         printf("failed to read: %s\n", archfileS);
         return false;
     }
-
     printf("writing archfile: %s\n", archfileT);
     if (!arch.write(archfileT))
     {
         printf("failed to create: %s\n", archfileT);
         return false;
     }
-
     return true;
 }
 
 int main(int argc, char *args[])
 {
-    /*
-        ims.readIMS("data/jungle.ims");
-        ims.readSCR("data/_lev01.scr");
-        ims.debug("jungle1.txt");
-        */
-
     // exportIms();
     // compositeAll();
     createScriptArch();
