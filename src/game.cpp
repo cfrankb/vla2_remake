@@ -4,6 +4,7 @@
 #include <cstdio>
 #include "imswrap.h"
 #include "framemap.h"
+#include "defs.h"
 
 CGame::CGame()
 {
@@ -44,13 +45,12 @@ bool CGame::loadTileset(const char *tileset)
     if (!ims.readIMS(tilesetName.c_str()))
     {
         m_lastError = "can't read tileset: " + tilesetName;
-        printf("can't read tileset %s\n", tilesetName.c_str());
+        printf("can't read tileset: %s\n", tilesetName.c_str());
         return false;
     }
     ims.toFrameSet(*m_frameSet, nullptr);
     m_frameMap->fromFrameSet(*m_frameSet);
     m_frameMap->write("out/fmap.dat");
-
     return true;
 }
 
@@ -64,15 +64,17 @@ bool CGame::loadLevel(int i)
         fseek(sfile, m_scriptIndex[i], SEEK_SET);
         // read level
         result = m_script->read(sfile);
+        mapScript(m_script);
         fclose(sfile);
     }
     else
     {
         m_lastError = "can't open: " + m_scriptArchName;
-        printf("can't read %s\n", m_scriptArchName.c_str());
+        printf("can't open: %s\n", m_scriptArchName.c_str());
         return false;
     }
 
+    // load tileset
     const std::string tileset = m_script->tileset();
     if (result && !loadTileset(tileset.c_str()))
     {
@@ -86,4 +88,21 @@ bool CGame::loadLevel(int i)
 const char *CGame::lastError()
 {
     return m_lastError.c_str();
+}
+
+void CGame::mapScript(CScript *script)
+{
+    m_map.clear();
+    for (int i = 0; i < script->getSize(); ++i)
+    {
+        const scriptEntry_t &entry = (*script)[i];
+        if (entry.type != TYPE_BLANK && CScript::isBackgroundType(entry.type))
+        {
+            auto &a = m_map[CScript::toKey(entry.x, entry.y)];
+            if (a != TYPE_SAND && a < entry.type)
+            {
+                a = entry.type;
+            }
+        }
+    }
 }

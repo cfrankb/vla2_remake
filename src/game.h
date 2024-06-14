@@ -2,6 +2,7 @@
 #define __GAME_H
 #include <string>
 #include <cstdint>
+#include <unordered_map>
 
 class CFrameSet;
 class CScript;
@@ -25,7 +26,10 @@ private:
     CFrameMap *m_frameMap;
     bool m_valid;
     std::string m_lastError;
+    std::unordered_map<uint32_t, uint32_t> m_map;
+
     bool loadTileset(const char *tileset);
+    void mapScript(CScript *script);
 };
 
 #endif

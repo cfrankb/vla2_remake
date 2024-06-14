@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdint>
 #include <cstdio>
+#include "defs.h"
 
 typedef struct
 {
@@ -31,13 +32,29 @@ public:
     std::string tileset();
     void setTileSet(const std::string &tileset);
     int getSize();
-    inline scriptEntry_t &operator[](int i);
-    static inline uint16_t toKey(const uint8_t x, const uint8_t y);
-    static inline bool isBackgroundType(uint8_t type);
+    inline scriptEntry_t &operator[](int i)
+    {
+        return m_script[i];
+    }
+    static inline uint16_t toKey(const uint8_t x, const uint8_t y)
+    {
+        return x + (y << 8);
+    }
+    static inline bool isBackgroundType(uint8_t type)
+    {
+        return type == TYPE_BLANK || type >= TYPE_LADDER;
+    }
+    static inline bool isForegroundType(uint8_t type)
+    {
+        return type != TYPE_BLANK && type < TYPE_LADDER;
+    }
     int add(const scriptEntry_t &entry);
     int insertAt(int i, const scriptEntry_t &entry);
     void removeAt(int i);
-    inline scriptEntry_t &at(int i);
+    inline scriptEntry_t &at(int i)
+    {
+        return (*this)[i];
+    }
 
 private:
     std::string m_name;

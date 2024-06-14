@@ -28,7 +28,7 @@ private:
     uint8_t *m_mapData;
     int m_dataSize;
 
-    int fromSquare(CFrame &frame, int baseX, int baseY);
+    int scoreFromTile(CFrame &frame, int baseX, int baseY);
     void forget();
 };
 

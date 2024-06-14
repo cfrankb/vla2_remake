@@ -128,26 +128,6 @@ int CScript::getSize()
     return m_size;
 }
 
-scriptEntry_t &CScript::operator[](int i)
-{
-    return m_script[i];
-}
-
-scriptEntry_t &CScript::at(int i)
-{
-    return (*this)[i];
-}
-
-uint16_t CScript::toKey(const uint8_t x, const uint8_t y)
-{
-    return x + (y << 8);
-}
-
-bool CScript::isBackgroundType(uint8_t type)
-{
-    return type == TYPE_BLANK || type >= TYPE_LADDER;
-}
-
 void CScript::growArray()
 {
     if (m_size == m_max)

@@ -55,16 +55,14 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet)
         {
             for (int x = 0; x < frame.len() / fntTileSize; ++x)
             {
-                uint8_t score = fromSquare(frame, x * fntTileSize, y * fntTileSize);
-                //     printf("score: %d\n", score);
+                const uint8_t score = scoreFromTile(frame, x * fntTileSize, y * fntTileSize);
                 *p++ = score >= threshold ? 0xff : 0;
             }
-            //            printf("%p\n", p);
         }
     }
 }
 
-int CFrameMap::fromSquare(CFrame &frame, int baseX, int baseY)
+int CFrameMap::scoreFromTile(CFrame &frame, int baseX, int baseY)
 {
     int score = 0;
     for (int y = 0; y < fntTileSize; ++y)
@@ -85,6 +83,7 @@ uint8_t *CFrameMap::mapPtr(int i)
 
 bool CFrameMap::write(const char *filename)
 {
+    // TODO: fix this
     FILE *tfile = fopen(filename, "wb");
     if (tfile)
     {
@@ -93,11 +92,11 @@ bool CFrameMap::write(const char *filename)
         fwrite(m_mapData, m_dataSize, 1, tfile);
         fclose(tfile);
     }
-
     return tfile != nullptr;
 }
 
 bool CFrameMap::read(const char *filename)
 {
+    // TODO: implement this
     return true;
 }
