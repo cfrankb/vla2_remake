@@ -4,17 +4,7 @@
 #include <cstdint>
 #include <cstdio>
 #include "defs.h"
-
-typedef struct
-{
-    uint8_t attr;
-    uint8_t type; // objType
-    uint8_t u1;
-    uint8_t u2;
-    uint16_t imageId;
-    uint8_t x;
-    uint8_t y;
-} scriptEntry_t;
+#include "struct.h"
 
 class CScript
 {
@@ -36,7 +26,7 @@ public:
     void setName(const std::string &name);
     std::string tileset();
     void setTileSet(const std::string &tileset);
-    inline int getSize()
+    inline int getSize() const
     {
         return m_size;
     }
@@ -44,18 +34,23 @@ public:
     {
         return m_script[i];
     }
-    static inline uint16_t toKey(const uint8_t x, const uint8_t y)
+    static inline uint32_t toKey(const uint8_t x, const uint8_t y)
     {
-        return x + (y << 8);
+        return x + (y << 16);
     }
-    static inline bool isBackgroundType(uint8_t type)
+    static inline bool isBackgroundType(const uint8_t type)
     {
         return type == TYPE_BLANK || type >= TYPE_LADDER;
     }
-    static inline bool isForegroundType(uint8_t type)
+    static inline bool isForegroundType(const uint8_t type)
     {
         return type != TYPE_BLANK && type < TYPE_LADDER;
     }
+    static inline bool isMonsterType(const uint8_t type)
+    {
+        return (type & TYPE_FILTER_GROUP) == TYPE_MONSTER_FILTER;
+    }
+
     int add(const scriptEntry_t &entry);
     int insertAt(int i, const scriptEntry_t &entry);
     void removeAt(int i);

@@ -33,6 +33,11 @@
 #define TYPE_STOPCLASS 0x0f0
 #define TYPE_LAVA 0x0ff
 
+// filters
+
+#define TYPE_FILTER_GROUP 0xf0
+#define TYPE_MONSTER_FILTER 0xc0
+
 // tasks
 
 #define TASK_NONE 0

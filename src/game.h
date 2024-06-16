@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdint>
 #include <unordered_map>
+#include "struct.h"
 
 class CFrameSet;
 class CScript;
@@ -18,6 +19,15 @@ public:
     const char *lastError();
 
 private:
+    enum
+    {
+        AIM_UP,
+        AIM_DOWN,
+        AIM_LEFT,
+        AIM_RIGHT,
+        PLAYER_RECT = 2
+    };
+
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;
     uint32_t *m_scriptIndex;
@@ -31,6 +41,7 @@ private:
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
     void splitScript();
+    bool canMove(scriptEntry_t &actor, int aim);
 };
 
 #endif

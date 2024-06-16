@@ -1,5 +1,6 @@
 #include "game.h"
 #include "shared/FrameSet.h"
+#include "shared/Frame.h"
 #include "scriptarch.h"
 #include <cstdio>
 #include "imswrap.h"
@@ -124,4 +125,51 @@ void CGame::splitScript()
     for (int i = 0; i < m_script->getSize(); ++i)
     {
     }
+}
+
+bool CGame::canMove(scriptEntry_t &actor, int aim)
+{
+    int len, hei;
+    if (actor.type == TYPE_PLAYER)
+    {
+        len = PLAYER_RECT;
+        hei = PLAYER_RECT;
+    }
+    else
+    {
+        CFrame *frame = (*m_frameSet)[actor.imageId];
+        len = frame->len();
+        hei = frame->hei();
+    }
+
+    int x = actor.x;
+    int y = actor.y;
+
+    switch (aim)
+    {
+    case AIM_UP:
+        if (y == 0)
+            return false;
+        --y;
+        hei = 1;
+        break;
+    case AIM_DOWN:
+        y += hei;
+        hei = 1;
+        break;
+    case AIM_LEFT:
+        x += len;
+        len = 1;
+        break;
+    case AIM_RIGHT:
+        if (x == 0)
+            return false;
+        --x;
+        len = 1;
+        break;
+    default:
+        return false;
+    };
+
+    return true;
 }
