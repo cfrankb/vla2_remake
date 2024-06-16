@@ -69,7 +69,8 @@ protected:
 
     enum
     {
-        IMSNAME_MAX = 8192
+        IMSNAME_MAX = 8192,
+        fntBlockSize = 8
     };
 
     int getImageCount(uint8_t *imsTable);
@@ -94,7 +95,6 @@ protected:
     scriptEntry_t *m_script;
     stoEntry_t *m_stoData;
     uint8_t *m_imsTable;
-    const int fntBlockSize = 8;
 };
 
 #endif

@@ -19,6 +19,11 @@ typedef struct
 class CScript
 {
 public:
+    enum
+    {
+        NOT_FOUND = -1
+    };
+
     CScript();
     CScript(scriptEntry_t *script, uint32_t size);
     ~CScript();
@@ -31,7 +36,10 @@ public:
     void setName(const std::string &name);
     std::string tileset();
     void setTileSet(const std::string &tileset);
-    int getSize();
+    inline int getSize()
+    {
+        return m_size;
+    }
     inline scriptEntry_t &operator[](int i)
     {
         return m_script[i];
@@ -55,6 +63,8 @@ public:
     {
         return (*this)[i];
     }
+    int findPlayerIndex();
+    int countType(uint8_t type);
 
 private:
     std::string m_name;

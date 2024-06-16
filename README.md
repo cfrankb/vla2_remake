@@ -1,3 +1,3 @@
-Porting 1995, The Vlamits 2 from assembly source to portable C++
+Remake of The Vlamits 2 (1995) from assembly source to portable C++ (2024).
 
-![Foo](techdocs/images/_lev07.png)
+![level07](techdocs/images/_lev07.png)

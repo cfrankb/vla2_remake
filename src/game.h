@@ -30,6 +30,7 @@ private:
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
+    void splitScript();
 };
 
 #endif

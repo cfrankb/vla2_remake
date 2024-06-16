@@ -65,6 +65,18 @@ bool CGame::loadLevel(int i)
         // read level
         result = m_script->read(sfile);
         mapScript(m_script);
+
+        printf("flower count: %d\n", m_script->countType(TYPE_FLOWER));
+        int i = m_script->findPlayerIndex();
+        if (i != CScript::NOT_FOUND)
+        {
+            scriptEntry_t &entry = (*m_script)[i];
+            printf("player found at: x=%d y=%d\n", entry.x, entry.y);
+        }
+        else
+        {
+            printf("no player found\n");
+        }
         fclose(sfile);
     }
     else
@@ -81,7 +93,6 @@ bool CGame::loadLevel(int i)
         result = false;
         m_lastError = "loadTileset failed";
     }
-
     return result;
 }
 
@@ -104,5 +115,13 @@ void CGame::mapScript(CScript *script)
                 a = entry.type;
             }
         }
+    }
+}
+
+void CGame::splitScript()
+{
+    // TODO: implement this
+    for (int i = 0; i < m_script->getSize(); ++i)
+    {
     }
 }

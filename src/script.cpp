@@ -123,11 +123,6 @@ void CScript::setTileSet(const std::string &tileset)
     m_tileset = tileset;
 }
 
-int CScript::getSize()
-{
-    return m_size;
-}
-
 void CScript::growArray()
 {
     if (m_size == m_max)
@@ -166,4 +161,29 @@ void CScript::removeAt(int i)
         m_script[i] = m_script[i + 1];
     }
     --m_size;
+}
+
+int CScript::findPlayerIndex()
+{
+    for (int i = 0; i < m_size; ++i)
+    {
+        if (m_script[i].type == TYPE_PLAYER)
+        {
+            return i;
+        }
+    }
+    return NOT_FOUND;
+}
+
+int CScript::countType(uint8_t type)
+{
+    int count = 0;
+    for (int i = 0; i < m_size; ++i)
+    {
+        if (m_script[i].type == type)
+        {
+            ++count;
+        }
+    }
+    return count;
 }
