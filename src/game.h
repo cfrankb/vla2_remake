@@ -17,14 +17,9 @@ public:
 
     bool loadLevel(int i);
     const char *lastError();
-    inline int mode()
-    {
-        return m_mode;
-    }
-    void setMode(int mode)
-    {
-        m_mode = mode;
-    }
+    bool init(const char *archname);
+    int mode();
+    void setMode(int mode);
 
     enum
     {

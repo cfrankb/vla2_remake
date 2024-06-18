@@ -10,20 +10,11 @@
 CGame::CGame()
 {
     m_frameSet = new CFrameSet;
-    m_scriptArchName = "out/levels.scrx";
     m_scriptCount = 0;
     m_script = new CScript;
     m_valid = false;
     m_frameMap = new CFrameMap;
-
-    if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
-    {
-        m_lastError = "can't read: " + m_scriptArchName;
-        printf("can't read %s\n", m_scriptArchName.c_str());
-        return;
-    }
-
-    m_valid = true;
+    m_valid = false;
 }
 
 CGame::~CGame()
@@ -37,6 +28,19 @@ CGame::~CGame()
     {
         delete m_script;
     }
+}
+
+bool CGame::init(const char *archname)
+{
+    m_scriptArchName = archname ? archname : "out/levels.scrx";
+    if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
+    {
+        m_lastError = "can't read index: " + m_scriptArchName;
+        printf("can't read index: %s\n", m_scriptArchName.c_str());
+        return false;
+    }
+    printf("map count: %d\n", m_scriptCount);
+    return true;
 }
 
 bool CGame::loadTileset(const char *tileset)
@@ -240,4 +244,14 @@ uint32_t CGame::mapAt(int x, int y)
     {
         return 0;
     }
+}
+
+int CGame::mode()
+{
+    return m_mode;
+}
+
+void CGame::setMode(int mode)
+{
+    m_mode = mode;
 }

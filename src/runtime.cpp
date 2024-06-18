@@ -26,6 +26,7 @@ CRuntime::CRuntime()
 {
     memset(&m_app, 0, sizeof(App));
     m_game = new CGame();
+    m_assetPreloaded = false;
 }
 
 CRuntime::~CRuntime()
@@ -186,12 +187,10 @@ void CRuntime::preloadAssets()
     } asset_t;
 
     asset_t assets[] = {
-        {"data/tiles.obl", &m_tiles},
-        {"data/animz.obl", &m_animz},
         {"data/annie.obl", &m_annie},
     };
 
-    for (int i = 0; i < 3; ++i)
+    for (size_t i = 0; i < sizeof(assets) / sizeof(asset_t); ++i)
     {
         asset_t &asset = assets[i];
         *(asset.frameset) = new CFrameSet();
@@ -222,14 +221,30 @@ void CRuntime::preloadAssets()
     }
 }
 
-void CRuntime::drawLevelIntro(CFrame &)
+void CRuntime::drawLevelIntro(CFrame &screen)
 {
 }
 
-void CRuntime::drawScreen(CFrame &)
+void CRuntime::drawScreen(CFrame &screen)
 {
 }
 
 void CRuntime::mainLoop()
 {
+}
+
+bool CRuntime::init(const char *filearch)
+{
+    if (!m_assetPreloaded)
+    {
+        preloadAssets();
+        m_assetPreloaded = true;
+    }
+
+    bool result = m_game->init(filearch);
+    if (result)
+    {
+        m_game->loadLevel(0);
+    }
+    return result;
 }

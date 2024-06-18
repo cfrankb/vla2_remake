@@ -31,6 +31,7 @@ public:
     void run();
     bool SDLInit();
     void doInput();
+    bool init(const char *filearch);
 
 protected:
     enum
@@ -59,12 +60,11 @@ private:
     uint8_t m_joyState[JOY_STATES];
     uint8_t *m_fontData;
     CFrameSet *m_annie;
-    CFrameSet *m_tiles;
-    CFrameSet *m_animz;
+    bool m_assetPreloaded;
 
     static void cleanup();
     virtual void preloadAssets();
-    void drawLevelIntro(CFrame &);
-    void drawScreen(CFrame &);
+    void drawLevelIntro(CFrame &screen);
+    void drawScreen(CFrame &screen);
     void mainLoop();
 };
