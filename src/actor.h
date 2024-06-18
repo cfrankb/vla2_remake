@@ -18,7 +18,16 @@ public:
     uint8_t y;
 
     bool canMove(int aim);
-    void move(int aim);
+    bool move(int aim);
+
+private:
+    enum
+    {
+        AIM_UP,
+        AIM_DOWN,
+        AIM_LEFT,
+        AIM_RIGHT,
+    };
 
     friend class CGame;
 };

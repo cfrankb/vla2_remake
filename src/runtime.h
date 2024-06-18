@@ -61,6 +61,7 @@ private:
     uint8_t *m_fontData;
     CFrameSet *m_annie;
     bool m_assetPreloaded;
+    uint32_t m_ticks;
 
     static void cleanup();
     virtual void preloadAssets();

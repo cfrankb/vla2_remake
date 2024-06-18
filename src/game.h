@@ -3,7 +3,6 @@
 #include <string>
 #include <cstdint>
 #include <unordered_map>
-#include "struct.h"
 
 class CFrameSet;
 class CScript;
@@ -24,12 +23,17 @@ public:
     void drawScreen(CFrame &screen, CFrame *annie);
     static CGame *getGame();
 
+    int playerSpeed();
+    bool isPlayerDead();
+    void managePlayer(uint8_t *joyState);
+
     enum
     {
         MODE_INTRO = 0,
         MODE_LEVEL = 1,
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
+        DEFAULT_PLAYER_SPEED = 4
     };
 
 protected:
@@ -44,7 +48,8 @@ private:
         AIM_RIGHT,
         HERE = 255,
         PLAYER_RECT = 2,
-        fntBlockSize = 8
+        fntBlockSize = 8,
+        MAX_POS = 255
     };
 
     CFrameSet *m_frameSet;

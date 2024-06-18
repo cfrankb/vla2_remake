@@ -28,8 +28,9 @@ CRuntime::CRuntime()
 {
     memset(&m_app, 0, sizeof(App));
     m_game = CGame::getGame();
-    // new CGame();
     m_assetPreloaded = false;
+    m_ticks = 0;
+    memset(m_joyState, 0, sizeof(m_joyState));
 }
 
 CRuntime::~CRuntime()
@@ -252,6 +253,12 @@ void CRuntime::drawScreen(CFrame &screen)
 void CRuntime::mainLoop()
 {
     // printf("mainLoop\n");
+    CGame &game = *CGame::getGame();
+
+    if (m_ticks % game.playerSpeed() == 0 && !game.isPlayerDead())
+    {
+        game.managePlayer(m_joyState);
+    }
 }
 
 bool CRuntime::init(const char *filearch)

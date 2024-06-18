@@ -8,6 +8,7 @@
 #include "defs.h"
 #include "actor.h"
 
+#define DEFAULT_ARCHFILE "data/levels.scrx"
 CGame *g_game = nullptr;
 
 CGame::CGame()
@@ -41,7 +42,7 @@ CGame::~CGame()
 
 bool CGame::init(const char *archname)
 {
-    m_scriptArchName = archname ? archname : "data/levels.scrx";
+    m_scriptArchName = archname ? archname : DEFAULT_ARCHFILE;
     if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
     {
         m_lastError = "can't read index: " + m_scriptArchName;
@@ -81,7 +82,6 @@ bool CGame::loadLevel(int i)
         fseek(sfile, m_scriptIndex[i], SEEK_SET);
         // read level
         result = m_script->read(sfile);
-        mapScript(m_script);
 
         printf("flowers: %d\n", m_script->countType(TYPE_FLOWER));
         int i = m_script->findPlayerIndex();
@@ -114,6 +114,9 @@ bool CGame::loadLevel(int i)
         result = false;
         m_lastError = "loadTileset failed";
     }
+    // map script
+    mapScript(m_script);
+
     return result;
 }
 
@@ -130,10 +133,19 @@ void CGame::mapScript(CScript *script)
         const CActor &entry = (*script)[i];
         if (entry.type != TYPE_BLANK && CScript::isBackgroundType(entry.type))
         {
-            auto &a = m_map[CScript::toKey(entry.x, entry.y)];
-            if (a != TYPE_SAND && a < entry.type)
+            int len, hei;
+            sizeFrame(entry, len, hei);
+            for (int y = 0; y < hei / fntBlockSize; ++y)
             {
-                a = entry.type;
+                for (int x = 0; x < len / fntBlockSize; ++x)
+                {
+                    const uint32_t key = CScript::toKey(entry.x + x, entry.y + y);
+                    auto &a = m_map[key];
+                    if (a != TYPE_SAND && a < entry.type)
+                    {
+                        a = entry.type;
+                    }
+                }
             }
         }
     }
@@ -152,29 +164,36 @@ bool CGame::canMove(const CActor &actor, int aim)
     int len, hei;
     sizeFrame(actor, len, hei);
 
-    int x = actor.x;
-    int y = actor.y;
-
+    int actX = actor.x;
+    int actY = actor.y;
     switch (aim)
     {
     case AIM_UP:
-        if (y == 0)
+        if (actY == 0)
             return false;
-        --y;
+        --actY;
         hei = 1;
         break;
     case AIM_DOWN:
-        y += hei;
+        if (actY + hei >= MAX_POS)
+        {
+            return false;
+        }
+        actY += hei;
         hei = 1;
         break;
     case AIM_LEFT:
-        x += len;
+        if (actX == 0)
+            return false;
+        --actX;
         len = 1;
         break;
     case AIM_RIGHT:
-        if (x == 0)
+        if (actX + len >= MAX_POS)
+        {
             return false;
-        --x;
+        }
+        actX += len;
         len = 1;
         break;
     default:
@@ -182,11 +201,11 @@ bool CGame::canMove(const CActor &actor, int aim)
     };
 
     // check collision map
-    for (int iy; iy < hei; ++iy)
+    for (int iy = 0; iy < hei; ++iy)
     {
-        for (int ix; ix < len; ++ix)
+        for (int ix = 0; ix < len; ++ix)
         {
-            uint32_t bkType = mapAt(x + ix, y + iy);
+            uint32_t bkType = mapAt(actX + ix, actY + iy);
             if (CScript::isMonsterType(actor.type))
             {
                 if (actor.type != TYPE_FISH &&
@@ -206,7 +225,8 @@ bool CGame::canMove(const CActor &actor, int aim)
         }
     }
 
-    // check script entries for inbound collisions
+    // return true;
+    //  check script entries for inbound collisions
     int eLen;
     int eHei;
     for (int i = 0; i < m_script->getSize(); ++i)
@@ -216,10 +236,12 @@ bool CGame::canMove(const CActor &actor, int aim)
             CScript::isPlayerType(entry.type))
         {
             sizeFrame(entry, eLen, eHei);
-            if ((entry.x + eLen <= actor.x) ||
-                (entry.x + eLen >= actor.x + len) ||
-                (entry.y + eHei <= actor.y) ||
-                (entry.y + eHei >= actor.y + hei))
+            eLen /= fntBlockSize;
+            eHei /= fntBlockSize;
+            if ((entry.x + eLen <= actX) ||
+                (entry.x + eLen >= actX + len) ||
+                (entry.y + eHei <= actY) ||
+                (entry.y + eHei >= actY + hei))
             {
                 continue;
             }
@@ -274,10 +296,14 @@ void CGame::setMode(int mode)
 
 void CGame::drawScreen(CFrame &screen, CFrame *annie)
 {
+    const int scrLen = screen.len();
+    const int scrHei = screen.hei();
     const int rows = screen.hei() / fntBlockSize;
     const int cols = screen.len() / fntBlockSize;
-    const int mx = 0;
-    const int my = 0;
+    const int hx = cols / 2;
+    const int hy = rows / 2;
+    const int mx = m_player->x < hx ? 0 : m_player->x - hx;
+    const int my = m_player->y < hy ? 0 : m_player->y - hy;
     for (int i = 0; i < m_script->getSize(); ++i)
     {
         CFrame *frame;
@@ -294,11 +320,10 @@ void CGame::drawScreen(CFrame &screen, CFrame *annie)
         {
             frame = (*m_frameSet)[entry.imageId];
         }
-
-        const int frows = frame->hei() / fntBlockSize;
         const int fcols = frame->len() / fntBlockSize;
-        const int rx = entry.x - mx;
-        const int ry = entry.y - my;
+        const int frows = frame->hei() / fntBlockSize;
+        const int rx = int(entry.x) - mx;
+        const int ry = int(entry.y) - my;
         if ((rx < cols) &&
             (rx + fcols > 0) &&
             (ry < rows) &&
@@ -312,13 +337,17 @@ void CGame::drawScreen(CFrame &screen, CFrame *annie)
             const int sy = ry > 0 ? ry : 0;
             for (int y = 0; y < fhei * fntBlockSize; ++y)
             {
+                if (sy * fntBlockSize + y >= scrHei)
+                    break;
                 uint32_t *rgba = &screen.at(sx * fntBlockSize, sy * fntBlockSize + y);
+                const uint32_t *pixel = &frame->at(offsetX * fntBlockSize, offsetY * fntBlockSize + y);
                 for (int x = 0; x < flen * fntBlockSize; ++x)
                 {
-                    const uint32_t &pixel = frame->at(x + offsetX * fntBlockSize, y + offsetY * fntBlockSize);
-                    if (pixel)
+                    if (sx * fntBlockSize + x >= scrLen)
+                        break;
+                    if (pixel[x])
                     {
-                        rgba[x] = pixel;
+                        rgba[x] = pixel[x];
                     }
                 }
             }
@@ -333,4 +362,29 @@ CGame *CGame::getGame()
         g_game = new CGame();
     }
     return g_game;
+}
+
+int CGame::playerSpeed()
+{
+    return DEFAULT_PLAYER_SPEED;
+}
+
+bool CGame::isPlayerDead()
+{
+    return false;
+}
+
+void CGame::managePlayer(uint8_t *joyState)
+{
+    uint8_t aims[] = {AIM_UP, AIM_DOWN, AIM_LEFT, AIM_RIGHT};
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        uint8_t aim = aims[i];
+        if (joyState[aim] &&
+            m_player->canMove(aim) &&
+            m_player->move(aim))
+        {
+            break;
+        }
+    }
 }
