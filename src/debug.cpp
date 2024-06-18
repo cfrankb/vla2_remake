@@ -10,6 +10,7 @@
 #include "shared/FileWrap.h"
 #include "script.h"
 #include "scriptarch.h"
+#include "struct.h"
 
 typedef struct
 {
@@ -162,7 +163,7 @@ bool createScriptArch()
             scriptEntry_t *scriptData = new scriptEntry_t[entryCount];
             fread(scriptData, dataLenght, 1, sfileSCR);
             fclose(sfileSCR);
-            CScript *script = new CScript(scriptData, entryCount);
+            CScript *script = new CScript(reinterpret_cast<CActor *>(scriptData), entryCount);
             std::string tileset = def.imsFile;
             auto j = tileset.find(".");
             if (j != std::string::npos)

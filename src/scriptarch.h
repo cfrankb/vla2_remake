@@ -5,6 +5,7 @@
 #include "script.h"
 
 class CScript;
+class CActor;
 
 class CScriptArch
 {
@@ -14,7 +15,7 @@ public:
 
     bool read(const char *filename);
     bool write(const char *filename);
-    void add(scriptEntry_t *scriptArray, uint32_t size);
+    void add(CActor *scriptArray, uint32_t size);
     void add(CScript *script);
     void forget();
     int getSize();

@@ -9,6 +9,7 @@ class CFrameSet;
 class CScript;
 class CFrameMap;
 class CFrame;
+class CActor;
 
 class CGame
 {
@@ -43,9 +44,7 @@ private:
         AIM_RIGHT,
         HERE = 255,
         PLAYER_RECT = 2,
-        FntTileSize = 8,
         fntBlockSize = 8
-
     };
 
     CFrameSet *m_frameSet;
@@ -59,14 +58,16 @@ private:
     std::unordered_map<uint32_t, uint32_t> m_map;
     int m_mode;
     std::string m_loadedTileSet;
-    scriptEntry_t *m_player;
+    CActor *m_player;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
     void splitScript();
-    bool canMove(const scriptEntry_t &actor, int aim);
+    bool canMove(const CActor &actor, int aim);
     inline uint32_t mapAt(int x, int y);
-    inline void sizeFrame(const scriptEntry_t &entry, int &len, int &hei) const;
+    inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
+
+    friend class CActor;
 };
 
 #endif

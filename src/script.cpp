@@ -1,6 +1,7 @@
 #include <cstring>
 #include "script.h"
 #include "defs.h"
+#include "actor.h"
 
 CScript::CScript()
 {
@@ -9,7 +10,7 @@ CScript::CScript()
     m_max = m_size;
 }
 
-CScript::CScript(scriptEntry_t *script, uint32_t size)
+CScript::CScript(CActor *script, uint32_t size)
 {
     m_script = script;
     m_size = size;
@@ -32,7 +33,7 @@ void CScript::forget()
     m_max = 0;
 }
 
-void CScript::copy(scriptEntry_t *script, int count)
+void CScript::copy(CActor *script, int count)
 {
     if (m_script)
     {
@@ -40,8 +41,8 @@ void CScript::copy(scriptEntry_t *script, int count)
     }
     m_size = count;
     m_max = m_size;
-    m_script = new scriptEntry_t[m_size];
-    memcpy(m_script, script, sizeof(scriptEntry_t) * count);
+    m_script = new CActor[m_size];
+    memcpy(m_script, script, sizeof(CActor) * count);
 }
 
 bool CScript::write(FILE *tfile)
@@ -56,7 +57,7 @@ bool CScript::write(FILE *tfile)
     fwrite(tileset, sizeof(tileset), 1, tfile);
 
     // write script
-    fwrite(m_script, sizeof(scriptEntry_t) * m_size, 1, tfile);
+    fwrite(m_script, sizeof(CActor) * m_size, 1, tfile);
 
     // write scriptname + padding
     char name[SCRIPTNAME_MAX];
@@ -89,8 +90,8 @@ bool CScript::read(FILE *sfile)
     m_tileset = tileset;
 
     // read script
-    m_script = new scriptEntry_t[m_size];
-    fread(m_script, sizeof(scriptEntry_t) * m_size, 1, sfile);
+    m_script = new CActor[m_size];
+    fread(m_script, sizeof(CActor) * m_size, 1, sfile);
 
     // read scriptname
     char name[SCRIPTNAME_MAX + 1];
@@ -128,21 +129,21 @@ void CScript::growArray()
     if (m_size == m_max)
     {
         m_max += GROW_BY;
-        scriptEntry_t *tmp = new scriptEntry_t[m_max];
-        memcpy(tmp, m_script, m_size * sizeof(scriptEntry_t));
+        auto tmp = new CActor[m_max];
+        memcpy(tmp, m_script, m_size * sizeof(CActor));
         delete[] m_script;
         m_script = tmp;
     }
 }
 
-int CScript::add(const scriptEntry_t &entry)
+int CScript::add(const CActor &entry)
 {
     growArray();
     m_script[m_size] = entry;
     return m_size++;
 }
 
-int CScript::insertAt(int i, const scriptEntry_t &entry)
+int CScript::insertAt(int i, const CActor &entry)
 {
     growArray();
     for (int j = m_size; j > i; --j)

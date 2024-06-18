@@ -6,6 +6,7 @@
 #include "imswrap.h"
 #include "framemap.h"
 #include "defs.h"
+#include "actor.h"
 
 CGame *g_game = nullptr;
 
@@ -87,7 +88,7 @@ bool CGame::loadLevel(int i)
         m_player = nullptr;
         if (i != CScript::NOT_FOUND)
         {
-            scriptEntry_t &entry = (*m_script)[i];
+            CActor &entry = (*m_script)[i];
             m_player = &entry;
             printf("player found at: x=%d y=%d\n", entry.x, entry.y);
         }
@@ -126,7 +127,7 @@ void CGame::mapScript(CScript *script)
     m_map.clear();
     for (int i = 0; i < script->getSize(); ++i)
     {
-        const scriptEntry_t &entry = (*script)[i];
+        const CActor &entry = (*script)[i];
         if (entry.type != TYPE_BLANK && CScript::isBackgroundType(entry.type))
         {
             auto &a = m_map[CScript::toKey(entry.x, entry.y)];
@@ -146,7 +147,7 @@ void CGame::splitScript()
     }
 }
 
-bool CGame::canMove(const scriptEntry_t &actor, int aim)
+bool CGame::canMove(const CActor &actor, int aim)
 {
     int len, hei;
     sizeFrame(actor, len, hei);
@@ -210,7 +211,7 @@ bool CGame::canMove(const scriptEntry_t &actor, int aim)
     int eHei;
     for (int i = 0; i < m_script->getSize(); ++i)
     {
-        scriptEntry_t &entry = (*m_script)[i];
+        CActor &entry = (*m_script)[i];
         if (CScript::isMonsterType(entry.type) ||
             CScript::isPlayerType(entry.type))
         {
@@ -229,7 +230,7 @@ bool CGame::canMove(const scriptEntry_t &actor, int aim)
     return true;
 }
 
-void CGame::sizeFrame(const scriptEntry_t &entry, int &len, int &hei) const
+void CGame::sizeFrame(const CActor &entry, int &len, int &hei) const
 {
     if (entry.type == TYPE_PLAYER)
     {

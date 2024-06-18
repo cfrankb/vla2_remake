@@ -10,8 +10,9 @@ CActor::~CActor()
 
 bool CActor::canMove(int aim)
 {
+    return true;
 }
 
-bool CActor::move(int aim)
+void CActor::move(int aim)
 {
 }

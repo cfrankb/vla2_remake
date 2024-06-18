@@ -4,7 +4,9 @@
 #include <cstdint>
 #include <cstdio>
 #include "defs.h"
-#include "struct.h"
+#include "actor.h"
+
+class CActor;
 
 class CScript
 {
@@ -15,11 +17,11 @@ public:
     };
 
     CScript();
-    CScript(scriptEntry_t *script, uint32_t size);
+    CScript(CActor *script, uint32_t size);
     ~CScript();
 
     void forget();
-    void copy(scriptEntry_t *script, int count);
+    void copy(CActor *script, int count);
     bool write(FILE *tfile);
     bool read(FILE *sfile);
     std::string name();
@@ -30,7 +32,7 @@ public:
     {
         return m_size;
     }
-    inline scriptEntry_t &operator[](int i)
+    inline CActor &operator[](int i)
     {
         return m_script[i];
     }
@@ -55,10 +57,10 @@ public:
         return type == TYPE_PLAYER;
     }
 
-    int add(const scriptEntry_t &entry);
-    int insertAt(int i, const scriptEntry_t &entry);
+    int add(const CActor &entry);
+    int insertAt(int i, const CActor &entry);
     void removeAt(int i);
-    inline scriptEntry_t &at(int i)
+    inline CActor &at(int i)
     {
         return (*this)[i];
     }
@@ -68,7 +70,7 @@ public:
 private:
     std::string m_name;
     std::string m_tileset;
-    scriptEntry_t *m_script;
+    CActor *m_script;
     uint32_t m_size;
     uint32_t m_max;
     enum

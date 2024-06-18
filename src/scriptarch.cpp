@@ -124,7 +124,7 @@ void CScriptArch::add(CScript *script)
     ++m_size;
 }
 
-void CScriptArch::add(scriptEntry_t *scriptArray, uint32_t size)
+void CScriptArch::add(CActor *scriptArray, uint32_t size)
 {
     add(new CScript(scriptArray, size));
 }

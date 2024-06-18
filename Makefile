@@ -6,7 +6,7 @@ PARGS=
 BPATH=build
 BNAME=vlamits2-sdl
 TARGET=$(BPATH)/$(BNAME)
-DEPS=$(BPATH)/script$(EXT) $(BPATH)/runtime$(EXT) $(BPATH)/main$(EXT) $(BPATH)/framemap$(EXT) $(BPATH)/game$(EXT) $(BPATH)/debug$(EXT) $(BPATH)/imswrap$(EXT) $(BPATH)/scriptarch$(EXT) $(BPATH)/FrameSet$(EXT) $(BPATH)/Frame$(EXT) $(BPATH)/DotArray$(EXT) $(BPATH)/helper$(EXT) $(BPATH)/PngMagic$(EXT) $(BPATH)/FileWrap$(EXT)
+DEPS=$(BPATH)/script$(EXT) $(BPATH)/runtime$(EXT) $(BPATH)/main$(EXT) $(BPATH)/framemap$(EXT) $(BPATH)/game$(EXT) $(BPATH)/debug$(EXT) $(BPATH)/imswrap$(EXT) $(BPATH)/actor$(EXT) $(BPATH)/scriptarch$(EXT) $(BPATH)/FrameSet$(EXT) $(BPATH)/Frame$(EXT) $(BPATH)/DotArray$(EXT) $(BPATH)/helper$(EXT) $(BPATH)/PngMagic$(EXT) $(BPATH)/FileWrap$(EXT)
 EXT=.o
 
 all: $(TARGET)
@@ -30,6 +30,9 @@ $(BPATH)/debug$(EXT): src/debug.cpp src/debug.h
 	$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@
 
 $(BPATH)/imswrap$(EXT): src/imswrap.cpp src/imswrap.h
+	$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@
+
+$(BPATH)/actor$(EXT): src/actor.cpp src/actor.h
 	$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@
 
 $(BPATH)/scriptarch$(EXT): src/scriptarch.cpp src/scriptarch.h
