@@ -127,20 +127,10 @@ void CGame::splitScript()
     }
 }
 
-bool CGame::canMove(scriptEntry_t &actor, int aim)
+bool CGame::canMove(const scriptEntry_t &actor, int aim)
 {
     int len, hei;
-    if (actor.type == TYPE_PLAYER)
-    {
-        len = PLAYER_RECT;
-        hei = PLAYER_RECT;
-    }
-    else
-    {
-        CFrame *frame = (*m_frameSet)[actor.imageId];
-        len = frame->len();
-        hei = frame->hei();
-    }
+    sizeFrame(actor, len, hei);
 
     int x = actor.x;
     int y = actor.y;
@@ -171,5 +161,83 @@ bool CGame::canMove(scriptEntry_t &actor, int aim)
         return false;
     };
 
+    // check collision map
+    for (int iy; iy < hei; ++iy)
+    {
+        for (int ix; ix < len; ++ix)
+        {
+            uint32_t bkType = mapAt(x + ix, y + iy);
+            if (CScript::isMonsterType(actor.type))
+            {
+                if (actor.type != TYPE_FISH &&
+                    (bkType == TYPE_BOTTOMWATER || bkType == TYPE_TOPWATER))
+                {
+                    return false;
+                }
+                if (bkType == TYPE_STOPCLASS)
+                {
+                    return false;
+                }
+            }
+            if (bkType == TYPE_OBSTACLECLASS)
+            {
+                return false;
+            }
+        }
+    }
+
+    // check script entries for inbound collisions
+    int eLen;
+    int eHei;
+    for (int i = 0; i < m_script->getSize(); ++i)
+    {
+        scriptEntry_t &entry = (*m_script)[i];
+        if (CScript::isMonsterType(entry.type) ||
+            CScript::isPlayerType(entry.type))
+        {
+            sizeFrame(entry, eLen, eHei);
+            if ((entry.x + eLen <= actor.x) ||
+                (entry.x + eLen >= actor.x + len) ||
+                (entry.y + eHei <= actor.y) ||
+                (entry.y + eHei >= actor.y + hei))
+            {
+                continue;
+            }
+            return false;
+        }
+    }
+
     return true;
+}
+
+void CGame::sizeFrame(const scriptEntry_t &entry, int &len, int &hei) const
+{
+    if (entry.type == TYPE_PLAYER)
+    {
+        len = PLAYER_RECT;
+        hei = PLAYER_RECT;
+    }
+    else
+    {
+        const CFrame *frame = (*m_frameSet)[entry.imageId];
+        len = frame->len();
+        hei = frame->hei();
+    }
+}
+
+/// @brief
+/// @param x
+/// @param y
+/// @return
+uint32_t CGame::mapAt(int x, int y)
+{
+    int key = CScript::toKey(x, y);
+    if (m_map.count(key) > 0)
+    {
+        return m_map[key];
+    }
+    else
+    {
+        return 0;
+    }
 }

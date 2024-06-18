@@ -8,6 +8,6 @@ int main(int argc, char *args[])
     createScriptArch();
     testArch();
 
-    CGame game;
-    game.loadLevel(0);
+    // CGame game;
+    // game.loadLevel(0);
 }

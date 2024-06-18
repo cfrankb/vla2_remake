@@ -50,6 +50,10 @@ public:
     {
         return (type & TYPE_FILTER_GROUP) == TYPE_MONSTER_FILTER;
     }
+    static inline bool isPlayerType(const uint8_t type)
+    {
+        return type == TYPE_PLAYER;
+    }
 
     int add(const scriptEntry_t &entry);
     int insertAt(int i, const scriptEntry_t &entry);
