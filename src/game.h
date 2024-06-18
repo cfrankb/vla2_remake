@@ -8,11 +8,11 @@
 class CFrameSet;
 class CScript;
 class CFrameMap;
+class CFrame;
 
 class CGame
 {
 public:
-    CGame();
     ~CGame();
 
     bool loadLevel(int i);
@@ -20,6 +20,8 @@ public:
     bool init(const char *archname);
     int mode();
     void setMode(int mode);
+    void drawScreen(CFrame &screen, CFrame *annie);
+    static CGame *getGame();
 
     enum
     {
@@ -28,6 +30,9 @@ public:
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
     };
+
+protected:
+    CGame();
 
 private:
     enum
@@ -39,6 +44,7 @@ private:
         HERE = 255,
         PLAYER_RECT = 2,
         FntTileSize = 8,
+        fntBlockSize = 8
 
     };
 
@@ -52,6 +58,8 @@ private:
     std::string m_lastError;
     std::unordered_map<uint32_t, uint32_t> m_map;
     int m_mode;
+    std::string m_loadedTileSet;
+    scriptEntry_t *m_player;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);

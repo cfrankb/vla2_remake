@@ -7,6 +7,8 @@
 #include "framemap.h"
 #include "defs.h"
 
+CGame *g_game = nullptr;
+
 CGame::CGame()
 {
     m_frameSet = new CFrameSet;
@@ -15,6 +17,7 @@ CGame::CGame()
     m_valid = false;
     m_frameMap = new CFrameMap;
     m_valid = false;
+    m_loadedTileSet = "";
 }
 
 CGame::~CGame()
@@ -28,11 +31,16 @@ CGame::~CGame()
     {
         delete m_script;
     }
+
+    if (m_frameMap)
+    {
+        delete m_frameMap;
+    }
 }
 
 bool CGame::init(const char *archname)
 {
-    m_scriptArchName = archname ? archname : "out/levels.scrx";
+    m_scriptArchName = archname ? archname : "data/levels.scrx";
     if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
     {
         m_lastError = "can't read index: " + m_scriptArchName;
@@ -45,17 +53,20 @@ bool CGame::init(const char *archname)
 
 bool CGame::loadTileset(const char *tileset)
 {
+    printf("loading tileset: %s\n", tileset);
     std::string tilesetName = "data/" + std::string(tileset) + ".ims";
     CImsWrap ims;
     if (!ims.readIMS(tilesetName.c_str()))
     {
         m_lastError = "can't read tileset: " + tilesetName;
         printf("can't read tileset: %s\n", tilesetName.c_str());
+        m_loadedTileSet = "";
         return false;
     }
     ims.toFrameSet(*m_frameSet, nullptr);
     m_frameMap->fromFrameSet(*m_frameSet);
     m_frameMap->write("out/fmap.dat");
+    m_loadedTileSet = tileset;
     return true;
 }
 
@@ -71,11 +82,13 @@ bool CGame::loadLevel(int i)
         result = m_script->read(sfile);
         mapScript(m_script);
 
-        printf("flower count: %d\n", m_script->countType(TYPE_FLOWER));
+        printf("flowers: %d\n", m_script->countType(TYPE_FLOWER));
         int i = m_script->findPlayerIndex();
+        m_player = nullptr;
         if (i != CScript::NOT_FOUND)
         {
             scriptEntry_t &entry = (*m_script)[i];
+            m_player = &entry;
             printf("player found at: x=%d y=%d\n", entry.x, entry.y);
         }
         else
@@ -93,7 +106,9 @@ bool CGame::loadLevel(int i)
 
     // load tileset
     const std::string tileset = m_script->tileset();
-    if (result && !loadTileset(tileset.c_str()))
+    if (result &&
+        (m_loadedTileSet != tileset) &&
+        !loadTileset(tileset.c_str()))
     {
         result = false;
         m_lastError = "loadTileset failed";
@@ -254,4 +269,67 @@ int CGame::mode()
 void CGame::setMode(int mode)
 {
     m_mode = mode;
+}
+
+void CGame::drawScreen(CFrame &screen, CFrame *annie)
+{
+    const int rows = screen.hei() / fntBlockSize;
+    const int cols = screen.len() / fntBlockSize;
+    const int mx = 0;
+    const int my = 0;
+    for (int i = 0; i < m_script->getSize(); ++i)
+    {
+        CFrame *frame;
+        const auto &entry = (*m_script)[i];
+        if (entry.type == TYPE_PLAYER)
+        {
+            frame = annie;
+        }
+        else if (entry.imageId >= m_frameSet->getSize())
+        {
+            continue;
+        }
+        else
+        {
+            frame = (*m_frameSet)[entry.imageId];
+        }
+
+        const int frows = frame->hei() / fntBlockSize;
+        const int fcols = frame->len() / fntBlockSize;
+        const int rx = entry.x - mx;
+        const int ry = entry.y - my;
+        if ((rx < cols) &&
+            (rx + fcols > 0) &&
+            (ry < rows) &&
+            (ry + frows > 0))
+        {
+            const int offsetX = rx < 0 ? -rx : 0;
+            const int offsetY = ry < 0 ? -ry : 0;
+            const int flen = fcols - offsetX;
+            const int fhei = frows - offsetY;
+            const int sx = rx > 0 ? rx : 0;
+            const int sy = ry > 0 ? ry : 0;
+            for (int y = 0; y < fhei * fntBlockSize; ++y)
+            {
+                uint32_t *rgba = &screen.at(sx * fntBlockSize, sy * fntBlockSize + y);
+                for (int x = 0; x < flen * fntBlockSize; ++x)
+                {
+                    const uint32_t &pixel = frame->at(x + offsetX * fntBlockSize, y + offsetY * fntBlockSize);
+                    if (pixel)
+                    {
+                        rgba[x] = pixel;
+                    }
+                }
+            }
+        }
+    }
+}
+
+CGame *CGame::getGame()
+{
+    if (!g_game)
+    {
+        g_game = new CGame();
+    }
+    return g_game;
 }

@@ -22,10 +22,13 @@
 #include <cstring>
 #include "shared/FileWrap.h"
 
+#define WINDOW_TITLE "The Vlamits2 Runtime"
+
 CRuntime::CRuntime()
 {
     memset(&m_app, 0, sizeof(App));
-    m_game = new CGame();
+    m_game = CGame::getGame();
+    // new CGame();
     m_assetPreloaded = false;
 }
 
@@ -35,11 +38,27 @@ CRuntime::~CRuntime()
     SDL_DestroyRenderer(m_app.renderer);
     SDL_DestroyWindow(m_app.window);
     SDL_Quit();
+
+    if (m_annie)
+    {
+        delete m_annie;
+    }
+
+    if (m_fontData)
+    {
+        delete[] m_fontData;
+    }
+
+    if (m_game)
+    {
+        delete m_game;
+    }
 }
 
 void CRuntime::paint()
 {
     CFrame bitmap(WIDTH, HEIGHT);
+
     switch (m_game->mode())
     {
     case CGame::MODE_INTRO:
@@ -69,7 +88,7 @@ bool CRuntime::SDLInit()
     else
     {
         m_app.window = SDL_CreateWindow(
-            "CS3v2 Runtime",
+            WINDOW_TITLE,
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 2 * WIDTH, 2 * HEIGHT, windowFlags);
         if (m_app.window == NULL)
         {
@@ -227,10 +246,12 @@ void CRuntime::drawLevelIntro(CFrame &screen)
 
 void CRuntime::drawScreen(CFrame &screen)
 {
+    m_game->drawScreen(screen, (*m_annie)[8]);
 }
 
 void CRuntime::mainLoop()
 {
+    // printf("mainLoop\n");
 }
 
 bool CRuntime::init(const char *filearch)
@@ -246,5 +267,7 @@ bool CRuntime::init(const char *filearch)
     {
         m_game->loadLevel(0);
     }
+
+    m_game->setMode(CGame::MODE_LEVEL);
     return result;
 }
