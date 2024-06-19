@@ -40,16 +40,6 @@ CRuntime::~CRuntime()
     SDL_DestroyWindow(m_app.window);
     SDL_Quit();
 
-    if (m_annie)
-    {
-        delete m_annie;
-    }
-
-    if (m_fontData)
-    {
-        delete[] m_fontData;
-    }
-
     if (m_game)
     {
         delete m_game;
@@ -196,58 +186,13 @@ void CRuntime::doInput()
     }
 }
 
-void CRuntime::preloadAssets()
-{
-    CFileWrap file;
-
-    typedef struct
-    {
-        const char *filename;
-        CFrameSet **frameset;
-    } asset_t;
-
-    asset_t assets[] = {
-        {"data/annie.obl", &m_annie},
-    };
-
-    for (size_t i = 0; i < sizeof(assets) / sizeof(asset_t); ++i)
-    {
-        asset_t &asset = assets[i];
-        *(asset.frameset) = new CFrameSet();
-        if (file.open(asset.filename, "rb"))
-        {
-            printf("reading %s\n", asset.filename);
-            if ((*(asset.frameset))->extract(file))
-            {
-                printf("extracted: %d\n", (*(asset.frameset))->getSize());
-            }
-            file.close();
-        }
-    }
-
-    const char fontName[] = "data/bitfont.bin";
-    int size = 0;
-    if (file.open(fontName, "rb"))
-    {
-        size = file.getSize();
-        m_fontData = new uint8_t[size];
-        file.read(m_fontData, size);
-        file.close();
-        printf("loaded %s: %d bytes\n", fontName, size);
-    }
-    else
-    {
-        printf("failed to open %s\n", fontName);
-    }
-}
-
 void CRuntime::drawLevelIntro(CFrame &screen)
 {
 }
 
 void CRuntime::drawScreen(CFrame &screen)
 {
-    m_game->drawScreen(screen, (*m_annie)[8]);
+    m_game->drawScreen(screen);
 }
 
 void CRuntime::mainLoop()
@@ -265,7 +210,7 @@ bool CRuntime::init(const char *filearch)
 {
     if (!m_assetPreloaded)
     {
-        preloadAssets();
+        m_game->preloadAssets();
         m_assetPreloaded = true;
     }
 
@@ -273,6 +218,7 @@ bool CRuntime::init(const char *filearch)
     if (result)
     {
         m_game->loadLevel(0);
+        //  m_game->debugFrameMap();
     }
 
     m_game->setMode(CGame::MODE_LEVEL);

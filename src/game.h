@@ -20,12 +20,15 @@ public:
     bool init(const char *archname);
     int mode();
     void setMode(int mode);
-    void drawScreen(CFrame &screen, CFrame *annie);
+    void drawScreen(CFrame &screen);
     static CGame *getGame();
 
     int playerSpeed();
     bool isPlayerDead();
     void managePlayer(uint8_t *joyState);
+    void preloadAssets();
+
+    void debugFrameMap();
 
     enum
     {
@@ -52,6 +55,14 @@ private:
         MAX_POS = 255
     };
 
+    typedef struct
+    {
+        uint8_t bkType;
+        uint8_t player;
+        uint16_t ac;
+        uint16_t fw[2];
+    } mapData_t;
+
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;
     uint32_t *m_scriptIndex;
@@ -64,9 +75,12 @@ private:
     int m_mode;
     std::string m_loadedTileSet;
     CActor *m_player;
+    uint8_t *m_fontData;
+    CFrameSet *m_annie;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
+    void mapEntry(const CActor &actor);
     void splitScript();
     bool canMove(const CActor &actor, int aim);
     inline uint32_t mapAt(int x, int y);

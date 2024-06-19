@@ -56,7 +56,7 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet)
             for (int x = 0; x < frame.len() / fntTileSize; ++x)
             {
                 const uint8_t score = scoreFromTile(frame, x * fntTileSize, y * fntTileSize);
-                *p++ = score >= threshold ? 0xff : 0;
+                *p++ = score >= threshold ? score : 0;
             }
         }
     }
@@ -99,4 +99,8 @@ bool CFrameMap::read(const char *filename)
 {
     // TODO: implement this
     return true;
+}
+uint8_t *CFrameMap::operator[](int i)
+{
+    return mapPtr(i);
 }

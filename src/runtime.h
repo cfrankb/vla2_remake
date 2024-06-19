@@ -58,13 +58,11 @@ private:
     App m_app;
     CGame *m_game;
     uint8_t m_joyState[JOY_STATES];
-    uint8_t *m_fontData;
-    CFrameSet *m_annie;
+
     bool m_assetPreloaded;
     uint32_t m_ticks;
 
     static void cleanup();
-    virtual void preloadAssets();
     void drawLevelIntro(CFrame &screen);
     void drawScreen(CFrame &screen);
     void mainLoop();

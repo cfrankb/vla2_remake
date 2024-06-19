@@ -17,6 +17,7 @@ public:
 
     void fromFrameSet(CFrameSet &frameSet);
     uint8_t *mapPtr(int i);
+    uint8_t *operator[](int i);
 
 private:
     enum

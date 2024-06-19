@@ -1,6 +1,7 @@
 #include "game.h"
 #include "shared/FrameSet.h"
 #include "shared/Frame.h"
+#include "shared/FileWrap.h"
 #include "scriptarch.h"
 #include <cstdio>
 #include "imswrap.h"
@@ -24,6 +25,16 @@ CGame::CGame()
 
 CGame::~CGame()
 {
+    if (m_annie)
+    {
+        delete m_annie;
+    }
+
+    if (m_fontData)
+    {
+        delete[] m_fontData;
+    }
+
     if (m_frameSet)
     {
         delete m_frameSet;
@@ -115,6 +126,7 @@ bool CGame::loadLevel(int i)
         m_lastError = "loadTileset failed";
     }
     // map script
+    m_frameMap->fromFrameSet(*m_frameSet);
     mapScript(m_script);
 
     return result;
@@ -131,20 +143,30 @@ void CGame::mapScript(CScript *script)
     for (int i = 0; i < script->getSize(); ++i)
     {
         const CActor &entry = (*script)[i];
-        if (entry.type != TYPE_BLANK && CScript::isBackgroundType(entry.type))
+        mapEntry(entry);
+    }
+}
+
+void CGame::mapEntry(const CActor &entry)
+{
+    static uint8_t playerMap[] = {0xff, 0xff, 0xff, 0xff};
+    uint8_t *map = entry.type == TYPE_PLAYER ? playerMap : (*m_frameMap)[entry.imageId];
+
+    if (entry.type != TYPE_BLANK && CScript::isBackgroundType(entry.type))
+    {
+        int len, hei;
+        sizeFrame(entry, len, hei);
+        for (int y = 0; y < hei / fntBlockSize; ++y)
         {
-            int len, hei;
-            sizeFrame(entry, len, hei);
-            for (int y = 0; y < hei / fntBlockSize; ++y)
+            for (int x = 0; x < len / fntBlockSize; ++x)
             {
-                for (int x = 0; x < len / fntBlockSize; ++x)
+                //   if (*map++)
+                //     continue;
+                const uint32_t key = CScript::toKey(entry.x + x, entry.y + y);
+                auto &a = m_map[key];
+                if (a != TYPE_SAND && a < entry.type)
                 {
-                    const uint32_t key = CScript::toKey(entry.x + x, entry.y + y);
-                    auto &a = m_map[key];
-                    if (a != TYPE_SAND && a < entry.type)
-                    {
-                        a = entry.type;
-                    }
+                    a = entry.type;
                 }
             }
         }
@@ -294,7 +316,7 @@ void CGame::setMode(int mode)
     m_mode = mode;
 }
 
-void CGame::drawScreen(CFrame &screen, CFrame *annie)
+void CGame::drawScreen(CFrame &screen)
 {
     const int scrLen = screen.len();
     const int scrHei = screen.hei();
@@ -310,9 +332,11 @@ void CGame::drawScreen(CFrame &screen, CFrame *annie)
         const auto &entry = (*m_script)[i];
         if (entry.type == TYPE_PLAYER)
         {
+            CFrame *annie = (*m_annie)[8];
             frame = annie;
         }
-        else if (entry.imageId >= m_frameSet->getSize())
+        else if (entry.imageId >= m_frameSet->getSize() ||
+                 CScript::isSystemType(entry.type))
         {
             continue;
         }
@@ -386,5 +410,90 @@ void CGame::managePlayer(uint8_t *joyState)
         {
             break;
         }
+    }
+}
+
+void CGame::preloadAssets()
+{
+    CFileWrap file;
+
+    typedef struct
+    {
+        const char *filename;
+        CFrameSet **frameset;
+    } asset_t;
+
+    asset_t assets[] = {
+        {"data/annie.obl", &m_annie},
+    };
+
+    for (size_t i = 0; i < sizeof(assets) / sizeof(asset_t); ++i)
+    {
+        asset_t &asset = assets[i];
+        *(asset.frameset) = new CFrameSet();
+        if (file.open(asset.filename, "rb"))
+        {
+            printf("reading %s\n", asset.filename);
+            if ((*(asset.frameset))->extract(file))
+            {
+                printf("extracted: %d\n", (*(asset.frameset))->getSize());
+            }
+            file.close();
+        }
+    }
+
+    const char fontName[] = "data/bitfont.bin";
+    int size = 0;
+    if (file.open(fontName, "rb"))
+    {
+        size = file.getSize();
+        m_fontData = new uint8_t[size];
+        file.read(m_fontData, size);
+        file.close();
+        printf("loaded %s: %d bytes\n", fontName, size);
+    }
+    else
+    {
+        printf("failed to open %s\n", fontName);
+    }
+}
+
+void CGame::debugFrameMap()
+{
+    CFrameSet fs;
+
+    for (int i = 0; i < m_frameSet->getSize(); ++i)
+    {
+        CFrame *frame = new CFrame((*m_frameSet)[i]);
+        uint8_t *map = m_frameMap->mapPtr(i);
+        for (int j = 0; j < frame->hei() / fntBlockSize; ++j)
+        {
+            for (int k = 0; k < frame->len() / fntBlockSize; ++k)
+            {
+                uint8_t c = *map++;
+                uint8_t *p = &m_fontData[c * fntBlockSize];
+
+                for (int y = 0; y < fntBlockSize; ++y)
+                {
+                    uint8_t bits = p[y];
+                    for (int x = 0; x < fntBlockSize; ++x)
+                    {
+                        if (bits & 1)
+                        {
+                            frame->at(k * fntBlockSize + x, j * fntBlockSize + y) = 0xff00ffff;
+                        }
+                        bits = bits >> 1;
+                    }
+                }
+            }
+        }
+        fs.add(frame);
+    }
+
+    CFileWrap file;
+    if (file.open("out/map.obl", "wb"))
+    {
+        fs.write(file);
+        file.close();
     }
 }

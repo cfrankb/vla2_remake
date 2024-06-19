@@ -56,6 +56,17 @@ public:
     {
         return type == TYPE_PLAYER;
     }
+    static inline bool isObjectType(const uint8_t type)
+    {
+        return (type & 0xf0 <= 0x10) &&
+               type != TYPE_PLAYER &&
+               type != TYPE_BLANK;
+    }
+
+    static inline bool isSystemType(const uint8_t type)
+    {
+        return type == TYPE_STOPCLASS;
+    }
 
     int add(const CActor &entry);
     int insertAt(int i, const CActor &entry);
