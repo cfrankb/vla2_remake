@@ -6,7 +6,7 @@ PARGS=
 BPATH=build
 BNAME=vlamits2-sdl
 TARGET=$(BPATH)/$(BNAME)
-DEPS=$(BPATH)/script$(EXT) $(BPATH)/runtime$(EXT) $(BPATH)/main$(EXT) $(BPATH)/framemap$(EXT) $(BPATH)/game$(EXT) $(BPATH)/debug$(EXT) $(BPATH)/imswrap$(EXT) $(BPATH)/actor$(EXT) $(BPATH)/scriptarch$(EXT) $(BPATH)/FrameSet$(EXT) $(BPATH)/Frame$(EXT) $(BPATH)/DotArray$(EXT) $(BPATH)/helper$(EXT) $(BPATH)/PngMagic$(EXT) $(BPATH)/FileWrap$(EXT)
+DEPS=$(BPATH)/script$(EXT) $(BPATH)/runtime$(EXT) $(BPATH)/main$(EXT) $(BPATH)/framemap$(EXT) $(BPATH)/game$(EXT) $(BPATH)/debug$(EXT) $(BPATH)/imswrap$(EXT) $(BPATH)/actor$(EXT) $(BPATH)/scriptarch$(EXT) $(BPATH)/mapentry$(EXT) $(BPATH)/FrameSet$(EXT) $(BPATH)/Frame$(EXT) $(BPATH)/DotArray$(EXT) $(BPATH)/helper$(EXT) $(BPATH)/PngMagic$(EXT) $(BPATH)/FileWrap$(EXT)
 EXT=.o
 
 all: $(TARGET)
@@ -36,6 +36,9 @@ $(BPATH)/actor$(EXT): src/actor.cpp src/actor.h
 	$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@
 
 $(BPATH)/scriptarch$(EXT): src/scriptarch.cpp src/scriptarch.h
+	$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@
+
+$(BPATH)/mapentry$(EXT): src/mapentry.cpp src/mapentry.h
 	$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@
 
 $(BPATH)/FrameSet$(EXT): src/shared/FrameSet.cpp src/shared/FrameSet.h

@@ -128,9 +128,14 @@ void CScript::growArray()
 {
     if (m_size == m_max)
     {
+        printf("hit max: %d\n", m_max);
         m_max += GROW_BY;
-        auto tmp = new CActor[m_max];
-        memcpy(tmp, m_script, m_size * sizeof(CActor));
+        printf("new max: %d\n", m_max);
+        CActor *tmp = new CActor[m_max];
+        for (int i = 0; i < m_size; ++i)
+        {
+            tmp[i] = m_script[i];
+        }
         delete[] m_script;
         m_script = tmp;
     }

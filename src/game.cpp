@@ -93,8 +93,10 @@ bool CGame::loadLevel(int i)
         fseek(sfile, m_scriptIndex[i], SEEK_SET);
         // read level
         result = m_script->read(sfile);
-
-        printf("flowers: %d\n", m_script->countType(TYPE_FLOWER));
+        fclose(sfile);
+        m_script->insertAt(0, CActor());
+        m_goals = m_script->countType(TYPE_FLOWER);
+        printf("flowers: %d\n", m_goals);
         int i = m_script->findPlayerIndex();
         m_player = nullptr;
         if (i != CScript::NOT_FOUND)
@@ -107,7 +109,6 @@ bool CGame::loadLevel(int i)
         {
             printf("no player found\n");
         }
-        fclose(sfile);
     }
     else
     {
@@ -128,7 +129,6 @@ bool CGame::loadLevel(int i)
     // map script
     m_frameMap->fromFrameSet(*m_frameSet);
     mapScript(m_script);
-
     return result;
 }
 
@@ -143,31 +143,47 @@ void CGame::mapScript(CScript *script)
     for (int i = 0; i < script->getSize(); ++i)
     {
         const CActor &entry = (*script)[i];
-        mapEntry(entry);
+        mapEntry(i, entry);
     }
 }
 
-void CGame::mapEntry(const CActor &entry)
+void CGame::mapEntry(int i, const CActor &entry)
 {
+    if (entry.type == TYPE_BLANK)
+        return;
     static uint8_t playerMap[] = {0xff, 0xff, 0xff, 0xff};
     uint8_t *map = entry.type == TYPE_PLAYER ? playerMap : (*m_frameMap)[entry.imageId];
-
-    if (entry.type != TYPE_BLANK && CScript::isBackgroundType(entry.type))
+    int len, hei;
+    sizeFrame(entry, len, hei);
+    for (int y = 0; y < hei / fntBlockSize; ++y)
     {
-        int len, hei;
-        sizeFrame(entry, len, hei);
-        for (int y = 0; y < hei / fntBlockSize; ++y)
+        for (int x = 0; x < len / fntBlockSize; ++x)
         {
-            for (int x = 0; x < len / fntBlockSize; ++x)
+            if (!*map++)
+                continue;
+            const uint32_t key = CScript::toKey(entry.x + x, entry.y + y);
+            auto &a = m_map[key];
+            if (CScript::isBackgroundType(entry.type))
             {
-                //   if (*map++)
-                //     continue;
-                const uint32_t key = CScript::toKey(entry.x + x, entry.y + y);
-                auto &a = m_map[key];
-                if (a != TYPE_SAND && a < entry.type)
+                if (a.bk() != TYPE_SAND && a.bk() < entry.type)
                 {
-                    a = entry.type;
+                    a.setBk(entry.type);
                 }
+            }
+            else if (CScript::isMonsterType(entry.type))
+            {
+                printf("m %d type=%x x=%d y=%d\n", i, entry.type, entry.x, entry.y);
+                a.setAcEntry(i);
+            }
+            else if (CScript::isObjectType(entry.type))
+            {
+                // printf("o %d type=%x x=%d y=%d\n", i, entry.type, entry.x, entry.y);
+                a.setFwEntry(i);
+            }
+            else if (entry.type == TYPE_PLAYER)
+            {
+                printf("p %d type=%x x=%d y=%d\n", i, entry.type, entry.x, entry.y);
+                a.setPlayer(true);
             }
         }
     }
@@ -227,50 +243,38 @@ bool CGame::canMove(const CActor &actor, int aim)
     {
         for (int ix = 0; ix < len; ++ix)
         {
-            uint32_t bkType = mapAt(actX + ix, actY + iy);
+            const auto &key = CScript::toKey(actX + ix, actY + iy);
+            // don't check empty locations
+            if (m_map.count(key) == 0)
+            {
+                continue;
+            }
+            const auto &mapEntry = m_map[key];
             if (CScript::isMonsterType(actor.type))
             {
                 if (actor.type != TYPE_FISH &&
-                    (bkType == TYPE_BOTTOMWATER || bkType == TYPE_TOPWATER))
+                    (mapEntry.bk() == TYPE_BOTTOMWATER ||
+                     mapEntry.bk() == TYPE_TOPWATER))
                 {
                     return false;
                 }
-                if (bkType == TYPE_STOPCLASS)
+                if (mapEntry.bk() == TYPE_STOPCLASS)
                 {
                     return false;
                 }
             }
-            if (bkType == TYPE_OBSTACLECLASS)
+            if (mapEntry.bk() == TYPE_OBSTACLECLASS)
+            {
+                return false;
+            }
+
+            //  check map entries for inbound collisions
+            if (mapEntry.player() || mapEntry.acEntry())
             {
                 return false;
             }
         }
     }
-
-    // return true;
-    //  check script entries for inbound collisions
-    int eLen;
-    int eHei;
-    for (int i = 0; i < m_script->getSize(); ++i)
-    {
-        CActor &entry = (*m_script)[i];
-        if (CScript::isMonsterType(entry.type) ||
-            CScript::isPlayerType(entry.type))
-        {
-            sizeFrame(entry, eLen, eHei);
-            eLen /= fntBlockSize;
-            eHei /= fntBlockSize;
-            if ((entry.x + eLen <= actX) ||
-                (entry.x + eLen >= actX + len) ||
-                (entry.y + eHei <= actY) ||
-                (entry.y + eHei >= actY + hei))
-            {
-                continue;
-            }
-            return false;
-        }
-    }
-
     return true;
 }
 
@@ -293,16 +297,17 @@ void CGame::sizeFrame(const CActor &entry, int &len, int &hei) const
 /// @param x
 /// @param y
 /// @return
-uint32_t CGame::mapAt(int x, int y)
+CMapEntry &CGame::mapAt(int x, int y)
 {
-    int key = CScript::toKey(x, y);
-    if (m_map.count(key) > 0)
+    static CMapEntry tmp;
+    const uint32_t key = CScript::toKey(x, y);
+    if (m_map.count(key) != 0)
     {
         return m_map[key];
     }
     else
     {
-        return 0;
+        return tmp;
     }
 }
 

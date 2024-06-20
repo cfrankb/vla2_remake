@@ -1,8 +1,10 @@
 #include "actor.h"
 #include "game.h"
+#include <cstring>
 
 CActor::CActor()
 {
+    memset(this, 0, sizeof(CActor));
 }
 
 CActor::~CActor()
@@ -36,4 +38,9 @@ bool CActor::move(int aim)
     }
 
     return true;
+}
+
+void CActor::debug()
+{
+    printf("type %x x=%d y=%d imageId=%.4x\n", type, x, y, imageId);
 }

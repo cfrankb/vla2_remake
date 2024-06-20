@@ -216,7 +216,7 @@ const char *CImsWrap::getTypeName(int typeId)
         _C(TYPE_PLAYER),
         _C(TYPE_OXYGEN),
         _C(TYPE_TRANSPORTER),
-        _C(TYPE_DIAMONDS),
+        _C(TYPE_DIAMOND),
         _C(TYPE_FLOWER),
         _C(TYPE_FRUIT),
         _C(TYPE_MUSHROOM),

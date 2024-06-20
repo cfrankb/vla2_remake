@@ -3,6 +3,7 @@
 #include <string>
 #include <cstdint>
 #include <unordered_map>
+#include "mapentry.h"
 
 class CFrameSet;
 class CScript;
@@ -55,14 +56,6 @@ private:
         MAX_POS = 255
     };
 
-    typedef struct
-    {
-        uint8_t bkType;
-        uint8_t player;
-        uint16_t ac;
-        uint16_t fw[2];
-    } mapData_t;
-
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;
     uint32_t *m_scriptIndex;
@@ -71,19 +64,20 @@ private:
     CFrameMap *m_frameMap;
     bool m_valid;
     std::string m_lastError;
-    std::unordered_map<uint32_t, uint32_t> m_map;
+    std::unordered_map<uint32_t, CMapEntry> m_map;
     int m_mode;
     std::string m_loadedTileSet;
     CActor *m_player;
     uint8_t *m_fontData;
     CFrameSet *m_annie;
+    int m_goals;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
-    void mapEntry(const CActor &actor);
+    void mapEntry(int i, const CActor &actor);
     void splitScript();
     bool canMove(const CActor &actor, int aim);
-    inline uint32_t mapAt(int x, int y);
+    inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
 
     friend class CActor;

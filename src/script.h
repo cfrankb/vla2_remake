@@ -58,9 +58,9 @@ public:
     }
     static inline bool isObjectType(const uint8_t type)
     {
-        return (type & 0xf0 <= 0x10) &&
-               type != TYPE_PLAYER &&
-               type != TYPE_BLANK;
+        return (type <= 0x1f) &&
+               (type != TYPE_PLAYER) &&
+               (type != TYPE_BLANK);
     }
 
     static inline bool isSystemType(const uint8_t type)

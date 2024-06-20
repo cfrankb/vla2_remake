@@ -6,7 +6,7 @@
 #define TYPE_PLAYER 0x1
 #define TYPE_OXYGEN 0x3
 #define TYPE_TRANSPORTER 0x4
-#define TYPE_DIAMONDS 0x10
+#define TYPE_DIAMOND 0x10
 #define TYPE_FLOWER 0x11
 #define TYPE_FRUIT 0x12
 #define TYPE_MUSHROOM 0x13
