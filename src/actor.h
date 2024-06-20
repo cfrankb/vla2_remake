@@ -11,7 +11,11 @@ public:
 
     uint8_t attr;
     uint8_t type; // objType
-    uint8_t u1;
+    union
+    {
+        uint8_t u1;
+        uint8_t aim;
+    };
     uint8_t u2;
     uint16_t imageId;
     uint8_t x;

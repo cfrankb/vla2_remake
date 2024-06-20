@@ -197,8 +197,11 @@ void CRuntime::drawScreen(CFrame &screen)
 
 void CRuntime::mainLoop()
 {
-    // printf("mainLoop\n");
     CGame &game = *CGame::getGame();
+    if (m_ticks % 4 == 0)
+    {
+        game.manageMonsters();
+    }
 
     if (m_ticks % game.playerSpeed() == 0 && !game.isPlayerDead())
     {
@@ -218,7 +221,6 @@ bool CRuntime::init(const char *filearch)
     if (result)
     {
         m_game->loadLevel(0);
-        //  m_game->debugFrameMap();
     }
 
     m_game->setMode(CGame::MODE_LEVEL);

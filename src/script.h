@@ -77,6 +77,7 @@ public:
     }
     int findPlayerIndex();
     int countType(uint8_t type);
+    void replace(CActor *script, uint32_t size);
 
 private:
     std::string m_name;

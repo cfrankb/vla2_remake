@@ -128,9 +128,7 @@ void CScript::growArray()
 {
     if (m_size == m_max)
     {
-        printf("hit max: %d\n", m_max);
         m_max += GROW_BY;
-        printf("new max: %d\n", m_max);
         CActor *tmp = new CActor[m_max];
         for (int i = 0; i < m_size; ++i)
         {
@@ -192,4 +190,15 @@ int CScript::countType(uint8_t type)
         }
     }
     return count;
+}
+
+void CScript::replace(CActor *script, uint32_t size)
+{
+    if (m_script)
+    {
+        delete[] m_script;
+    }
+    m_size = size;
+    m_max = size;
+    m_script = script;
 }

@@ -6,14 +6,13 @@
 class CMapEntry
 {
 private:
-    /* data */
     uint8_t m_bkType;
     uint8_t m_player;
     uint16_t m_acEntry;
     uint16_t m_fwEntry[2];
 
 public:
-    CMapEntry(/* args */);
+    CMapEntry();
     ~CMapEntry();
 
     inline uint8_t bk() const
@@ -33,7 +32,7 @@ public:
 
     inline void setPlayer(bool p)
     {
-        m_player = p;
+        m_player = static_cast<uint8_t>(p);
     }
 
     inline bool isEmpty() const
@@ -78,5 +77,7 @@ public:
             }
         }
     }
+
+    void debug() const;
 };
 #endif

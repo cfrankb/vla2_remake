@@ -23,12 +23,11 @@ public:
     void setMode(int mode);
     void drawScreen(CFrame &screen);
     static CGame *getGame();
-
     int playerSpeed();
     bool isPlayerDead();
     void managePlayer(uint8_t *joyState);
     void preloadAssets();
-
+    void manageMonsters();
     void debugFrameMap();
 
     enum
@@ -37,7 +36,7 @@ public:
         MODE_LEVEL = 1,
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
-        DEFAULT_PLAYER_SPEED = 4
+        DEFAULT_PLAYER_SPEED = 4,
     };
 
 protected:
@@ -53,8 +52,29 @@ private:
         HERE = 255,
         PLAYER_RECT = 2,
         fntBlockSize = 8,
-        MAX_POS = 255
+        BASE_ENTRY = 1,
+        MAX_POS = 255,
+        NONE = 0,
+        PLAYER_FRAME = 8,
+        fontSize = 8
     };
+
+    enum
+    {
+        BLACK = 0xff000000,
+        WHITE = 0xffffffff,
+        PINK = 0xffd187e8,
+        YELLOW = 0xff34ebeb,
+        GREEN = 0xff009000
+    };
+
+    typedef struct
+    {
+        uint16_t x;
+        uint16_t y;
+        int len;
+        int hei;
+    } rect_t;
 
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;
@@ -71,14 +91,22 @@ private:
     uint8_t *m_fontData;
     CFrameSet *m_annie;
     int m_goals;
+    int m_score;
+    int m_hp;
+    int m_lives;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
-    void mapEntry(int i, const CActor &actor);
-    void splitScript();
+    bool mapEntry(int i, const CActor &actor, bool removed);
+    void sortScript();
     bool canMove(const CActor &actor, int aim);
+    bool isPlayerThere(const CActor &actor, int aim);
+    void consume();
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
+    inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
+    void drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color);
+    void manageFish(int i, CActor &actor);
 
     friend class CActor;
 };
