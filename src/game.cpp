@@ -9,11 +9,12 @@
 #include "framemap.h"
 #include "defs.h"
 #include "actor.h"
+#include <unordered_set>
 
 #define DEFAULT_ARCHFILE "data/levels.scrx"
 CGame *g_game = nullptr;
 
-uint16_t points[] = {
+static uint16_t g_points[] = {
     10,
     15,
     25,
@@ -24,7 +25,8 @@ uint16_t points[] = {
     500,
     1000,
     5000,
-    10000};
+    10000,
+    50000};
 
 CGame::CGame()
 {
@@ -42,6 +44,11 @@ CGame::~CGame()
     if (m_annie)
     {
         delete m_annie;
+    }
+
+    if (m_points)
+    {
+        delete m_points;
     }
 
     if (m_fontData)
@@ -99,8 +106,9 @@ bool CGame::loadTileset(const char *tileset)
 
 bool CGame::loadLevel(int i)
 {
-    m_hp = 128;
-    m_lives = 5;
+    m_hp = DefaultHp;
+    m_oxygen = DefaultHp;
+    m_lives = DefaultLives;
 
     bool result = false;
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
@@ -111,7 +119,7 @@ bool CGame::loadLevel(int i)
         // read level
         result = m_script->read(sfile);
         fclose(sfile);
-        sortScript();
+        m_script->sort();
         m_script->insertAt(0, CActor());
         m_goals = m_script->countType(TYPE_FLOWER);
         printf("flowers: %d\n", m_goals);
@@ -214,33 +222,6 @@ bool CGame::mapEntry(int i, const CActor &entry, bool removed)
         }
     }
     return true;
-}
-
-void CGame::sortScript()
-{
-    CActor *tmp = new CActor[m_script->getSize()];
-    // TODO: implement this
-    int j = 0;
-    for (int i = 0; i < m_script->getSize(); ++i)
-    {
-        const CActor &entry = (*m_script)[i];
-        if (CScript::isBackgroundType(entry.type))
-        {
-            tmp[j++] = entry;
-        }
-    }
-    for (int i = 0; i < m_script->getSize(); ++i)
-    {
-        const CActor &entry = (*m_script)[i];
-        if (!CScript::isBackgroundType(entry.type))
-        {
-            tmp[j++] = entry;
-        }
-    }
-    int size = m_script->getSize();
-    printf("size=%d j=%d\n", size, j);
-    tmp[0].debug();
-    m_script->replace(tmp, size);
 }
 
 bool CGame::isPlayerThere(const CActor &actor, int aim)
@@ -420,8 +401,11 @@ void CGame::drawScreen(CFrame &screen)
         const auto &entry = (*m_script)[i];
         if (entry.type == TYPE_PLAYER)
         {
-            CFrame *annie = (*m_annie)[entry.aim * PLAYER_FRAME];
-            frame = annie;
+            frame = (*m_annie)[entry.aim * PLAYER_FRAME];
+        }
+        else if (entry.type == TYPE_POINTS)
+        {
+            frame = (*m_points)[entry.imageId];
         }
         else if (entry.imageId >= m_frameSet->getSize() ||
                  CScript::isSystemType(entry.type))
@@ -521,6 +505,7 @@ void CGame::managePlayer(uint8_t *joyState)
             break;
         }
     }
+    consumeAll();
 }
 
 void CGame::preloadAssets()
@@ -535,6 +520,7 @@ void CGame::preloadAssets()
 
     asset_t assets[] = {
         {"data/annie.obl", &m_annie},
+        {"data/points.obl", &m_points},
     };
 
     for (size_t i = 0; i < sizeof(assets) / sizeof(asset_t); ++i)
@@ -594,6 +580,17 @@ void CGame::manageMonsters()
         CActor &actor = (*m_script)[i];
         if (!CScript::isMonsterType(actor.type))
         {
+            if (actor.type == TYPE_POINTS)
+            {
+                if (actor.y)
+                {
+                    --actor.y;
+                }
+                else
+                {
+                    actor.type = TYPE_EMPTY;
+                }
+            }
             continue;
         }
 
@@ -629,25 +626,130 @@ void CGame::drawText(CFrame &frame, int x, int y, const char *text, const uint32
     }
 }
 
+void CGame::addToScore(int score)
+{
+    m_score += score;
+}
+
+bool CGame::consumeObject(uint16_t j)
+{
+    CActor &entry = (*m_script)[j];
+    int points = INVALID;
+
+    switch (entry.type)
+    {
+    case TYPE_OXYGEN:
+        points = _10pts;
+        m_oxygen += OxygenBonus;
+        break;
+    case TYPE_TRANSPORTER:
+        return false;
+    case TYPE_DIAMOND:
+        points = _50pts;
+        break;
+    case TYPE_FLOWER:
+        points = _100pts;
+        m_hp += HpBonus;
+        --m_goals;
+        break;
+    case TYPE_FRUIT:
+        if (entry.imageId == 1)
+        {
+            points = _15pts;
+        }
+        else if (entry.imageId == 2)
+        {
+            points = _10pts;
+        }
+        else
+        {
+            points = _25pts;
+        }
+        break;
+    case TYPE_MUSHROOM:
+        printf("mushroom\n");
+        break;
+    case TYPE_MISC:
+        // TODO: doPickup
+        if (entry.imageId == 5)
+        {
+            points = _400pts;
+        }
+        else if (entry.imageId == 0x21)
+        {
+            points = _200pts;
+        }
+        else
+        {
+            points = _10pts;
+        }
+        // printf("TYPE_MISC\n");
+        break;
+    case TYPE_DEADLYITEM:
+        printf("TYPE_DEADLYITEM\n");
+        break;
+    }
+
+    // unmap entry
+    mapEntry(j, entry, true);
+
+    if (points == INVALID)
+    {
+        entry.type = TYPE_EMPTY;
+        entry.imageId = 0;
+    }
+    else
+    {
+        addToScore(g_points[points]);
+        entry.type = TYPE_POINTS;
+        entry.imageId = points + 1;
+    }
+
+    return true;
+}
+
 /// @brief
-void CGame::consume()
+void CGame::consumeAll()
 {
     rect_t rect;
     if (!calcActorRect(*m_player, HERE, rect))
     {
         return;
     }
+
+    std::unordered_set<uint16_t> fwEntries;
     for (int y = 0; y < rect.hei; ++y)
     {
         for (int x = 0; x < rect.len; ++x)
         {
             const auto &key = CScript::toKey(rect.x + x, rect.y + y);
-            // ignore empty locations
             if (m_map.count(key) == 0)
             {
+                // ignore empty locations
                 continue;
             }
-            const auto &a = m_map[key];
+            auto &a = m_map[key];
+            for (int i = 0; i < CMapEntry::fwCount; ++i)
+            {
+                uint16_t j = a.fwEntry(i);
+                if (j == NONE)
+                    continue;
+                if (fwEntries.count(j) == 0)
+                {
+                    // consume object only once
+                    fwEntries.insert(j);
+                    if (!consumeObject(j))
+                    {
+                        // don't removed if not consumed
+                        continue;
+                    }
+                }
+                a.removeFwEntry(j);
+            }
+            if (a.isEmpty())
+            {
+                m_map.erase(key);
+            }
         }
     }
 }

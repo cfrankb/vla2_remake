@@ -65,7 +65,7 @@ public:
 
     static inline bool isSystemType(const uint8_t type)
     {
-        return type == TYPE_STOPCLASS;
+        return type == TYPE_STOPCLASS || type == TYPE_EMPTY;
     }
 
     int add(const CActor &entry);
@@ -78,6 +78,7 @@ public:
     int findPlayerIndex();
     int countType(uint8_t type);
     void replace(CActor *script, uint32_t size);
+    void sort();
 
 private:
     std::string m_name;

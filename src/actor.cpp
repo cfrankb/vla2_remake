@@ -4,7 +4,7 @@
 
 CActor::CActor()
 {
-    memset(this, 0, sizeof(CActor));
+    clear();
 }
 
 CActor::~CActor()
@@ -43,4 +43,9 @@ bool CActor::move(int aim)
 void CActor::debug()
 {
     printf("type %x x=%d y=%d imageId=%.4x\n", type, x, y, imageId);
+}
+
+void CActor::clear()
+{
+    memset(this, 0, sizeof(CActor));
 }

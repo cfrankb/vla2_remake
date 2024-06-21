@@ -202,3 +202,27 @@ void CScript::replace(CActor *script, uint32_t size)
     m_max = size;
     m_script = script;
 }
+
+void CScript::sort()
+{
+    CActor *tmp = new CActor[m_size];
+    int j = 0;
+    for (int i = 0; i < m_size; ++i)
+    {
+        const CActor &entry = (m_script)[i];
+        if (CScript::isBackgroundType(entry.type))
+        {
+            tmp[j++] = entry;
+        }
+    }
+    for (int i = 0; i < m_size; ++i)
+    {
+        const CActor &entry = (m_script)[i];
+        if (!CScript::isBackgroundType(entry.type))
+        {
+            tmp[j++] = entry;
+        }
+    }
+    memcpy(m_script, tmp, m_size * sizeof(CActor));
+    delete[] tmp;
+}

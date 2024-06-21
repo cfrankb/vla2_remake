@@ -56,7 +56,8 @@ private:
         MAX_POS = 255,
         NONE = 0,
         PLAYER_FRAME = 8,
-        fontSize = 8
+        fontSize = 8,
+        INVALID = -1
     };
 
     enum
@@ -68,6 +69,32 @@ private:
         GREEN = 0xff009000
     };
 
+    enum
+    {
+        _10pts,
+        _15pts,
+        _25pts,
+        _50pts,
+        _100pts,
+        _200pts,
+        _400pts,
+        _500pts,
+        _1000pts,
+        _5000pts,
+        _10000pts,
+        _50000pts
+    };
+
+    enum
+    {
+        DefaultLives = 5,
+        NeedleDrain = 32,
+        MaxOxygen = 256,
+        DefaultHp = 128,
+        HpBonus = 4,
+        MaxHP = 8192,
+        OxygenBonus = 4,
+    };
     typedef struct
     {
         uint16_t x;
@@ -90,18 +117,21 @@ private:
     CActor *m_player;
     uint8_t *m_fontData;
     CFrameSet *m_annie;
+    CFrameSet *m_points;
     int m_goals;
     int m_score;
     int m_hp;
     int m_lives;
+    int m_oxygen;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
     bool mapEntry(int i, const CActor &actor, bool removed);
-    void sortScript();
     bool canMove(const CActor &actor, int aim);
     bool isPlayerThere(const CActor &actor, int aim);
-    void consume();
+    void consumeAll();
+    bool consumeObject(uint16_t j);
+    void addToScore(int score);
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
     inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);

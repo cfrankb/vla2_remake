@@ -13,6 +13,9 @@
 #define TYPE_MISC 0x14
 #define TYPE_DEADLYITEM 0x15
 
+#define TYPE_POINTS 0x8e
+#define TYPE_EMPTY 0x8f
+
 #define TYPE_FISH 0x0c0
 #define TYPE_VCREA 0x0c1
 #define TYPE_VAMPIREPLANT 0x0c2

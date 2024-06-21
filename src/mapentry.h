@@ -5,6 +5,7 @@
 
 class CMapEntry
 {
+
 private:
     uint8_t m_bkType;
     uint8_t m_player;
@@ -12,6 +13,15 @@ private:
     uint16_t m_fwEntry[2];
 
 public:
+    enum
+    {
+        fwCount = sizeof(m_fwEntry) / sizeof(uint16_t)
+    };
+
+    uint16_t fwEntry(int i) const
+    {
+        return m_fwEntry[i];
+    }
     CMapEntry();
     ~CMapEntry();
 

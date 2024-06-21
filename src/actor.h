@@ -24,6 +24,7 @@ public:
     bool canMove(int aim);
     bool move(int aim);
     void debug();
+    void clear();
 
 private:
     enum
