@@ -188,6 +188,23 @@ void CRuntime::doInput()
 
 void CRuntime::drawLevelIntro(CFrame &screen)
 {
+    char t[32];
+    switch (m_game->mode())
+    {
+    case CGame::MODE_INTRO:
+        sprintf(t, "LEVEL %.2d", m_game->level() + 1);
+        break;
+    case CGame::MODE_RESTART:
+        sprintf(t, "LIVES LEFT %.2d", m_game->lives());
+        break;
+    case CGame::MODE_GAMEOVER:
+        strcpy(t, "GAME OVER");
+    };
+
+    int x = (WIDTH - strlen(t) * FONT_SIZE) / 2;
+    int y = (HEIGHT - FONT_SIZE) / 2;
+    screen.fill(CGame::BLACK);
+    CGame::getGame()->drawText(screen, x, y, t, CGame::WHITE);
 }
 
 void CRuntime::drawScreen(CFrame &screen)
@@ -198,6 +215,31 @@ void CRuntime::drawScreen(CFrame &screen)
 void CRuntime::mainLoop()
 {
     CGame &game = *CGame::getGame();
+    if (m_countdown > 0)
+    {
+        --m_countdown;
+    }
+
+    switch (game.mode())
+    {
+    case CGame::MODE_INTRO:
+    case CGame::MODE_RESTART:
+    case CGame::MODE_GAMEOVER:
+        if (m_countdown)
+        {
+            return;
+        }
+        if (game.mode() == CGame::MODE_GAMEOVER)
+        {
+            game.restartGame();
+        }
+        else
+        {
+            game.setMode(CGame::MODE_LEVEL);
+        }
+        break;
+    }
+
     if (m_ticks % 4 == 0)
     {
         game.manageMonsters();
@@ -206,6 +248,12 @@ void CRuntime::mainLoop()
     if (m_ticks % game.playerSpeed() == 0 && !game.isPlayerDead())
     {
         game.managePlayer(m_joyState);
+    }
+
+    if (game.goals() == 0)
+    {
+        m_countdown = IntroCountdown;
+        game.nextLevel();
     }
 }
 
@@ -217,12 +265,14 @@ bool CRuntime::init(const char *filearch)
         m_assetPreloaded = true;
     }
 
+    m_game->restartGame();
+    m_game->setMode(CGame::MODE_INTRO);
+    m_countdown = IntroCountdown;
     bool result = m_game->init(filearch);
     if (result)
     {
         m_game->loadLevel(0);
     }
 
-    m_game->setMode(CGame::MODE_LEVEL);
     return result;
 }

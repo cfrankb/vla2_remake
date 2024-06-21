@@ -29,6 +29,13 @@ public:
     void preloadAssets();
     void manageMonsters();
     void debugFrameMap();
+    void setLevel(int i);
+    int level();
+    int lives();
+    int goals();
+    void drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color);
+    void restartGame();
+    void nextLevel();
 
     enum
     {
@@ -37,6 +44,11 @@ public:
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
         DEFAULT_PLAYER_SPEED = 4,
+        BLACK = 0xff000000,
+        WHITE = 0xffffffff,
+        PINK = 0xffd187e8,
+        YELLOW = 0xff34ebeb,
+        GREEN = 0xff009000
     };
 
 protected:
@@ -45,28 +57,15 @@ protected:
 private:
     enum
     {
-        AIM_UP,
-        AIM_DOWN,
-        AIM_LEFT,
-        AIM_RIGHT,
         HERE = 255,
         PLAYER_RECT = 2,
         fntBlockSize = 8,
         BASE_ENTRY = 1,
         MAX_POS = 255,
         NONE = 0,
-        PLAYER_FRAME = 8,
+        PLAYER_FRAME_CYCLE = 8,
         fontSize = 8,
         INVALID = -1
-    };
-
-    enum
-    {
-        BLACK = 0xff000000,
-        WHITE = 0xffffffff,
-        PINK = 0xffd187e8,
-        YELLOW = 0xff34ebeb,
-        GREEN = 0xff009000
     };
 
     enum
@@ -89,11 +88,22 @@ private:
     {
         DefaultLives = 5,
         NeedleDrain = 32,
-        MaxOxygen = 256,
         DefaultHp = 128,
+        DefaultOxygen = 64,
         HpBonus = 4,
         MaxHP = 8192,
+        MaxOxygen = 256,
         OxygenBonus = 4,
+        FishDrain = 20,
+        PlantDrain = 4,
+        VCreaDrain = 4,
+        InMangaBite = -1,
+        FleaDrain = 4,
+        FlowerHpBonus = 6,
+        OxygenAdd = 2,
+        OxygenDrain = 1,
+        LifeDrowning = 2,
+        LevelCompletionBonus = 2000
     };
     typedef struct
     {
@@ -123,6 +133,7 @@ private:
     int m_hp;
     int m_lives;
     int m_oxygen;
+    int m_level;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
@@ -135,7 +146,6 @@ private:
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
     inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
-    void drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color);
     void manageFish(int i, CActor &actor);
 
     friend class CActor;

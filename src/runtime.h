@@ -55,12 +55,19 @@ private:
         SDL_Texture *texture;
     } App;
 
+    enum
+    {
+        FONT_SIZE = 8,
+        IntroCountdown = 25,
+    };
+
     App m_app;
     CGame *m_game;
     uint8_t m_joyState[JOY_STATES];
 
     bool m_assetPreloaded;
     uint32_t m_ticks;
+    uint32_t m_countdown;
 
     static void cleanup();
     void drawLevelIntro(CFrame &screen);

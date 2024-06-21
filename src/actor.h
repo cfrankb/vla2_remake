@@ -9,6 +9,14 @@ public:
     CActor();
     ~CActor();
 
+    enum
+    {
+        AIM_UP,
+        AIM_DOWN,
+        AIM_LEFT,
+        AIM_RIGHT,
+    };
+
     uint8_t attr;
     uint8_t type; // objType
     union
@@ -25,15 +33,6 @@ public:
     bool move(int aim);
     void debug();
     void clear();
-
-private:
-    enum
-    {
-        AIM_UP,
-        AIM_DOWN,
-        AIM_LEFT,
-        AIM_RIGHT,
-    };
 
     friend class CGame;
 };

@@ -81,7 +81,7 @@ bool CGame::init(const char *archname)
         printf("can't read index: %s\n", m_scriptArchName.c_str());
         return false;
     }
-    printf("map count: %d\n", m_scriptCount);
+    printf("map count in index: %d\n", m_scriptCount);
     return true;
 }
 
@@ -107,7 +107,7 @@ bool CGame::loadTileset(const char *tileset)
 bool CGame::loadLevel(int i)
 {
     m_hp = DefaultHp;
-    m_oxygen = DefaultHp;
+    m_oxygen = DefaultOxygen;
     m_lives = DefaultLives;
 
     bool result = false;
@@ -129,7 +129,7 @@ bool CGame::loadLevel(int i)
         {
             CActor &entry = (*m_script)[i];
             m_player = &entry;
-            entry.aim = AIM_DOWN;
+            entry.aim = CActor::AIM_DOWN;
             printf("player found at: x=%d y=%d\n", entry.x, entry.y);
         }
         else
@@ -258,13 +258,13 @@ bool CGame::calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect)
     rect.y = actor.y;
     switch (aim)
     {
-    case AIM_UP:
+    case CActor::AIM_UP:
         if (rect.y == 0)
             return false;
         --rect.y;
         rect.hei = 1;
         break;
-    case AIM_DOWN:
+    case CActor::AIM_DOWN:
         if (rect.y + rect.hei >= MAX_POS)
         {
             return false;
@@ -272,13 +272,13 @@ bool CGame::calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect)
         rect.y += rect.hei;
         rect.hei = 1;
         break;
-    case AIM_LEFT:
+    case CActor::AIM_LEFT:
         if (rect.x == 0)
             return false;
         --rect.x;
         rect.len = 1;
         break;
-    case AIM_RIGHT:
+    case CActor::AIM_RIGHT:
         if (rect.x + rect.len >= MAX_POS)
         {
             return false;
@@ -401,7 +401,7 @@ void CGame::drawScreen(CFrame &screen)
         const auto &entry = (*m_script)[i];
         if (entry.type == TYPE_PLAYER)
         {
-            frame = (*m_annie)[entry.aim * PLAYER_FRAME];
+            frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE];
         }
         else if (entry.type == TYPE_POINTS)
         {
@@ -465,7 +465,7 @@ void CGame::drawScreen(CFrame &screen)
     drawText(screen, x, 0, tmp, PINK);
     x += strlen(tmp) * fontSize;
 
-    sprintf(tmp, "HP %.2d ", m_hp);
+    sprintf(tmp, "HP %.2d", m_hp);
     drawText(screen, x, 0, tmp, GREEN);
     x += strlen(tmp) * fontSize;
 }
@@ -491,7 +491,11 @@ bool CGame::isPlayerDead()
 
 void CGame::managePlayer(uint8_t *joyState)
 {
-    uint8_t aims[] = {AIM_UP, AIM_DOWN, AIM_LEFT, AIM_RIGHT};
+    uint8_t aims[] = {
+        CActor::AIM_UP,
+        CActor::AIM_DOWN,
+        CActor::AIM_LEFT,
+        CActor::AIM_RIGHT};
     for (uint8_t i = 0; i < sizeof(aims); ++i)
     {
         uint8_t aim = aims[i];
@@ -500,8 +504,8 @@ void CGame::managePlayer(uint8_t *joyState)
         {
             mapEntry(NONE, *m_player, true);
             m_player->move(aim);
-            mapEntry(NONE, *m_player, false);
             m_player->aim = aim;
+            mapEntry(NONE, *m_player, false);
             break;
         }
     }
@@ -556,9 +560,9 @@ void CGame::preloadAssets()
 
 void CGame::manageFish(int i, CActor &actor)
 {
-    if (actor.aim < AIM_LEFT)
+    if (actor.aim < CActor::AIM_LEFT)
     {
-        actor.aim = AIM_LEFT;
+        actor.aim = CActor::AIM_LEFT;
     }
     if (actor.canMove(actor.aim))
     {
@@ -635,7 +639,6 @@ bool CGame::consumeObject(uint16_t j)
 {
     CActor &entry = (*m_script)[j];
     int points = INVALID;
-
     switch (entry.type)
     {
     case TYPE_OXYGEN:
@@ -649,7 +652,7 @@ bool CGame::consumeObject(uint16_t j)
         break;
     case TYPE_FLOWER:
         points = _100pts;
-        m_hp += HpBonus;
+        m_hp += FlowerHpBonus;
         --m_goals;
         break;
     case TYPE_FRUIT:
@@ -683,7 +686,6 @@ bool CGame::consumeObject(uint16_t j)
         {
             points = _10pts;
         }
-        // printf("TYPE_MISC\n");
         break;
     case TYPE_DEADLYITEM:
         printf("TYPE_DEADLYITEM\n");
@@ -752,6 +754,42 @@ void CGame::consumeAll()
             }
         }
     }
+}
+
+void CGame::setLevel(int i)
+{
+    m_level = i;
+}
+
+int CGame::level()
+{
+    return m_level;
+}
+
+int CGame::lives()
+{
+    return m_lives;
+}
+
+void CGame::restartGame()
+{
+    m_hp = DefaultHp;
+    m_oxygen = DefaultOxygen;
+    m_lives = DefaultLives;
+    m_level = 0;
+}
+
+int CGame::goals()
+{
+    return m_goals;
+}
+
+void CGame::nextLevel()
+{
+    m_score += LevelCompletionBonus;
+    setMode(CGame::MODE_INTRO);
+    ++m_level;
+    loadLevel(m_level);
 }
 
 void CGame::debugFrameMap()
