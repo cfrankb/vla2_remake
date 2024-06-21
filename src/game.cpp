@@ -28,6 +28,12 @@ static uint16_t g_points[] = {
     10000,
     50000};
 
+static uint8_t AIMS[] = {
+    CActor::AIM_UP,
+    CActor::AIM_DOWN,
+    CActor::AIM_LEFT,
+    CActor::AIM_RIGHT};
+
 CGame::CGame()
 {
     m_frameSet = new CFrameSet;
@@ -217,7 +223,7 @@ bool CGame::mapEntry(int i, const CActor &entry, bool removed)
             }
             if (removed && a.isEmpty())
             {
-                m_map.erase(key);
+                // m_map.erase(key);
             }
         }
     }
@@ -491,14 +497,9 @@ bool CGame::isPlayerDead()
 
 void CGame::managePlayer(uint8_t *joyState)
 {
-    uint8_t aims[] = {
-        CActor::AIM_UP,
-        CActor::AIM_DOWN,
-        CActor::AIM_LEFT,
-        CActor::AIM_RIGHT};
-    for (uint8_t i = 0; i < sizeof(aims); ++i)
+    for (uint8_t i = 0; i < sizeof(AIMS); ++i)
     {
-        uint8_t aim = aims[i];
+        uint8_t aim = AIMS[i];
         if (joyState[aim] &&
             m_player->canMove(aim))
         {
@@ -572,8 +573,47 @@ void CGame::manageFish(int i, CActor &actor)
     }
     else
     {
+        if (isPlayerThere(actor, actor.aim))
+        {
+        }
+        else
+        {
+        }
         actor.aim ^= 1;
     }
+}
+
+void CGame::manageVamplant(int i, CActor &actor)
+{
+    for (uint8_t i = 0; i < sizeof(AIMS); ++i)
+    {
+        uint8_t aim = AIMS[i];
+        if (isPlayerThere(actor, aim))
+        {
+            // PlantDrain
+            break;
+        }
+    }
+}
+
+void CGame::manageVCreature(int i, CActor &actor)
+{
+}
+
+void CGame::manageFlyingPlatform(int i, CActor &actor)
+{
+}
+
+void CGame::manageCannibal(int i, CActor &actor)
+{
+}
+
+void CGame::manageInManga(int i, CActor &actor)
+{
+}
+
+void CGame::manageGreenFlea(int i, CActor &actor)
+{
 }
 
 /// @brief
@@ -603,6 +643,23 @@ void CGame::manageMonsters()
         case TYPE_FISH:
             manageFish(i, actor);
             break;
+        case TYPE_VAMPIREPLANT:
+            manageVamplant(i, actor);
+            break;
+        case TYPE_VCREA:
+            manageVCreature(i, actor);
+            break;
+        case TYPE_FLYPLAT:
+            manageFlyingPlatform(i, actor);
+            break;
+        case TYPE_CANNIBAL:
+            manageCannibal(i, actor);
+            break;
+        case TYPE_INMANGA:
+            manageInManga(i, actor);
+            break;
+        case TYPE_GREENFLEA:
+            manageGreenFlea(i, actor);
         };
     }
 }

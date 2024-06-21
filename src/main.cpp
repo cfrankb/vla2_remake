@@ -21,10 +21,13 @@ void loop_handler(void *arg)
 
 int main(int argc, char *args[])
 {
-    // createScriptArch();
-    // testArch();
+    for (int i = 0; i < argc; ++i)
+    {
+        printf("%d %s\n", i, args[i]);
+    }
+    int startLevel = argc > 1 ? atoi(args[1]) : 0;
     CRuntime runtime;
-    runtime.init(MAPARCH_FILE);
+    runtime.init(MAPARCH_FILE, startLevel);
     runtime.SDLInit();
     runtime.paint();
 #ifdef WASM

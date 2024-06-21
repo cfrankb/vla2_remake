@@ -147,6 +147,12 @@ private:
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
     inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
     void manageFish(int i, CActor &actor);
+    void manageVamplant(int i, CActor &actor);
+    void manageVCreature(int i, CActor &actor);
+    void manageFlyingPlatform(int i, CActor &actor);
+    void manageCannibal(int i, CActor &actor);
+    void manageInManga(int i, CActor &actor);
+    void manageGreenFlea(int i, CActor &actor);
 
     friend class CActor;
 };

@@ -47,7 +47,16 @@ public:
 
     inline bool isEmpty() const
     {
-        return m_bkType == m_acEntry == m_fwEntry[0] == m_fwEntry[1] == m_player == 0;
+        for (uint32_t i = 0; i < fwCount; ++i)
+        {
+            if (m_fwEntry[i] != 0)
+            {
+                return false;
+            }
+        }
+        return (m_bkType == 0) &&
+               (m_acEntry == 0) &&
+               (m_player == 0);
     }
 
     inline uint16_t acEntry() const
@@ -62,11 +71,14 @@ public:
 
     inline void setFwEntry(const uint16_t fw)
     {
-        if ((m_fwEntry[0] == fw) || (m_fwEntry[1] == fw))
+        for (uint32_t i = 0; i < fwCount; ++i)
         {
-            return;
+            if (m_fwEntry[i] == fw)
+            {
+                return;
+            }
         }
-        for (uint32_t i = 0; i < sizeof(m_fwEntry) / sizeof(uint16_t); ++i)
+        for (uint32_t i = 0; i < fwCount; ++i)
         {
             if (m_fwEntry[i] == 0)
             {
@@ -78,7 +90,7 @@ public:
 
     inline void removeFwEntry(const uint16_t fw)
     {
-        for (uint32_t i = 0; i < sizeof(m_fwEntry) / sizeof(uint16_t); ++i)
+        for (uint32_t i = 0; i < fwCount; ++i)
         {
             if (m_fwEntry[i] == fw)
             {

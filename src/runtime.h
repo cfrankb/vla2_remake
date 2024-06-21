@@ -31,7 +31,7 @@ public:
     void run();
     bool SDLInit();
     void doInput();
-    bool init(const char *filearch);
+    bool init(const char *filearch, int startLevel = 0);
 
 protected:
     enum

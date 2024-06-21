@@ -161,6 +161,9 @@ void CRuntime::doInput()
             case SDLK_RIGHT:
                 m_joyState[AIM_RIGHT] = KEY_PRESSED;
                 break;
+            case SDLK_HOME:
+                m_game->nextLevel();
+                break;
             default:
                 break;
             }
@@ -257,7 +260,7 @@ void CRuntime::mainLoop()
     }
 }
 
-bool CRuntime::init(const char *filearch)
+bool CRuntime::init(const char *filearch, int startLevel)
 {
     if (!m_assetPreloaded)
     {
@@ -267,11 +270,13 @@ bool CRuntime::init(const char *filearch)
 
     m_game->restartGame();
     m_game->setMode(CGame::MODE_INTRO);
+    m_game->setLevel(startLevel);
     m_countdown = IntroCountdown;
     bool result = m_game->init(filearch);
     if (result)
     {
-        m_game->loadLevel(0);
+        int level = m_game->level();
+        m_game->loadLevel(level);
     }
 
     return result;
