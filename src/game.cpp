@@ -37,6 +37,29 @@ static uint8_t AIMS[] = {
     CActor::AIM_LEFT,
     CActor::AIM_RIGHT};
 
+#define _J(s)                        \
+    {                                \
+        .seq = s, .count = sizeof(s) \
+    }
+
+typedef struct
+{
+    const uint8_t *seq;
+    const int count;
+} jumpSeq_t;
+
+uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
+uint8_t jumpDOWN[] = {};
+uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
+uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+
+jumpSeq_t g_jumpSeqs[] = {
+    _J(jumpUP),
+    _J(jumpDOWN),
+    _J(jumpLEFT),
+    _J(jumpRIGHT),
+};
+
 CGame::CGame()
 {
     m_frameSet = new CFrameSet;
@@ -179,8 +202,13 @@ void CGame::mapScript(CScript *script)
     for (int i = BASE_ENTRY; i < script->getSize(); ++i)
     {
         const CActor &entry = (*script)[i];
-        mapEntry(i, entry, false);
+        mapEntry(i, entry);
     }
+}
+
+bool CGame::unmapEntry(int i, const CActor &actor)
+{
+    return mapEntry(i, actor, true);
 }
 
 bool CGame::mapEntry(int i, const CActor &entry, bool removed)
@@ -194,7 +222,7 @@ bool CGame::mapEntry(int i, const CActor &entry, bool removed)
     {
         for (int x = 0; x < len; ++x)
         {
-            if (!*map++)
+            if (map && !*map++)
                 continue;
             const uint32_t key = CScript::toKey(entry.x + x, entry.y + y);
             auto &a = m_map[key];
@@ -495,22 +523,69 @@ bool CGame::isPlayerDead()
     return m_hp == 0;
 }
 
-void CGame::managePlayer(uint8_t *joyState)
+bool CGame::manageJump(const uint8_t *joyState)
 {
+    if (m_jumpFlag)
+    {
+        const uint8_t &aim = g_jumpSeqs[m_jumpSeq].seq[m_jumpIndex];
+        if (m_player->canMove(aim))
+        {
+            unmapEntry(NONE, *m_player);
+            m_player->move(aim);
+            mapEntry(NONE, *m_player);
+        }
+        else
+        {
+            m_jumpFlag = false;
+        }
+        ++m_jumpIndex;
+        if (m_jumpIndex >= g_jumpSeqs[m_jumpSeq].count)
+        {
+            m_jumpFlag = false;
+        }
+    }
+    else
+    {
+        if (joyState[BUTTON])
+        {
+            m_jumpIndex = 0;
+            const uint8_t aims[] = {UP, LEFT, RIGHT};
+            for (int i = 0; i < sizeof(aims); ++i)
+            {
+                const int aim = aims[i];
+                if (joyState[aim])
+                {
+                    m_jumpFlag = true;
+                    m_jumpSeq = aim;
+                    break;
+                }
+            }
+        }
+    }
+    return m_jumpFlag;
+}
+
+void CGame::managePlayer(const uint8_t *joyState)
+{
+    consumeAll();
+    if (manageJump(joyState))
+    {
+        return;
+    }
+
     for (uint8_t i = 0; i < sizeof(AIMS); ++i)
     {
-        uint8_t aim = AIMS[i];
+        const uint8_t aim = AIMS[i];
         if (joyState[aim] &&
             m_player->canMove(aim))
         {
-            mapEntry(NONE, *m_player, true);
+            unmapEntry(NONE, *m_player);
             m_player->move(aim);
             m_player->aim = aim;
-            mapEntry(NONE, *m_player, false);
+            mapEntry(NONE, *m_player);
             break;
         }
     }
-    consumeAll();
 }
 
 void CGame::preloadAssets()
@@ -616,9 +691,9 @@ void CGame::manageFish(int i, CActor &actor)
     }
     if (actor.canMove(actor.aim))
     {
-        mapEntry(i, actor, true);
+        unmapEntry(i, actor);
         actor.move(actor.aim);
-        mapEntry(i, actor, false);
+        mapEntry(i, actor);
     }
     else
     {
@@ -628,7 +703,7 @@ void CGame::manageFish(int i, CActor &actor)
         }
         else
         {
-            actor.aim ^= 1;
+            actor.flipDir();
         }
     }
 }
@@ -668,9 +743,9 @@ void CGame::manageFlyingPlatform(int i, CActor &actor)
     {
         if (m_player->canMove(aim))
         {
-            mapEntry(NONE, *m_player, true);
+            unmapEntry(NONE, *m_player);
             m_player->move(aim);
-            mapEntry(NONE, *m_player, false);
+            mapEntry(NONE, *m_player);
         }
         else
         {
@@ -681,13 +756,13 @@ void CGame::manageFlyingPlatform(int i, CActor &actor)
 
     if (actor.canMove(aim))
     {
-        mapEntry(i, actor, true);
+        unmapEntry(i, actor);
         actor.move(aim);
-        mapEntry(i, actor, false);
+        mapEntry(i, actor);
     }
     else
     {
-        actor.aim ^= 1;
+        actor.flipDir();
     }
 }
 
@@ -838,7 +913,7 @@ bool CGame::consumeObject(uint16_t j)
     }
 
     // unmap entry
-    mapEntry(j, entry, true);
+    unmapEntry(j, entry);
 
     if (points == INVALID)
     {
@@ -923,11 +998,13 @@ void CGame::restartGame()
     m_lives = DefaultLives;
     m_level = 0;
     m_mode = MODE_INTRO;
+    m_jumpFlag = false;
     loadLevel(m_level);
 }
 
 void CGame::restartLevel()
 {
+    m_jumpFlag = false;
     m_hp = DefaultHp;
     m_oxygen = DefaultOxygen;
     --m_lives;
@@ -953,8 +1030,7 @@ void CGame::nextLevel()
 
 uint8_t *CGame::getActorMap(const CActor &actor)
 {
-    static uint8_t playerMap[] = {0xff, 0xff, 0xff, 0xff};
-    return actor.type == TYPE_PLAYER ? playerMap : (*m_frameMap)[actor.imageId];
+    return actor.type == TYPE_PLAYER ? nullptr : (*m_frameMap)[actor.imageId];
 }
 
 bool CGame::isFalling(CActor &actor)
@@ -981,7 +1057,7 @@ bool CGame::isFalling(CActor &actor)
     {
         for (int x = 0; x < rect.len; ++x)
         {
-            if (!*map++)
+            if (map && !*map++)
                 continue;
             const auto &key = CScript::toKey(rect.x + x, rect.y + y);
             // ignore empty locations
@@ -998,6 +1074,27 @@ bool CGame::isFalling(CActor &actor)
         }
     }
     return true;
+}
+
+void CGame::manageGravity()
+{
+    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
+    {
+        CActor &actor = (*m_script)[i];
+        if ((CScript::isMonsterType(actor.type) || (actor.type == TYPE_PLAYER)) &&
+            (actor.type != TYPE_FLYPLAT) &&
+            (actor.type != TYPE_FISH) &&
+            isFalling(actor))
+        {
+            if ((actor.type == TYPE_PLAYER) && m_jumpFlag)
+            {
+                continue;
+            }
+            unmapEntry(i, actor);
+            actor.move(CActor::AIM_DOWN);
+            mapEntry(i, actor);
+        }
+    }
 }
 
 void CGame::debugFrameMap()

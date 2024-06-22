@@ -40,6 +40,7 @@ protected:
         AIM_DOWN,
         AIM_LEFT,
         AIM_RIGHT,
+        BUTTON,
         JOY_STATES = 8,
         WIDTH = 320,
         HEIGHT = 240,

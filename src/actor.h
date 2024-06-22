@@ -15,6 +15,7 @@ public:
         AIM_DOWN,
         AIM_LEFT,
         AIM_RIGHT,
+        BUTTON
     };
 
     uint8_t attr;
@@ -36,6 +37,7 @@ public:
     void clear();
     void attackPlayer() const;
     void killPlayer() const;
+    void flipDir();
 
     friend class CGame;
 };

@@ -141,6 +141,9 @@ void CRuntime::doInput()
             case SDLK_RIGHT:
                 m_joyState[AIM_RIGHT] = KEY_RELEASED;
                 break;
+            case SDLK_LSHIFT:
+                m_joyState[BUTTON] = KEY_RELEASED;
+                break;
             default:
                 break;
             }
@@ -163,6 +166,9 @@ void CRuntime::doInput()
                 break;
             case SDLK_HOME:
                 m_game->nextLevel();
+                break;
+            case SDLK_LSHIFT:
+                m_joyState[BUTTON] = KEY_PRESSED;
                 break;
             default:
                 break;
@@ -247,6 +253,11 @@ void CRuntime::mainLoop()
     if (m_ticks % 4 == 0)
     {
         game.manageMonsters();
+    }
+
+    if (m_ticks % 6 == 0)
+    {
+        game.manageGravity();
     }
 
     if (m_ticks % game.playerSpeed() == 0 && !game.isPlayerDead())

@@ -5,6 +5,11 @@
 #include <unordered_map>
 #include "mapentry.h"
 
+#define UP CActor::AIM_UP
+#define DOWN CActor::AIM_DOWN
+#define LEFT CActor::AIM_LEFT
+#define RIGHT CActor::AIM_RIGHT
+
 class CFrameSet;
 class CScript;
 class CFrameMap;
@@ -25,7 +30,7 @@ public:
     static CGame *getGame();
     int playerSpeed();
     bool isPlayerDead();
-    void managePlayer(uint8_t *joyState);
+    void managePlayer(const uint8_t *joyState);
     void preloadAssets();
     void manageMonsters();
     void debugFrameMap();
@@ -37,6 +42,7 @@ public:
     void restartGame();
     void restartLevel();
     void nextLevel();
+    void manageGravity();
 
     enum
     {
@@ -68,6 +74,7 @@ private:
         fontSize = 8,
         INVALID = -1,
         KILL_PLAYER = -1,
+        BUTTON = 4,
     };
 
     enum
@@ -136,10 +143,14 @@ private:
     int m_oxygen;
     int m_level;
     int m_mode;
+    bool m_jumpFlag;
+    int m_jumpSeq;
+    int m_jumpIndex;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
-    bool mapEntry(int i, const CActor &actor, bool removed);
+    bool mapEntry(int i, const CActor &actor, bool removed = false);
+    bool unmapEntry(int i, const CActor &actor);
     bool canMove(const CActor &actor, int aim);
     bool isPlayerThere(const CActor &actor, int aim);
     bool isFalling(CActor &actor);
@@ -152,6 +163,7 @@ private:
     inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
     void attackPlayer(const CActor &actor);
     void killPlayer(const CActor &actor);
+    bool manageJump(const uint8_t *joyState);
     void manageFish(int i, CActor &actor);
     void manageVamplant(int i, CActor &actor);
     void manageVCreature(int i, CActor &actor);

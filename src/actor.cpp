@@ -63,3 +63,8 @@ void CActor::killPlayer() const
 {
     return CGame::getGame()->killPlayer(*this);
 }
+
+void CActor::flipDir()
+{
+    aim ^= 1;
+}
