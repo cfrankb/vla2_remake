@@ -13,8 +13,7 @@ CActor::~CActor()
 
 bool CActor::canMove(int aim)
 {
-    CGame *game = CGame::getGame();
-    return game->canMove(*this, aim);
+    return CGame::getGame()->canMove(*this, aim);
 }
 
 bool CActor::move(int aim)
@@ -48,4 +47,19 @@ void CActor::debug()
 void CActor::clear()
 {
     memset(this, 0, sizeof(CActor));
+}
+
+bool CActor::isPlayerThere(int aim)
+{
+    return CGame::getGame()->isPlayerThere(*this, aim);
+}
+
+void CActor::attackPlayer() const
+{
+    return CGame::getGame()->attackPlayer(*this);
+}
+
+void CActor::killPlayer() const
+{
+    return CGame::getGame()->killPlayer(*this);
 }

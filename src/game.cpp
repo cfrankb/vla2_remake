@@ -1,15 +1,14 @@
+#include <cstdio>
+#include <cstring>
+#include <unordered_set>
 #include "game.h"
 #include "shared/FrameSet.h"
 #include "shared/Frame.h"
 #include "shared/FileWrap.h"
 #include "scriptarch.h"
-#include <cstdio>
-#include <cstring>
 #include "imswrap.h"
 #include "framemap.h"
-#include "defs.h"
 #include "actor.h"
-#include <unordered_set>
 
 #define DEFAULT_ARCHFILE "data/levels.scrx"
 CGame *g_game = nullptr;
@@ -21,12 +20,16 @@ static uint16_t g_points[] = {
     50,
     100,
     200,
+    300,
     400,
     500,
     1000,
+    2000,
     5000,
     10000,
-    50000};
+};
+
+const int pointCount = sizeof(g_points) / sizeof(u_int16_t);
 
 static uint8_t AIMS[] = {
     CActor::AIM_UP,
@@ -39,9 +42,7 @@ CGame::CGame()
     m_frameSet = new CFrameSet;
     m_scriptCount = 0;
     m_script = new CScript;
-    m_valid = false;
     m_frameMap = new CFrameMap;
-    m_valid = false;
     m_loadedTileSet = "";
 }
 
@@ -114,7 +115,7 @@ bool CGame::loadLevel(int i)
 {
     m_hp = DefaultHp;
     m_oxygen = DefaultOxygen;
-    m_lives = DefaultLives;
+    // m_lives = DefaultLives;
 
     bool result = false;
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
@@ -186,8 +187,7 @@ bool CGame::mapEntry(int i, const CActor &entry, bool removed)
 {
     if (entry.type == TYPE_BLANK)
         return true;
-    static uint8_t playerMap[] = {0xff, 0xff, 0xff, 0xff};
-    uint8_t *map = entry.type == TYPE_PLAYER ? playerMap : (*m_frameMap)[entry.imageId];
+    uint8_t *map = getActorMap(entry);
     int len, hei;
     sizeFrame(entry, len, hei);
     for (int y = 0; y < hei; ++y)
@@ -492,7 +492,7 @@ int CGame::playerSpeed()
 
 bool CGame::isPlayerDead()
 {
-    return false;
+    return m_hp == 0;
 }
 
 void CGame::managePlayer(uint8_t *joyState)
@@ -559,6 +559,55 @@ void CGame::preloadAssets()
     }
 }
 
+void CGame::killPlayer(const CActor &actor)
+{
+    m_hp = 0;
+}
+
+void CGame::attackPlayer(const CActor &actor)
+{
+    int damage = 0;
+
+    switch (actor.type)
+    {
+    case TYPE_FISH:
+        damage = FishDrain;
+        break;
+    case TYPE_VAMPIREPLANT:
+        damage = PlantDrain;
+        break;
+    case TYPE_VCREA:
+        damage = VCreaDrain;
+        break;
+    case TYPE_FLYPLAT:
+        damage = KILL_PLAYER;
+        break;
+    case TYPE_CANNIBAL:
+        damage = KILL_PLAYER;
+        break;
+    case TYPE_INMANGA:
+        damage = KILL_PLAYER;
+        break;
+    case TYPE_GREENFLEA:
+        damage = FleaDrain;
+        break;
+    case TYPE_DEADLYITEM:
+        damage = NeedleDrain;
+        break;
+    default:
+        printf("type=%d no damage defined\n", actor.type);
+    };
+
+    if (damage == KILL_PLAYER)
+    {
+        actor.killPlayer();
+    }
+    else
+    {
+        m_hp = std::max(0, m_hp - damage);
+    }
+}
+
 void CGame::manageFish(int i, CActor &actor)
 {
     if (actor.aim < CActor::AIM_LEFT)
@@ -575,22 +624,24 @@ void CGame::manageFish(int i, CActor &actor)
     {
         if (isPlayerThere(actor, actor.aim))
         {
+            actor.attackPlayer();
         }
         else
         {
+            actor.aim ^= 1;
         }
-        actor.aim ^= 1;
     }
 }
 
 void CGame::manageVamplant(int i, CActor &actor)
 {
-    for (uint8_t i = 0; i < sizeof(AIMS); ++i)
+    for (uint8_t j = 0; j < sizeof(AIMS); ++j)
     {
-        uint8_t aim = AIMS[i];
+        uint8_t aim = AIMS[j];
         if (isPlayerThere(actor, aim))
         {
             // PlantDrain
+            actor.attackPlayer();
             break;
         }
     }
@@ -598,10 +649,46 @@ void CGame::manageVamplant(int i, CActor &actor)
 
 void CGame::manageVCreature(int i, CActor &actor)
 {
+    for (uint8_t j = 0; j < sizeof(AIMS); ++j)
+    {
+        uint8_t aim = AIMS[j];
+        if (isPlayerThere(actor, aim))
+        {
+            // PlantDrain
+            actor.attackPlayer();
+            break;
+        }
+    }
 }
 
 void CGame::manageFlyingPlatform(int i, CActor &actor)
 {
+    int aim = actor.aim;
+    if (actor.isPlayerThere(aim))
+    {
+        if (m_player->canMove(aim))
+        {
+            mapEntry(NONE, *m_player, true);
+            m_player->move(aim);
+            mapEntry(NONE, *m_player, false);
+        }
+        else
+        {
+            actor.attackPlayer();
+            return;
+        }
+    }
+
+    if (actor.canMove(aim))
+    {
+        mapEntry(i, actor, true);
+        actor.move(aim);
+        mapEntry(i, actor, false);
+    }
+    else
+    {
+        actor.aim ^= 1;
+    }
 }
 
 void CGame::manageCannibal(int i, CActor &actor)
@@ -727,7 +814,7 @@ bool CGame::consumeObject(uint16_t j)
         }
         break;
     case TYPE_MUSHROOM:
-        printf("mushroom\n");
+        points = entry.imageId % pointCount;
         break;
     case TYPE_MISC:
         // TODO: doPickup
@@ -746,6 +833,7 @@ bool CGame::consumeObject(uint16_t j)
         break;
     case TYPE_DEADLYITEM:
         printf("TYPE_DEADLYITEM\n");
+        entry.attackPlayer();
         break;
     }
 
@@ -761,7 +849,7 @@ bool CGame::consumeObject(uint16_t j)
     {
         addToScore(g_points[points]);
         entry.type = TYPE_POINTS;
-        entry.imageId = points + 1;
+        entry.imageId = points;
     }
 
     return true;
@@ -834,6 +922,20 @@ void CGame::restartGame()
     m_oxygen = DefaultOxygen;
     m_lives = DefaultLives;
     m_level = 0;
+    m_mode = MODE_INTRO;
+    loadLevel(m_level);
+}
+
+void CGame::restartLevel()
+{
+    m_hp = DefaultHp;
+    m_oxygen = DefaultOxygen;
+    --m_lives;
+    if (m_lives)
+    {
+        m_mode = MODE_RESTART;
+        loadLevel(m_level);
+    }
 }
 
 int CGame::goals()
@@ -847,6 +949,55 @@ void CGame::nextLevel()
     setMode(CGame::MODE_INTRO);
     ++m_level;
     loadLevel(m_level);
+}
+
+uint8_t *CGame::getActorMap(const CActor &actor)
+{
+    static uint8_t playerMap[] = {0xff, 0xff, 0xff, 0xff};
+    return actor.type == TYPE_PLAYER ? playerMap : (*m_frameMap)[actor.imageId];
+}
+
+bool CGame::isFalling(CActor &actor)
+{
+    if (actor.type == TYPE_FLYPLAT)
+    {
+        return false;
+    }
+
+    if (!actor.canMove(CActor::AIM_DOWN))
+    {
+        return false;
+    }
+
+    rect_t rect;
+    if (!calcActorRect(actor, HERE, rect))
+    {
+        return false;
+    }
+
+    // check collision map
+    uint8_t *map = getActorMap(actor);
+    for (int y = 0; y < rect.hei; ++y)
+    {
+        for (int x = 0; x < rect.len; ++x)
+        {
+            if (!*map++)
+                continue;
+            const auto &key = CScript::toKey(rect.x + x, rect.y + y);
+            // ignore empty locations
+            if (m_map.count(key) == 0)
+            {
+                continue;
+            }
+            const auto &mapEntry = m_map[key];
+            uint8_t bk = mapEntry.bk();
+            if (bk >= TYPE_LADDER && bk != TYPE_STOPCLASS)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void CGame::debugFrameMap()

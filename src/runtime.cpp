@@ -234,6 +234,7 @@ void CRuntime::mainLoop()
         }
         if (game.mode() == CGame::MODE_GAMEOVER)
         {
+            m_countdown = IntroCountdown;
             game.restartGame();
         }
         else
@@ -257,6 +258,16 @@ void CRuntime::mainLoop()
     {
         m_countdown = IntroCountdown;
         game.nextLevel();
+    }
+
+    if (game.isPlayerDead())
+    {
+        m_countdown = IntroCountdown;
+        game.restartLevel();
+        if (game.lives() == 0)
+        {
+            game.setMode(CGame::MODE_GAMEOVER);
+        }
     }
 }
 

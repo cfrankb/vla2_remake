@@ -35,6 +35,7 @@ public:
     int goals();
     void drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color);
     void restartGame();
+    void restartLevel();
     void nextLevel();
 
     enum
@@ -65,7 +66,8 @@ private:
         NONE = 0,
         PLAYER_FRAME_CYCLE = 8,
         fontSize = 8,
-        INVALID = -1
+        INVALID = -1,
+        KILL_PLAYER = -1,
     };
 
     enum
@@ -76,12 +78,13 @@ private:
         _50pts,
         _100pts,
         _200pts,
+        _300pts,
         _400pts,
         _500pts,
         _1000pts,
+        _2000pts,
         _5000pts,
         _10000pts,
-        _50000pts
     };
 
     enum
@@ -119,10 +122,8 @@ private:
     uint32_t m_scriptCount;
     CScript *m_script;
     CFrameMap *m_frameMap;
-    bool m_valid;
     std::string m_lastError;
     std::unordered_map<uint32_t, CMapEntry> m_map;
-    int m_mode;
     std::string m_loadedTileSet;
     CActor *m_player;
     uint8_t *m_fontData;
@@ -134,18 +135,23 @@ private:
     int m_lives;
     int m_oxygen;
     int m_level;
+    int m_mode;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
     bool mapEntry(int i, const CActor &actor, bool removed);
     bool canMove(const CActor &actor, int aim);
     bool isPlayerThere(const CActor &actor, int aim);
+    bool isFalling(CActor &actor);
+    uint8_t *getActorMap(const CActor &actor);
     void consumeAll();
     bool consumeObject(uint16_t j);
     void addToScore(int score);
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
     inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
+    void attackPlayer(const CActor &actor);
+    void killPlayer(const CActor &actor);
     void manageFish(int i, CActor &actor);
     void manageVamplant(int i, CActor &actor);
     void manageVCreature(int i, CActor &actor);

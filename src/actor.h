@@ -30,9 +30,12 @@ public:
     uint8_t y;
 
     bool canMove(int aim);
+    bool isPlayerThere(int aim);
     bool move(int aim);
     void debug();
     void clear();
+    void attackPlayer() const;
+    void killPlayer() const;
 
     friend class CGame;
 };
