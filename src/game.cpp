@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <unordered_set>
+#include <memory>
 #include "game.h"
 #include "shared/FrameSet.h"
 #include "shared/Frame.h"
@@ -37,27 +38,45 @@ static uint8_t AIMS[] = {
     CActor::AIM_LEFT,
     CActor::AIM_RIGHT};
 
-#define _J(s)                        \
-    {                                \
-        .seq = s, .count = sizeof(s) \
+#define _J(_s_, _a_)          \
+    {                         \
+        .seq = _s_,           \
+        .count = sizeof(_s_), \
+        .aim = _a_            \
     }
 
 typedef struct
 {
     const uint8_t *seq;
     const int count;
+    const uint8_t aim;
 } jumpSeq_t;
 
-uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
+enum
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    UP_LEFT,
+    UP_RIGHT,
+    NO_AIM = 255
+};
+
+uint8_t jumpUP[] = {UP, UP, UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN};
 uint8_t jumpDOWN[] = {};
-uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
-uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, DOWN};
+uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN};
+uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN};
 
 jumpSeq_t g_jumpSeqs[] = {
-    _J(jumpUP),
-    _J(jumpDOWN),
-    _J(jumpLEFT),
-    _J(jumpRIGHT),
+    _J(jumpUP, UP),
+    _J(jumpDOWN, DOWN),
+    _J(jumpLEFT, LEFT),
+    _J(jumpRIGHT, RIGHT),
+    _J(jumpUP_LEFT, LEFT),
+    _J(jumpUP_RIGHT, RIGHT),
 };
 
 CGame::CGame()
@@ -112,6 +131,11 @@ bool CGame::init(const char *archname)
         return false;
     }
     printf("map count in index: %d\n", m_scriptCount);
+    if (!readConfig("data/vlamits2.cfg"))
+    {
+        printf("failed to read configfile.\n");
+    }
+
     return true;
 }
 
@@ -138,8 +162,6 @@ bool CGame::loadLevel(int i)
 {
     m_hp = DefaultHp;
     m_oxygen = DefaultOxygen;
-    // m_lives = DefaultLives;
-
     bool result = false;
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
     if (sfile)
@@ -421,6 +443,7 @@ void CGame::setMode(int mode)
 
 void CGame::drawScreen(CFrame &screen)
 {
+    const std::unordered_set<uint16_t> &hide = m_config[m_loadedTileSet].hide;
     const int scrLen = screen.len();
     const int scrHei = screen.hei();
     const int rows = screen.hei() / fntBlockSize;
@@ -442,7 +465,8 @@ void CGame::drawScreen(CFrame &screen)
             frame = (*m_points)[entry.imageId];
         }
         else if (entry.imageId >= m_frameSet->getSize() ||
-                 CScript::isSystemType(entry.type))
+                 CScript::isSystemType(entry.type) ||
+                 hide.count(entry.imageId))
         {
             continue;
         }
@@ -525,6 +549,12 @@ bool CGame::isPlayerDead()
 
 bool CGame::manageJump(const uint8_t *joyState)
 {
+    if (m_jumpCooldown)
+    {
+        --m_jumpCooldown;
+        return false;
+    }
+
     if (m_jumpFlag)
     {
         const uint8_t &aim = g_jumpSeqs[m_jumpSeq].seq[m_jumpIndex];
@@ -543,22 +573,45 @@ bool CGame::manageJump(const uint8_t *joyState)
         {
             m_jumpFlag = false;
         }
+        if (!m_jumpFlag)
+        {
+            m_jumpCooldown = JumpCooldown;
+        }
     }
     else
     {
         if (joyState[BUTTON])
         {
             m_jumpIndex = 0;
-            const uint8_t aims[] = {UP, LEFT, RIGHT};
-            for (int i = 0; i < sizeof(aims); ++i)
+            uint8_t newAim = NO_AIM;
+
+            if (joyState[UP] && joyState[LEFT])
             {
-                const int aim = aims[i];
-                if (joyState[aim])
+                newAim = UP_LEFT;
+            }
+            else if (joyState[UP] && joyState[RIGHT])
+            {
+                newAim = UP_RIGHT;
+            }
+            else
+            {
+                const uint8_t aims[] = {UP, LEFT, RIGHT};
+                for (int i = 0; i < sizeof(aims); ++i)
                 {
-                    m_jumpFlag = true;
-                    m_jumpSeq = aim;
-                    break;
+                    const int aim = aims[i];
+                    if (joyState[aim])
+                    {
+                        newAim = aim;
+                        break;
+                    }
                 }
+            }
+
+            if (newAim != NO_AIM)
+            {
+                m_player->aim = g_jumpSeqs[newAim].aim;
+                m_jumpFlag = true;
+                m_jumpSeq = newAim;
             }
         }
     }
@@ -1093,6 +1146,154 @@ void CGame::manageGravity()
             unmapEntry(i, actor);
             actor.move(CActor::AIM_DOWN);
             mapEntry(i, actor);
+        }
+    }
+}
+
+void CGame::parseLine(int &line, std::string &tileset, char *&p)
+{
+    ++line;
+    char *e = strstr(p, "\n");
+    if (e)
+    {
+        *e = 0;
+    }
+    char *c = strstr(p, "#");
+    if (c)
+    {
+        *c = 0;
+    }
+    while (*p == ' ' || *p == '\t')
+    {
+        ++p;
+    }
+    if (*p == '[')
+    {
+        ++p;
+        char *t = strstr(p, "]");
+        if (t)
+        {
+            *t = 0;
+        }
+        else
+        {
+            printf("no section delimiter on line %d\n", line);
+        }
+        tileset = p;
+    }
+    else if (*p)
+    {
+        //  printf("%s> %s\n", tileset.c_str(), p);
+        StringVector list;
+        splitString(p, list);
+        if (list.size() == 0)
+        {
+            printf("empty list on line %d\n", line);
+        }
+        else if (list[0] == "hide")
+        {
+            if (list.size() < 2)
+            {
+                printf("hide list `%s` on line %d has %d params, minimum is 2.", p, line, list.size());
+            }
+            else
+            {
+                for (int i = 1; i < list.size(); ++i)
+                {
+                    uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
+                    m_config[tileset].hide.insert(val);
+                }
+            }
+        }
+        else if (list[0] == "swap")
+        {
+            if (list.size() != 3)
+            {
+                printf("swap command `%s` on line %d has %d params not 3.", p, line, list.size());
+            }
+            else
+            {
+                uint16_t val1 = std::strtoul(list[1].c_str(), nullptr, 16);
+                uint16_t val2 = std::strtoul(list[2].c_str(), nullptr, 16);
+                m_config[tileset].swap[val1] = val2;
+                m_config[tileset].swap[val2] = val1;
+            }
+        }
+        else if (list[0] == "xmap")
+        {
+            if (list.size() < 2)
+            {
+                printf("xmap list `%s` on line %d has %d params, minimum is 2.", p, line, list.size());
+            }
+            else
+            {
+                for (int i = 1; i < list.size(); ++i)
+                {
+                    uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
+                    m_config[tileset].xmap.insert(val);
+                }
+            }
+        }
+    }
+    p = e ? ++e : nullptr;
+}
+
+void CGame::splitString(const std::string str, StringVector &list)
+{
+    int i = 0;
+    unsigned int j = 0;
+    while (j < str.length())
+    {
+        if (isspace(str[j]))
+        {
+            list.push_back(str.substr(i, j - i));
+            while (isspace(str[j]) && j < str.length())
+            {
+                ++j;
+            }
+            i = j;
+            continue;
+        }
+        ++j;
+    }
+    list.push_back(str.substr(i, j - i));
+}
+
+bool CGame::readConfig(const char *confName)
+{
+    m_config.clear();
+    FILE *sfile = fopen(confName, "rb");
+    if (sfile)
+    {
+        fseek(sfile, 0, SEEK_END);
+        size_t size = ftell(sfile);
+        fseek(sfile, 0, SEEK_SET);
+        char *data = new char[size + 1];
+        data[size];
+        fread(data, size, 1, sfile);
+        fclose(sfile);
+
+        char *p = data;
+        std::string tileset;
+        int line = 0;
+        while (p && *p)
+        {
+            parseLine(line, tileset, p);
+        }
+        delete[] data;
+    }
+    return sfile != nullptr;
+}
+
+void CGame::animator()
+{
+    PairMap &swap = m_config[m_loadedTileSet].swap;
+    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
+    {
+        CActor &actor = (*m_script)[i];
+        if (swap.count(actor.imageId))
+        {
+            actor.imageId = swap[actor.imageId];
         }
     }
 }

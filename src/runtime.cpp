@@ -255,9 +255,14 @@ void CRuntime::mainLoop()
         game.manageMonsters();
     }
 
-    if (m_ticks % 6 == 0)
+    if (m_ticks % 2 == 0)
     {
         game.manageGravity();
+    }
+
+    if (m_ticks % 5 == 0)
+    {
+        game.animator();
     }
 
     if (m_ticks % game.playerSpeed() == 0 && !game.isPlayerDead())
@@ -280,6 +285,8 @@ void CRuntime::mainLoop()
             game.setMode(CGame::MODE_GAMEOVER);
         }
     }
+
+    ++m_ticks;
 }
 
 bool CRuntime::init(const char *filearch, int startLevel)

@@ -3,18 +3,18 @@
 #include <string>
 #include <cstdint>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 #include "mapentry.h"
-
-#define UP CActor::AIM_UP
-#define DOWN CActor::AIM_DOWN
-#define LEFT CActor::AIM_LEFT
-#define RIGHT CActor::AIM_RIGHT
 
 class CFrameSet;
 class CScript;
 class CFrameMap;
 class CFrame;
 class CActor;
+
+typedef std::vector<std::string> StringVector;
+typedef std::unordered_map<uint16_t, uint16_t> PairMap;
 
 class CGame
 {
@@ -43,6 +43,7 @@ public:
     void restartLevel();
     void nextLevel();
     void manageGravity();
+    void animator();
 
     enum
     {
@@ -50,7 +51,7 @@ public:
         MODE_LEVEL = 1,
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
-        DEFAULT_PLAYER_SPEED = 4,
+        DEFAULT_PLAYER_SPEED = 2,
         BLACK = 0xff000000,
         WHITE = 0xffffffff,
         PINK = 0xffd187e8,
@@ -60,8 +61,6 @@ public:
 
 protected:
     CGame();
-
-private:
     enum
     {
         HERE = 255,
@@ -77,7 +76,7 @@ private:
         BUTTON = 4,
     };
 
-    enum
+    enum // bonus points
     {
         _10pts,
         _15pts,
@@ -94,7 +93,7 @@ private:
         _10000pts,
     };
 
-    enum
+    enum // game constants
     {
         DefaultLives = 5,
         NeedleDrain = 32,
@@ -113,7 +112,8 @@ private:
         OxygenAdd = 2,
         OxygenDrain = 1,
         LifeDrowning = 2,
-        LevelCompletionBonus = 2000
+        LevelCompletionBonus = 2000,
+        JumpCooldown = 6,
     };
     typedef struct
     {
@@ -123,6 +123,13 @@ private:
         int hei;
     } rect_t;
 
+    typedef struct
+    {
+        std::unordered_set<uint16_t> hide;
+        std::unordered_set<uint16_t> xmap;
+        PairMap swap;
+    } config_t;
+
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;
     uint32_t *m_scriptIndex;
@@ -131,6 +138,7 @@ private:
     CFrameMap *m_frameMap;
     std::string m_lastError;
     std::unordered_map<uint32_t, CMapEntry> m_map;
+    std::unordered_map<std::string, config_t> m_config;
     std::string m_loadedTileSet;
     CActor *m_player;
     uint8_t *m_fontData;
@@ -146,6 +154,7 @@ private:
     bool m_jumpFlag;
     int m_jumpSeq;
     int m_jumpIndex;
+    int m_jumpCooldown;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
@@ -171,6 +180,9 @@ private:
     void manageCannibal(int i, CActor &actor);
     void manageInManga(int i, CActor &actor);
     void manageGreenFlea(int i, CActor &actor);
+    bool readConfig(const char *confName);
+    void parseLine(int &line, std::string &tileset, char *&p);
+    void splitString(const std::string str, StringVector &list);
 
     friend class CActor;
 };
