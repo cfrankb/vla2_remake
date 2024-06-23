@@ -1030,6 +1030,13 @@ void CGame::consumeAll()
                 continue;
             }
             auto &a = m_map[key];
+            if (a.bk() == TYPE_LAVA)
+            {
+                // instant death
+                m_hp = 0;
+                return;
+            }
+
             for (int i = 0; i < CMapEntry::fwCount; ++i)
             {
                 uint16_t j = a.fwEntry(i);
@@ -1287,7 +1294,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
     }
 }
 
-void CGame::parseLine(int &line, std::string &tileset, char *&p)
+char *CGame::parseLine(int &line, std::string &tileset, char *p)
 {
     ++line;
     char *e = strstr(p, "\n");
@@ -1295,6 +1302,7 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
     {
         *e = 0;
     }
+
     char *c = strstr(p, "#");
     if (c)
     {
@@ -1311,7 +1319,7 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
         }
     }
 
-    while (*p == ' ' || *p == '\t')
+    while (isspace(*p))
     {
         ++p;
     }
@@ -1346,7 +1354,7 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
             parseTilesetOptions(tileset, list, line);
         }
     }
-    p = e ? ++e : nullptr;
+    return e ? ++e : nullptr;
 }
 
 void CGame::splitString(const std::string str, StringVector &list)
@@ -1380,7 +1388,7 @@ bool CGame::readConfig(const char *confName)
         size_t size = ftell(sfile);
         fseek(sfile, 0, SEEK_SET);
         char *data = new char[size + 1];
-        data[size];
+        data[size] = 0;
         fread(data, size, 1, sfile);
         fclose(sfile);
 
@@ -1389,7 +1397,7 @@ bool CGame::readConfig(const char *confName)
         int line = 0;
         while (p && *p)
         {
-            parseLine(line, tileset, p);
+            p = parseLine(line, tileset, p);
         }
         delete[] data;
     }

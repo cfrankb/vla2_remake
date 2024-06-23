@@ -23,6 +23,7 @@
 #include "shared/FileWrap.h"
 
 #define WINDOW_TITLE "The Vlamits2 Runtime"
+#define IntroCountdown "IntroCountdown"
 
 CRuntime::CRuntime()
 {
@@ -240,7 +241,7 @@ void CRuntime::mainLoop()
         }
         if (game.mode() == CGame::MODE_GAMEOVER)
         {
-            m_countdown = IntroCountdown;
+            m_countdown = game.define(IntroCountdown);
             game.restartGame();
         }
         else
@@ -269,13 +270,13 @@ void CRuntime::mainLoop()
 
     if (game.goals() == 0)
     {
-        m_countdown = IntroCountdown;
+        m_countdown = game.define(IntroCountdown);
         game.nextLevel();
     }
 
     if (game.isPlayerDead())
     {
-        m_countdown = IntroCountdown;
+        m_countdown = game.define(IntroCountdown);
         game.restartLevel();
         if (game.lives() == 0)
         {
@@ -294,16 +295,16 @@ bool CRuntime::init(const char *filearch, int startLevel)
         m_assetPreloaded = true;
     }
 
-    m_game->restartGame();
     m_game->setMode(CGame::MODE_INTRO);
     m_game->setLevel(startLevel);
-    m_countdown = IntroCountdown;
     bool result = m_game->init(filearch);
     if (result)
     {
         int level = m_game->level();
         m_game->loadLevel(level);
     }
+    m_game->restartGame();
+    m_countdown = m_game->define(IntroCountdown);
 
     return result;
 }

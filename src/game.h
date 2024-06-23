@@ -187,7 +187,7 @@ protected:
     void manageInManga(int i, CActor &actor);
     void manageGreenFlea(int i, CActor &actor);
     bool readConfig(const char *confName);
-    void parseLine(int &line, std::string &tileset, char *&p);
+    char *parseLine(int &line, std::string &tileset, char *p);
     void parseGeneralOptions(const StringVector &list, int line);
     void parseTilesetOptions(std::string tileset, const StringVector &list, int line);
     void splitString(const std::string str, StringVector &list);

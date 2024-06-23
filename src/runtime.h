@@ -33,7 +33,7 @@ public:
     void doInput();
     bool init(const char *filearch, int startLevel = 0);
 
-protected:
+private:
     enum
     {
         AIM_UP,
@@ -45,22 +45,16 @@ protected:
         WIDTH = 320,
         HEIGHT = 240,
         KEY_PRESSED = 1,
-        KEY_RELEASED = 0
+        KEY_RELEASED = 0,
+        FONT_SIZE = 8,
     };
 
-private:
     typedef struct
     {
         SDL_Renderer *renderer;
         SDL_Window *window;
         SDL_Texture *texture;
     } App;
-
-    enum
-    {
-        FONT_SIZE = 8,
-        IntroCountdown = 25,
-    };
 
     App m_app;
     CGame *m_game;
