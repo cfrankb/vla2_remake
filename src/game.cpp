@@ -129,7 +129,7 @@ bool CGame::init(const char *archname)
     if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
     {
         m_lastError = "can't read index: " + m_scriptArchName;
-        printf("can't read index: %s\n", m_scriptArchName.c_str());
+        printf("%s\n", m_lastError.c_str());
         return false;
     }
     printf("map count in index: %d\n", m_scriptCount);
@@ -149,7 +149,7 @@ bool CGame::loadTileset(const char *tileset)
     if (!ims.readIMS(tilesetName.c_str()))
     {
         m_lastError = "can't read tileset: " + tilesetName;
-        printf("can't read tileset: %s\n", tilesetName.c_str());
+        printf("%s\n", m_lastError.c_str());
         m_loadedTileSet = "";
         return false;
     }
@@ -189,15 +189,15 @@ bool CGame::loadLevel(int i)
         }
         else
         {
-            printf("no player found\n");
             m_lastError = "no player found";
+            printf("%s\n", m_lastError.c_str());
             return false;
         }
     }
     else
     {
         m_lastError = "can't open: " + m_scriptArchName;
-        printf("can't open: %s\n", m_scriptArchName.c_str());
+        printf("%s\n", m_lastError.c_str());
         return false;
     }
 
@@ -275,6 +275,7 @@ bool CGame::mapEntry(int i, const CActor &entry, bool removed)
             }
             if (removed && a.isEmpty())
             {
+                // TODO: check this later
                 // m_map.erase(key);
             }
         }
@@ -825,14 +826,17 @@ void CGame::manageFlyingPlatform(int i, CActor &actor)
 
 void CGame::manageCannibal(int i, CActor &actor)
 {
+    const uint32_t key = *_L("CANN");
 }
 
 void CGame::manageInManga(int i, CActor &actor)
 {
+    const uint32_t key = *_L("INMA");
 }
 
 void CGame::manageGreenFlea(int i, CActor &actor)
 {
+    const uint32_t key = *_L("SLUG");
 }
 
 /// @brief
@@ -1169,7 +1173,11 @@ void CGame::parseTypeOptions(const StringVector &list, int line)
         }
         else
         {
-            printf("type must have 3 args. only %d found on line %d\n", list.size(), line);
+            printf("type must have 3 args. %d found on line %d\n", list.size(), line);
+            for (int i = 0; i < list.size(); ++i)
+            {
+                printf(" -->%d %s\n", i, list[i].c_str());
+            }
         }
     }
     else
@@ -1191,6 +1199,17 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
     {
         *c = 0;
     }
+    int n = strlen(p);
+    if (n)
+    {
+        char *t = p + n - 1;
+        while (t > p && isspace(*t))
+        {
+            *t = 0;
+            --t;
+        }
+    }
+
     while (*p == ' ' || *p == '\t')
     {
         ++p;
