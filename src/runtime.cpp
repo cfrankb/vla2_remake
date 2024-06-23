@@ -250,17 +250,14 @@ void CRuntime::mainLoop()
         break;
     }
 
-    if (m_ticks % 4 == 0)
-    {
-        game.manageMonsters();
-    }
+    game.manageMonsters(m_ticks);
 
-    if (m_ticks % 2 == 0)
+    if (m_ticks % game.define("gravity") == 0)
     {
         game.manageGravity();
     }
 
-    if (m_ticks % 5 == 0)
+    if (m_ticks % game.define("animator") == 0)
     {
         game.animator();
     }

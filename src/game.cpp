@@ -12,6 +12,11 @@
 #include "actor.h"
 
 #define DEFAULT_ARCHFILE "data/levels.scrx"
+#define DefaultHp "DefaultHp"
+#define DefaultOxygen "DefaultOxygen"
+#define JumpCooldown "JumpCooldown"
+#define DefaultLives "DefaultLives"
+
 CGame *g_game = nullptr;
 
 static uint16_t g_points[] = {
@@ -162,8 +167,8 @@ bool CGame::loadTileset(const char *tileset)
 
 bool CGame::loadLevel(int i)
 {
-    m_hp = DefaultHp;
-    m_oxygen = DefaultOxygen;
+    m_hp = define(DefaultHp);
+    m_oxygen = define(DefaultOxygen);
     bool result = false;
     printf("reading level %d from script archive: %s\n", i + 1, m_scriptArchName.c_str());
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
@@ -542,7 +547,7 @@ CGame *CGame::getGame()
 
 int CGame::playerSpeed()
 {
-    return DEFAULT_PLAYER_SPEED;
+    return m_types[TYPE_PLAYER].speed; // DEFAULT_PLAYER_SPEED;
 }
 
 bool CGame::isPlayerDead()
@@ -578,7 +583,7 @@ bool CGame::manageJump(const uint8_t *joyState)
         }
         if (!m_jumpFlag)
         {
-            m_jumpCooldown = JumpCooldown;
+            m_jumpCooldown = define(JumpCooldown);
         }
     }
     else
@@ -840,14 +845,21 @@ void CGame::manageGreenFlea(int i, CActor &actor)
 }
 
 /// @brief
-void CGame::manageMonsters()
+void CGame::manageMonsters(uint32_t ticks)
 {
+    bool speeds[speedCount];
+    for (uint32_t i = 0; i < sizeof(speeds); ++i)
+    {
+        speeds[i] = i ? (ticks % i) == 0 : true;
+    }
+
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
         CActor &actor = (*m_script)[i];
         if (!CScript::isMonsterType(actor.type))
         {
-            if (actor.type == TYPE_POINTS)
+            int x = m_types[actor.type].speed;
+            if (speeds[x] && actor.type == TYPE_POINTS)
             {
                 if (actor.y)
                 {
@@ -858,6 +870,12 @@ void CGame::manageMonsters()
                     actor.type = TYPE_EMPTY;
                 }
             }
+            continue;
+        }
+
+        int x = m_types[actor.type].speed;
+        if (!speeds[x])
+        {
             continue;
         }
 
@@ -1054,9 +1072,9 @@ int CGame::lives()
 
 void CGame::restartGame()
 {
-    m_hp = DefaultHp;
-    m_oxygen = DefaultOxygen;
-    m_lives = DefaultLives;
+    m_hp = define(DefaultHp);
+    m_oxygen = define(DefaultOxygen);
+    m_lives = define(DefaultLives);
     m_level = 0;
     m_mode = MODE_INTRO;
     m_jumpFlag = false;
@@ -1069,8 +1087,8 @@ void CGame::restartGame()
 void CGame::restartLevel()
 {
     m_jumpFlag = false;
-    m_hp = DefaultHp;
-    m_oxygen = DefaultOxygen;
+    m_hp = define(DefaultHp);
+    m_oxygen = define(DefaultOxygen);
     --m_lives;
     if (m_lives)
     {
@@ -1161,7 +1179,7 @@ void CGame::manageGravity()
     }
 }
 
-void CGame::parseTypeOptions(const StringVector &list, int line)
+void CGame::parseGeneralOptions(const StringVector &list, int line)
 {
     if (list[0] == "type")
     {
@@ -1178,6 +1196,89 @@ void CGame::parseTypeOptions(const StringVector &list, int line)
             {
                 printf(" -->%d %s\n", i, list[i].c_str());
             }
+        }
+    }
+    else if (list[0] == "define")
+    {
+        if (list.size() == 3)
+        {
+            const std::string &key = list[1];
+            uint16_t val = std::strtoul(list[2].c_str(), nullptr, 10);
+            m_defines[key] = val;
+        }
+        else
+        {
+            printf("define must have 3 args. %d found on line %d\n", list.size(), line);
+            for (int i = 0; i < list.size(); ++i)
+            {
+                printf(" -->%d %s\n", i, list[i].c_str());
+            }
+        }
+    }
+    else
+    {
+        printf("unknown list `%s` on line %d\n", list[0].c_str(), line);
+    }
+}
+
+void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, int line)
+{
+    if (list[0] == "hide")
+    {
+        if (list.size() < 2)
+        {
+            printf("hide list on line %d has %d params, minimum is 2.", line, list.size());
+        }
+        else
+        {
+            for (int i = 1; i < list.size(); ++i)
+            {
+                uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
+                m_config[tileset].hide.insert(val);
+            }
+        }
+    }
+    else if (list[0] == "swap")
+    {
+        if (list.size() != 3)
+        {
+            printf("swap command  on line %d has %d params not 3.", line, list.size());
+        }
+        else
+        {
+            uint16_t val1 = std::strtoul(list[1].c_str(), nullptr, 16);
+            uint16_t val2 = std::strtoul(list[2].c_str(), nullptr, 16);
+            m_config[tileset].swap[val1] = val2;
+            m_config[tileset].swap[val2] = val1;
+        }
+    }
+    else if (list[0] == "xmap")
+    {
+        if (list.size() < 2)
+        {
+            printf("xmap list on line %d has %d params, minimum is 2.", line, list.size());
+        }
+        else
+        {
+            for (int i = 1; i < list.size(); ++i)
+            {
+                uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
+                m_config[tileset].xmap.insert(val);
+            }
+        }
+    }
+    else if (list[0] == "xdef")
+    {
+        if (list.size() < 2)
+        {
+            printf("xdef list on line %d has %d params, must have 2.", line, list.size());
+        }
+        else
+        {
+            uint32_t key;
+            memcpy(&key, list[1].c_str(), sizeof(key));
+            uint16_t val = std::strtoul(list[2].c_str(), nullptr, 16);
+            m_config[tileset].xdef[key] = val;
         }
     }
     else
@@ -1238,69 +1339,11 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
         }
         else if (tileset == "")
         {
-            parseTypeOptions(list, line);
-        }
-        else if (list[0] == "hide")
-        {
-            if (list.size() < 2)
-            {
-                printf("hide list `%s` on line %d has %d params, minimum is 2.", p, line, list.size());
-            }
-            else
-            {
-                for (int i = 1; i < list.size(); ++i)
-                {
-                    uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
-                    m_config[tileset].hide.insert(val);
-                }
-            }
-        }
-        else if (list[0] == "swap")
-        {
-            if (list.size() != 3)
-            {
-                printf("swap command `%s` on line %d has %d params not 3.", p, line, list.size());
-            }
-            else
-            {
-                uint16_t val1 = std::strtoul(list[1].c_str(), nullptr, 16);
-                uint16_t val2 = std::strtoul(list[2].c_str(), nullptr, 16);
-                m_config[tileset].swap[val1] = val2;
-                m_config[tileset].swap[val2] = val1;
-            }
-        }
-        else if (list[0] == "xmap")
-        {
-            if (list.size() < 2)
-            {
-                printf("xmap list `%s` on line %d has %d params, minimum is 2.", p, line, list.size());
-            }
-            else
-            {
-                for (int i = 1; i < list.size(); ++i)
-                {
-                    uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
-                    m_config[tileset].xmap.insert(val);
-                }
-            }
-        }
-        else if (list[0] == "xdef")
-        {
-            if (list.size() < 2)
-            {
-                printf("xdef list `%s` on line %d has %d params, must have 2.", p, line, list.size());
-            }
-            else
-            {
-                uint32_t key;
-                memcpy(&key, list[1].c_str(), sizeof(key));
-                uint16_t val = std::strtoul(list[2].c_str(), nullptr, 16);
-                m_config[tileset].xdef[key] = val;
-            }
+            parseGeneralOptions(list, line);
         }
         else
         {
-            printf("unknown list `%s` on line %d\n", list[0].c_str(), line);
+            parseTilesetOptions(tileset, list, line);
         }
     }
     p = e ? ++e : nullptr;
@@ -1363,6 +1406,19 @@ void CGame::animator()
         {
             actor.imageId = swap[actor.imageId];
         }
+    }
+}
+
+uint32_t CGame::define(const char *name)
+{
+    if (m_defines.count(name))
+    {
+        return m_defines[name];
+    }
+    else
+    {
+        printf("define %s not found\n", name);
+        return 0;
     }
 }
 

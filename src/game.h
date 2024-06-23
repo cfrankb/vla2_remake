@@ -32,7 +32,7 @@ public:
     bool isPlayerDead();
     void managePlayer(const uint8_t *joyState);
     void preloadAssets();
-    void manageMonsters();
+    void manageMonsters(uint32_t ticks);
     void debugFrameMap(const char *outFile);
     void setLevel(int i);
     int level();
@@ -44,6 +44,7 @@ public:
     void nextLevel();
     void manageGravity();
     void animator();
+    uint32_t define(const char *name);
 
     enum
     {
@@ -51,7 +52,6 @@ public:
         MODE_LEVEL = 1,
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
-        DEFAULT_PLAYER_SPEED = 2,
         BLACK = 0xff000000,
         WHITE = 0xffffffff,
         PINK = 0xffd187e8,
@@ -95,10 +95,7 @@ protected:
 
     enum // game constants
     {
-        DefaultLives = 5,
         NeedleDrain = 32,
-        DefaultHp = 128,
-        DefaultOxygen = 64,
         HpBonus = 4,
         MaxHP = 8192,
         MaxOxygen = 256,
@@ -114,6 +111,7 @@ protected:
         LifeDrowning = 2,
         LevelCompletionBonus = 2000,
         JumpCooldown = 6,
+        speedCount = 9
     };
     typedef struct
     {
@@ -145,6 +143,7 @@ protected:
     std::string m_lastError;
     std::unordered_map<uint32_t, CMapEntry> m_map;
     std::unordered_map<uint32_t, type_t> m_types;
+    std::unordered_map<std::string, uint32_t> m_defines;
     std::unordered_map<std::string, config_t> m_config;
     std::string m_loadedTileSet;
     CActor *m_player;
@@ -189,7 +188,8 @@ protected:
     void manageGreenFlea(int i, CActor &actor);
     bool readConfig(const char *confName);
     void parseLine(int &line, std::string &tileset, char *&p);
-    void parseTypeOptions(const StringVector &list, int line);
+    void parseGeneralOptions(const StringVector &list, int line);
+    void parseTilesetOptions(std::string tileset, const StringVector &list, int line);
     void splitString(const std::string str, StringVector &list);
 
     friend class CActor;
