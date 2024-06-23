@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <unordered_set>
 #include "framemap.h"
 #include "shared/FrameSet.h"
 #include "shared/Frame.h"
@@ -30,7 +31,7 @@ void CFrameMap::forget()
     }
 }
 
-void CFrameMap::fromFrameSet(CFrameSet &frameSet)
+void CFrameMap::fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &xmap)
 {
     forget();
 
@@ -55,7 +56,9 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet)
         {
             for (int x = 0; x < frame.len() / fntTileSize; ++x)
             {
-                const uint8_t score = scoreFromTile(frame, x * fntTileSize, y * fntTileSize);
+                const uint8_t score = xmap.count(i) == 0
+                                          ? scoreFromTile(frame, x * fntTileSize, y * fntTileSize)
+                                          : 0xff;
                 *p++ = score >= threshold ? score : 0;
             }
         }

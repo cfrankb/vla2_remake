@@ -33,7 +33,7 @@ public:
     void managePlayer(const uint8_t *joyState);
     void preloadAssets();
     void manageMonsters();
-    void debugFrameMap();
+    void debugFrameMap(const char *outFile);
     void setLevel(int i);
     int level();
     int lives();
@@ -125,10 +125,16 @@ protected:
 
     typedef struct
     {
+        std::unordered_map<uint32_t, uint16_t> xdef;
         std::unordered_set<uint16_t> hide;
         std::unordered_set<uint16_t> xmap;
         PairMap swap;
     } config_t;
+
+    typedef struct
+    {
+        uint8_t speed;
+    } type_t;
 
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;
@@ -138,6 +144,7 @@ protected:
     CFrameMap *m_frameMap;
     std::string m_lastError;
     std::unordered_map<uint32_t, CMapEntry> m_map;
+    std::unordered_map<uint32_t, type_t> m_types;
     std::unordered_map<std::string, config_t> m_config;
     std::string m_loadedTileSet;
     CActor *m_player;
@@ -182,6 +189,7 @@ protected:
     void manageGreenFlea(int i, CActor &actor);
     bool readConfig(const char *confName);
     void parseLine(int &line, std::string &tileset, char *&p);
+    void parseTypeOptions(const StringVector &list, int line);
     void splitString(const std::string str, StringVector &list);
 
     friend class CActor;

@@ -45,6 +45,8 @@ static uint8_t AIMS[] = {
         .aim = _a_            \
     }
 
+#define _L(_s_) reinterpret_cast<const uint32_t *>(_s_)
+
 typedef struct
 {
     const uint8_t *seq;
@@ -152,9 +154,9 @@ bool CGame::loadTileset(const char *tileset)
         return false;
     }
     ims.toFrameSet(*m_frameSet, nullptr);
-    m_frameMap->fromFrameSet(*m_frameSet);
-    m_frameMap->write("out/fmap.dat");
     m_loadedTileSet = tileset;
+    m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
+    m_frameMap->write("out/fmap.dat");
     return true;
 }
 
@@ -163,6 +165,7 @@ bool CGame::loadLevel(int i)
     m_hp = DefaultHp;
     m_oxygen = DefaultOxygen;
     bool result = false;
+    printf("reading level %d from script archive: %s\n", i + 1, m_scriptArchName.c_str());
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
     if (sfile)
     {
@@ -208,7 +211,6 @@ bool CGame::loadLevel(int i)
         m_lastError = "loadTileset failed";
     }
     // map script
-    m_frameMap->fromFrameSet(*m_frameSet);
     mapScript(m_script);
     return result;
 }
@@ -759,6 +761,8 @@ void CGame::manageFish(int i, CActor &actor)
             actor.flipDir();
         }
     }
+    const uint32_t key = *_L("FISH");
+    actor.imageId = m_config[m_loadedTileSet].xdef[key] + (actor.aim & 1);
 }
 
 void CGame::manageVamplant(int i, CActor &actor)
@@ -1052,7 +1056,10 @@ void CGame::restartGame()
     m_level = 0;
     m_mode = MODE_INTRO;
     m_jumpFlag = false;
-    loadLevel(m_level);
+    if (m_loadedTileSet != "")
+    {
+        loadLevel(m_level);
+    }
 }
 
 void CGame::restartLevel()
@@ -1150,6 +1157,27 @@ void CGame::manageGravity()
     }
 }
 
+void CGame::parseTypeOptions(const StringVector &list, int line)
+{
+    if (list[0] == "type")
+    {
+        if (list.size() == 3)
+        {
+            uint16_t val1 = std::strtoul(list[1].c_str(), nullptr, 16);
+            uint16_t val2 = std::strtoul(list[2].c_str(), nullptr, 16);
+            m_types[val1].speed = val2;
+        }
+        else
+        {
+            printf("type must have 3 args. only %d found on line %d\n", list.size(), line);
+        }
+    }
+    else
+    {
+        printf("unknown list `%s` on line %d\n", list[0].c_str(), line);
+    }
+}
+
 void CGame::parseLine(int &line, std::string &tileset, char *&p)
 {
     ++line;
@@ -1183,12 +1211,15 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
     }
     else if (*p)
     {
-        //  printf("%s> %s\n", tileset.c_str(), p);
         StringVector list;
         splitString(p, list);
         if (list.size() == 0)
         {
             printf("empty list on line %d\n", line);
+        }
+        else if (tileset == "")
+        {
+            parseTypeOptions(list, line);
         }
         else if (list[0] == "hide")
         {
@@ -1233,6 +1264,24 @@ void CGame::parseLine(int &line, std::string &tileset, char *&p)
                     m_config[tileset].xmap.insert(val);
                 }
             }
+        }
+        else if (list[0] == "xdef")
+        {
+            if (list.size() < 2)
+            {
+                printf("xdef list `%s` on line %d has %d params, must have 2.", p, line, list.size());
+            }
+            else
+            {
+                uint32_t key;
+                memcpy(&key, list[1].c_str(), sizeof(key));
+                uint16_t val = std::strtoul(list[2].c_str(), nullptr, 16);
+                m_config[tileset].xdef[key] = val;
+            }
+        }
+        else
+        {
+            printf("unknown list `%s` on line %d\n", list[0].c_str(), line);
         }
     }
     p = e ? ++e : nullptr;
@@ -1298,7 +1347,7 @@ void CGame::animator()
     }
 }
 
-void CGame::debugFrameMap()
+void CGame::debugFrameMap(const char *outFile)
 {
     CFrameSet fs;
     for (int i = 0; i < m_frameSet->getSize(); ++i)
@@ -1330,7 +1379,7 @@ void CGame::debugFrameMap()
     }
 
     CFileWrap file;
-    if (file.open("out/map.obl", "wb"))
+    if (file.open(outFile, "wb"))
     {
         fs.write(file);
         file.close();

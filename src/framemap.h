@@ -15,7 +15,7 @@ public:
     bool write(const char *filename);
     bool read(const char *filename);
 
-    void fromFrameSet(CFrameSet &frameSet);
+    void fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &xmap);
     uint8_t *mapPtr(int i);
     uint8_t *operator[](int i);
 
