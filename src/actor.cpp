@@ -68,3 +68,39 @@ void CActor::flipDir()
 {
     aim ^= 1;
 }
+
+bool CActor::canFall()
+{
+    return CGame::getGame()->canFall(*this);
+}
+
+int CActor::findNextDir()
+{
+    static uint8_t AIMS[] = {
+        AIM_DOWN, AIM_RIGHT, AIM_UP, AIM_LEFT,
+        AIM_UP, AIM_LEFT, AIM_DOWN, AIM_RIGHT,
+        AIM_RIGHT, AIM_UP, AIM_LEFT, AIM_DOWN,
+        AIM_LEFT, AIM_DOWN, AIM_RIGHT, AIM_UP};
+
+    int i = TOTAL_AIMS - 1;
+    while (i >= 0)
+    {
+        int newAim = AIMS[aim * TOTAL_AIMS + i];
+        if (testAim(newAim))
+        {
+            return newAim;
+        }
+        --i;
+    }
+    return AIM_NONE;
+}
+
+bool CActor::testAim(int aim)
+{
+    return CGame::getGame()->testAim(*this, aim);
+}
+
+bool CActor::isFalling(int aim)
+{
+    return CGame::getGame()->isFalling(*this, aim);
+}

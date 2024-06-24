@@ -170,6 +170,7 @@ protected:
     bool isPlayerThere(const CActor &actor, int aim);
     bool isFalling(CActor &actor, int aim);
     bool canFall(CActor &actor);
+    bool testAim(const CActor &actor, int aim);
     uint8_t *getActorMap(const CActor &actor);
     void consumeAll();
     bool consumeObject(uint16_t j);
@@ -186,10 +187,8 @@ protected:
     void killPlayer();
     bool manageJump(const uint8_t *joyState);
     void manageVamplant(int i, CActor &actor);
-    void manageVCreature(int i, CActor &actor);
+    void manageVCreatureVariant(int i, CActor &actor, const char *signcall, int frameCount);
     void manageFlyingPlatform(int i, CActor &actor);
-    void manageCannibal(int i, CActor &actor);
-    void manageGreenFlea(int i, CActor &actor);
     void manageDroneVariant(int i, CActor &actor, const char *signcall, int frameCount);
     bool readConfig(const char *confName);
     char *parseLine(int &line, std::string &tileset, char *p);

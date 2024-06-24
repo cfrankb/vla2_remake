@@ -15,7 +15,9 @@ public:
         AIM_DOWN,
         AIM_LEFT,
         AIM_RIGHT,
-        BUTTON
+        BUTTON,
+        TOTAL_AIMS = 4,
+        AIM_NONE = 255
     };
 
     union
@@ -34,6 +36,7 @@ public:
     {
         uint8_t u2;
         uint8_t changeTo;
+        uint8_t seqOffset;
     };
 
     uint16_t imageId;
@@ -43,11 +46,15 @@ public:
     bool canMove(int aim);
     bool isPlayerThere(int aim);
     bool move(int aim);
+    bool canFall();
     void debug();
     void clear();
     void attackPlayer() const;
     void killPlayer() const;
     void flipDir();
+    int findNextDir();
+    bool testAim(int aim);
+    bool isFalling(int aim);
 
     friend class CGame;
 };

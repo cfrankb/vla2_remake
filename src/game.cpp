@@ -73,10 +73,11 @@ enum
     UP_RIGHT,
     DOWN_LEFT,
     DOWN_RIGHT,
-    NO_AIM = 255
+    NO_AIM = 255,
+    AIM_NONE = 255,
 };
 
-const uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpUP[] = {UP, UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN, DOWN};
 const uint8_t jumpDOWN[] = {};
 const uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, DOWN};
 const uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
@@ -180,7 +181,7 @@ bool CGame::loadLevel(int i)
     m_hp = define(DefaultHp);
     m_oxygen = define(DefaultOxygen);
     bool result = false;
-    printf("reading level %d from script archive: %s\n", i + 1, m_scriptArchName.c_str());
+    printf("reading level %d from: %s\n", i + 1, m_scriptArchName.c_str());
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
     if (sfile)
     {
@@ -801,25 +802,39 @@ void CGame::manageVamplant(int i, CActor &actor)
         uint8_t aim = AIMS[j];
         if (isPlayerThere(actor, aim))
         {
-            // PlantDrain
             actor.attackPlayer();
             break;
         }
     }
 }
 
-void CGame::manageVCreature(int i, CActor &actor)
+void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, int frameCount)
 {
     for (uint8_t j = 0; j < sizeof(AIMS); ++j)
     {
         uint8_t aim = AIMS[j];
         if (isPlayerThere(actor, aim))
         {
-            // PlantDrain
             actor.attackPlayer();
             break;
         }
     }
+
+    unmapEntry(i, actor);
+    int aim = actor.findNextDir();
+    if (aim != AIM_NONE)
+    {
+        actor.move(aim);
+        actor.aim = aim;
+    }
+
+    if (signcall != nullptr)
+    {
+        actor.imageId = m_config[m_loadedTileSet].xdef[*_L(signcall)] +
+                        frameCount * (actor.aim & 1) + actor.u2;
+    }
+
+    mapEntry(i, actor);
 }
 
 void CGame::manageFlyingPlatform(int i, CActor &actor)
@@ -862,16 +877,6 @@ void CGame::manageFlyingPlatform(int i, CActor &actor)
     {
         actor.flipDir();
     }
-}
-
-void CGame::manageCannibal(int i, CActor &actor)
-{
-    const uint32_t key = *_L("CANN");
-}
-
-void CGame::manageGreenFlea(int i, CActor &actor)
-{
-    const uint32_t key = *_L("SLUG");
 }
 
 /// @brief
@@ -918,19 +923,19 @@ void CGame::manageMonsters(uint32_t ticks)
             manageVamplant(i, actor);
             break;
         case TYPE_VCREA:
-            manageVCreature(i, actor);
+            manageVCreatureVariant(i, actor, nullptr, 0);
             break;
         case TYPE_FLYPLAT:
             manageFlyingPlatform(i, actor);
             break;
         case TYPE_CANNIBAL:
-            manageCannibal(i, actor);
+            manageVCreatureVariant(i, actor, "CANN", 3);
             break;
         case TYPE_INMANGA:
             manageDroneVariant(i, actor, "INMA", InMangaFrameCycle);
             break;
         case TYPE_GREENFLEA:
-            manageGreenFlea(i, actor);
+            manageVCreatureVariant(i, actor, "SLUG", 2);
         };
     }
 }
@@ -1278,6 +1283,21 @@ bool CGame::isFalling(CActor &actor, int aim)
     return true;
 }
 
+bool CGame::testAim(const CActor &actor, int aim)
+{
+    CActor tmp = actor;
+    if (!tmp.canMove(aim))
+    {
+        return false;
+    }
+    tmp.move(aim);
+    if (tmp.canFall())
+    {
+        return false;
+    }
+    return true;
+}
+
 void CGame::manageGravity()
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
@@ -1532,7 +1552,7 @@ void CGame::animator()
         else if (actor.type == TYPE_INMANGA)
         {
             unmapEntry(i, actor);
-            actor.u2 ^= 1;
+            actor.seqOffset ^= 1;
             mapEntry(i, actor);
         }
     }
