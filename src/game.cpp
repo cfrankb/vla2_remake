@@ -76,16 +76,16 @@ enum
     NO_AIM = 255
 };
 
-uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
-uint8_t jumpDOWN[] = {};
-uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, DOWN};
-uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
-uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
-uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
-uint8_t jumpDOWN_LEFT[] = {UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
-uint8_t jumpDOWN_RIGHT[] = {UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
+const uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpDOWN[] = {};
+const uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, DOWN};
+const uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+const uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpDOWN_LEFT[] = {UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
+const uint8_t jumpDOWN_RIGHT[] = {UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
 
-static jumpSeq_t g_jumpSeqs[] = {
+const jumpSeq_t g_jumpSeqs[] = {
     _J(jumpUP, UP),
     _J(jumpDOWN, DOWN),
     _J(jumpLEFT, LEFT),
@@ -767,7 +767,7 @@ void CGame::attackPlayer(const CActor &actor)
     }
 }
 
-void CGame::manageFish(int i, CActor &actor)
+void CGame::manageDroneVariant(int i, CActor &actor, const char *signcall, int frameCount)
 {
     unmapEntry(i, actor);
     if (actor.aim < CActor::AIM_LEFT)
@@ -789,8 +789,8 @@ void CGame::manageFish(int i, CActor &actor)
             actor.flipDir();
         }
     }
-    const uint32_t key = *_L("FISH");
-    actor.imageId = m_config[m_loadedTileSet].xdef[key] + (actor.aim & 1);
+    actor.imageId = m_config[m_loadedTileSet].xdef[*_L(signcall)] +
+                    frameCount * (actor.aim & 1) + actor.u2;
     mapEntry(i, actor);
 }
 
@@ -869,11 +869,6 @@ void CGame::manageCannibal(int i, CActor &actor)
     const uint32_t key = *_L("CANN");
 }
 
-void CGame::manageInManga(int i, CActor &actor)
-{
-    const uint32_t key = *_L("INMA");
-}
-
 void CGame::manageGreenFlea(int i, CActor &actor)
 {
     const uint32_t key = *_L("SLUG");
@@ -917,7 +912,7 @@ void CGame::manageMonsters(uint32_t ticks)
         switch (actor.type)
         {
         case TYPE_FISH:
-            manageFish(i, actor);
+            manageDroneVariant(i, actor, "FISH", FishFrameCycle);
             break;
         case TYPE_VAMPIREPLANT:
             manageVamplant(i, actor);
@@ -932,7 +927,7 @@ void CGame::manageMonsters(uint32_t ticks)
             manageCannibal(i, actor);
             break;
         case TYPE_INMANGA:
-            manageInManga(i, actor);
+            manageDroneVariant(i, actor, "INMA", InMangaFrameCycle);
             break;
         case TYPE_GREENFLEA:
             manageGreenFlea(i, actor);
@@ -1077,7 +1072,6 @@ bool CGame::consumeObject(uint16_t j)
         points = entry.imageId % pointCount;
         break;
     case TYPE_MISC:
-        // TODO: doPickup
         if (entry.imageId == 5)
         {
             points = _400pts;
@@ -1274,7 +1268,8 @@ bool CGame::isFalling(CActor &actor, int aim)
             }
             const auto &mapEntry = m_map[key];
             uint8_t bk = mapEntry.bk();
-            if (bk >= TYPE_LADDER && bk != TYPE_STOPCLASS)
+            if (bk >= TYPE_LADDER && bk != TYPE_STOPCLASS &&
+                bk != TYPE_LAVA)
             {
                 return false;
             }
@@ -1532,6 +1527,12 @@ void CGame::animator()
         {
             unmapEntry(i, actor);
             actor.imageId = swap[actor.imageId];
+            mapEntry(i, actor);
+        }
+        else if (actor.type == TYPE_INMANGA)
+        {
+            unmapEntry(i, actor);
+            actor.u2 ^= 1;
             mapEntry(i, actor);
         }
     }

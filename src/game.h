@@ -109,7 +109,9 @@ protected:
         VCreaDrain = 4,
         InMangaBite = -1,
         FleaDrain = 4,
-        speedCount = 9
+        speedCount = 9,
+        FishFrameCycle = 1,
+        InMangaFrameCycle = 2
     };
     typedef struct
     {
@@ -183,13 +185,12 @@ protected:
     void killPlayer(const CActor &actor);
     void killPlayer();
     bool manageJump(const uint8_t *joyState);
-    void manageFish(int i, CActor &actor);
     void manageVamplant(int i, CActor &actor);
     void manageVCreature(int i, CActor &actor);
     void manageFlyingPlatform(int i, CActor &actor);
     void manageCannibal(int i, CActor &actor);
-    void manageInManga(int i, CActor &actor);
     void manageGreenFlea(int i, CActor &actor);
+    void manageDroneVariant(int i, CActor &actor, const char *signcall, int frameCount);
     bool readConfig(const char *confName);
     char *parseLine(int &line, std::string &tileset, char *p);
     void parseGeneralOptions(const StringVector &list, int line);
