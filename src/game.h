@@ -39,6 +39,7 @@ public:
     int lives();
     int goals();
     void drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color);
+    void startGame();
     void restartGame();
     void restartLevel();
     void nextLevel();
@@ -74,6 +75,7 @@ protected:
         INVALID = -1,
         KILL_PLAYER = -1,
         BUTTON = 4,
+        NOT_FOUND = 255
     };
 
     enum // bonus points
@@ -97,20 +99,16 @@ protected:
     {
         NeedleDrain = 32,
         HpBonus = 4,
-        MaxHP = 8192,
+        LifeDrowning = 2,
         MaxOxygen = 256,
+        OxygenAdd = 2,
+        OxygenDrain = 1,
         OxygenBonus = 4,
         FishDrain = 20,
         PlantDrain = 4,
         VCreaDrain = 4,
         InMangaBite = -1,
         FleaDrain = 4,
-        FlowerHpBonus = 6,
-        OxygenAdd = 2,
-        OxygenDrain = 1,
-        LifeDrowning = 2,
-        LevelCompletionBonus = 2000,
-        JumpCooldown = 6,
         speedCount = 9
     };
     typedef struct
@@ -178,6 +176,7 @@ protected:
     inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
     void attackPlayer(const CActor &actor);
     void killPlayer(const CActor &actor);
+    void killPlayer();
     bool manageJump(const uint8_t *joyState);
     void manageFish(int i, CActor &actor);
     void manageVamplant(int i, CActor &actor);

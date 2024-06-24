@@ -16,6 +16,10 @@
 #define DefaultOxygen "DefaultOxygen"
 #define JumpCooldown "JumpCooldown"
 #define DefaultLives "DefaultLives"
+#define MaxHP "MaxHP"
+#define FlowerHpBonus "FlowerHpBonus"
+#define LevelCompletionBonus "LevelCompletionBonus"
+#define ShowPoints "ShowPoints"
 
 CGame *g_game = nullptr;
 
@@ -700,6 +704,11 @@ void CGame::killPlayer(const CActor &actor)
     m_hp = 0;
 }
 
+void CGame::killPlayer()
+{
+    m_hp = 0;
+}
+
 void CGame::attackPlayer(const CActor &actor)
 {
     int damage = 0;
@@ -746,15 +755,14 @@ void CGame::attackPlayer(const CActor &actor)
 
 void CGame::manageFish(int i, CActor &actor)
 {
+    unmapEntry(i, actor);
     if (actor.aim < CActor::AIM_LEFT)
     {
         actor.aim = CActor::AIM_LEFT;
     }
     if (actor.canMove(actor.aim))
     {
-        unmapEntry(i, actor);
         actor.move(actor.aim);
-        mapEntry(i, actor);
     }
     else
     {
@@ -769,6 +777,7 @@ void CGame::manageFish(int i, CActor &actor)
     }
     const uint32_t key = *_L("FISH");
     actor.imageId = m_config[m_loadedTileSet].xdef[key] + (actor.aim & 1);
+    mapEntry(i, actor);
 }
 
 void CGame::manageVamplant(int i, CActor &actor)
@@ -801,19 +810,31 @@ void CGame::manageVCreature(int i, CActor &actor)
 
 void CGame::manageFlyingPlatform(int i, CActor &actor)
 {
-    int aim = actor.aim;
-    if (actor.isPlayerThere(aim))
+    uint8_t aim = actor.aim;
+    uint8_t pAim = NOT_FOUND;
+    if (aim == UP || aim == LEFT || aim == RIGHT)
     {
-        if (m_player->canMove(aim))
+        if (actor.isPlayerThere(aim))
         {
-            unmapEntry(NONE, *m_player);
-            m_player->move(aim);
-            mapEntry(NONE, *m_player);
+            pAim = aim;
         }
-        else
+        else if (actor.isPlayerThere(UP))
         {
-            actor.attackPlayer();
-            return;
+            pAim = UP;
+        }
+
+        if (pAim != NOT_FOUND)
+        {
+            if (m_player->canMove(aim))
+            {
+                unmapEntry(NONE, *m_player);
+                m_player->move(aim);
+                mapEntry(NONE, *m_player);
+            }
+            else
+            {
+                actor.attackPlayer();
+            }
         }
     }
 
@@ -950,7 +971,7 @@ bool CGame::consumeObject(uint16_t j)
         break;
     case TYPE_FLOWER:
         points = _100pts;
-        m_hp += FlowerHpBonus;
+        m_hp = std::min(m_hp + define(FlowerHpBonus), define(MaxHP));
         --m_goals;
         break;
     case TYPE_FRUIT:
@@ -1002,7 +1023,7 @@ bool CGame::consumeObject(uint16_t j)
     else
     {
         addToScore(g_points[points]);
-        entry.type = TYPE_POINTS;
+        entry.type = define(ShowPoints) ? TYPE_POINTS : TYPE_EMPTY;
         entry.imageId = points;
     }
 
@@ -1033,7 +1054,7 @@ void CGame::consumeAll()
             if (a.bk() == TYPE_LAVA)
             {
                 // instant death
-                m_hp = 0;
+                killPlayer();
                 return;
             }
 
@@ -1077,18 +1098,23 @@ int CGame::lives()
     return m_lives;
 }
 
-void CGame::restartGame()
+void CGame::startGame()
 {
     m_hp = define(DefaultHp);
     m_oxygen = define(DefaultOxygen);
     m_lives = define(DefaultLives);
-    m_level = 0;
     m_mode = MODE_INTRO;
     m_jumpFlag = false;
     if (m_loadedTileSet != "")
     {
         loadLevel(m_level);
     }
+}
+
+void CGame::restartGame()
+{
+    m_level = 0;
+    startGame();
 }
 
 void CGame::restartLevel()
@@ -1111,7 +1137,7 @@ int CGame::goals()
 
 void CGame::nextLevel()
 {
-    m_score += LevelCompletionBonus;
+    m_score += define(LevelCompletionBonus);
     setMode(CGame::MODE_INTRO);
     ++m_level;
     loadLevel(m_level);
@@ -1412,7 +1438,9 @@ void CGame::animator()
         CActor &actor = (*m_script)[i];
         if (swap.count(actor.imageId))
         {
+            unmapEntry(i, actor);
             actor.imageId = swap[actor.imageId];
+            mapEntry(i, actor);
         }
     }
 }

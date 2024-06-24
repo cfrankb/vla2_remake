@@ -303,7 +303,7 @@ bool CRuntime::init(const char *filearch, int startLevel)
         int level = m_game->level();
         m_game->loadLevel(level);
     }
-    m_game->restartGame();
+    m_game->startGame();
     m_countdown = m_game->define(IntroCountdown);
 
     return result;
