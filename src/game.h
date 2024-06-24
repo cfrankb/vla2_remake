@@ -166,10 +166,15 @@ protected:
     bool unmapEntry(int i, const CActor &actor);
     bool canMove(const CActor &actor, int aim);
     bool isPlayerThere(const CActor &actor, int aim);
-    bool isFalling(CActor &actor);
+    bool isFalling(CActor &actor, int aim);
+    bool canFall(CActor &actor);
     uint8_t *getActorMap(const CActor &actor);
     void consumeAll();
     bool consumeObject(uint16_t j);
+    void doPickup(int j, CActor &entry);
+    void handleRemove(int j, CActor &entry);
+    void handleChange(int j, CActor &entry);
+    void handleTeleport(int j, CActor &entry);
     void addToScore(int score);
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;

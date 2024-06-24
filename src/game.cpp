@@ -71,23 +71,29 @@ enum
     RIGHT,
     UP_LEFT,
     UP_RIGHT,
+    DOWN_LEFT,
+    DOWN_RIGHT,
     NO_AIM = 255
 };
 
-uint8_t jumpUP[] = {UP, UP, UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN};
+uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
 uint8_t jumpDOWN[] = {};
 uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, DOWN};
 uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
-uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN};
-uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN};
+uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
+uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
+uint8_t jumpDOWN_LEFT[] = {UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
+uint8_t jumpDOWN_RIGHT[] = {UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
 
-jumpSeq_t g_jumpSeqs[] = {
+static jumpSeq_t g_jumpSeqs[] = {
     _J(jumpUP, UP),
     _J(jumpDOWN, DOWN),
     _J(jumpLEFT, LEFT),
     _J(jumpRIGHT, RIGHT),
     _J(jumpUP_LEFT, LEFT),
     _J(jumpUP_RIGHT, RIGHT),
+    _J(jumpDOWN_LEFT, LEFT),
+    _J(jumpDOWN_RIGHT, RIGHT),
 };
 
 CGame::CGame()
@@ -605,6 +611,14 @@ bool CGame::manageJump(const uint8_t *joyState)
             {
                 newAim = UP_RIGHT;
             }
+            else if (joyState[DOWN] && joyState[LEFT])
+            {
+                newAim = DOWN_LEFT;
+            }
+            else if (joyState[DOWN] && joyState[RIGHT])
+            {
+                newAim = DOWN_RIGHT;
+            }
             else
             {
                 const uint8_t aims[] = {UP, LEFT, RIGHT};
@@ -954,6 +968,77 @@ void CGame::addToScore(int score)
     m_score += score;
 }
 
+void CGame::handleRemove(int j, CActor &entry)
+{
+    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
+    {
+        CActor &cur = (*m_script)[i];
+        if (i == j)
+            continue;
+        if (cur.triggerKey == entry.triggerKey)
+        {
+            unmapEntry(i, cur);
+            cur.clear();
+            cur.type = TYPE_EMPTY;
+            mapEntry(i, cur);
+        }
+    }
+}
+
+void CGame::handleChange(int j, CActor &entry)
+{
+    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
+    {
+        CActor &cur = (*m_script)[i];
+        if (i == j)
+            continue;
+        if (cur.triggerKey == entry.triggerKey)
+        {
+            unmapEntry(i, cur);
+            cur.clear();
+            cur.type = TYPE_OBSTACLECLASS;
+            cur.imageId = entry.changeTo;
+            mapEntry(i, cur);
+        }
+    }
+}
+
+void CGame::handleTeleport(int j, CActor &entry)
+{
+    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
+    {
+        CActor &cur = (*m_script)[i];
+        if (i == j)
+            continue;
+        if ((cur.triggerKey == entry.triggerKey) &&
+            (cur.task == TASK_DEST))
+        {
+            CActor &player = *m_player;
+            unmapEntry(NONE, player);
+            player.x = cur.x;
+            player.y = cur.y;
+            mapEntry(NONE, player);
+            return;
+        }
+    }
+    printf("no matching dest with triggerkey: %.2x\n", entry.triggerKey);
+}
+
+void CGame::doPickup(int j, CActor &entry)
+{
+    switch (entry.task)
+    {
+    case TASK_CHANGE:
+        handleChange(j, entry);
+        break;
+    case TASK_REMOVE:
+        handleRemove(j, entry);
+        break;
+    case TASK_SOURCE:
+        handleTeleport(j, entry);
+    }
+}
+
 bool CGame::consumeObject(uint16_t j)
 {
     CActor &entry = (*m_script)[j];
@@ -1010,7 +1095,12 @@ bool CGame::consumeObject(uint16_t j)
         printf("TYPE_DEADLYITEM\n");
         entry.attackPlayer();
         break;
+    default:
+        printf("unhanled type: %.2x at %d\n", entry.type, j);
     }
+
+    // doPickup (pickup triggers)
+    doPickup(j, entry);
 
     // unmap entry
     unmapEntry(j, entry);
@@ -1148,20 +1238,22 @@ uint8_t *CGame::getActorMap(const CActor &actor)
     return actor.type == TYPE_PLAYER ? nullptr : (*m_frameMap)[actor.imageId];
 }
 
-bool CGame::isFalling(CActor &actor)
+bool CGame::canFall(CActor &actor)
+{
+    return isFalling(actor, HERE) &&
+           isFalling(actor, DOWN) &&
+           actor.canMove(CActor::AIM_DOWN);
+}
+
+bool CGame::isFalling(CActor &actor, int aim)
 {
     if (actor.type == TYPE_FLYPLAT)
     {
         return false;
     }
 
-    if (!actor.canMove(CActor::AIM_DOWN))
-    {
-        return false;
-    }
-
     rect_t rect;
-    if (!calcActorRect(actor, HERE, rect))
+    if (!calcActorRect(actor, aim, rect))
     {
         return false;
     }
@@ -1199,7 +1291,7 @@ void CGame::manageGravity()
         if ((CScript::isMonsterType(actor.type) || (actor.type == TYPE_PLAYER)) &&
             (actor.type != TYPE_FLYPLAT) &&
             (actor.type != TYPE_FISH) &&
-            isFalling(actor))
+            canFall(actor))
         {
             if ((actor.type == TYPE_PLAYER) && m_jumpFlag)
             {

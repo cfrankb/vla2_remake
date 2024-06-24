@@ -18,14 +18,24 @@ public:
         BUTTON
     };
 
-    uint8_t attr;
+    union
+    {
+        uint8_t attr;
+        uint8_t task;
+    };
     uint8_t type; // objType
     union
     {
         uint8_t u1;
         uint8_t aim;
+        uint8_t triggerKey; // ???
     };
-    uint8_t u2;
+    union
+    {
+        uint8_t u2;
+        uint8_t changeTo;
+    };
+
     uint16_t imageId;
     uint8_t x;
     uint8_t y;
