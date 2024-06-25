@@ -477,7 +477,8 @@ void CGame::drawScreen(CFrame &screen)
         const auto &entry = (*m_script)[i];
         if (entry.type == TYPE_PLAYER)
         {
-            frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE];
+            frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE +
+                               m_playerFrameOffset];
         }
         else if (entry.type == TYPE_POINTS)
         {
@@ -647,6 +648,21 @@ bool CGame::manageJump(const uint8_t *joyState)
 
 void CGame::managePlayer(const uint8_t *joyState)
 {
+    // animate player
+    if (m_playerHitCountdown)
+    {
+        --m_playerHitCountdown;
+        m_playerFrameOffset = PLAYER_HIT_FRAME;
+    }
+    else if (*reinterpret_cast<const uint32_t *>(joyState))
+    {
+        m_playerFrameOffset = (m_playerFrameOffset + 1) % PLAYER_MOVE_FRAMES;
+    }
+    else
+    {
+        m_playerFrameOffset = 0;
+    }
+
     consumeAll();
 
     unmapEntry(NONE, *m_player);
@@ -754,6 +770,7 @@ void CGame::attackPlayer(const CActor &actor)
         printf("type=%d no damage defined\n", actor.type);
     };
 
+    m_playerHitCountdown = PlayerHitDuration;
     if (damage == KILL_PLAYER)
     {
         actor.killPlayer();
@@ -1184,6 +1201,7 @@ int CGame::lives()
 
 void CGame::startGame()
 {
+    m_playerHitCountdown = 0;
     m_hp = define(DefaultHp);
     m_oxygen = define(DefaultOxygen);
     m_lives = define(DefaultLives);
@@ -1193,12 +1211,14 @@ void CGame::startGame()
 
 void CGame::restartGame()
 {
+    m_playerHitCountdown = 0;
     m_level = 0;
     startGame();
 }
 
 void CGame::restartLevel()
 {
+    m_playerHitCountdown = 0;
     m_jumpFlag = false;
     m_hp = define(DefaultHp);
     m_oxygen = define(DefaultOxygen);
@@ -1538,7 +1558,7 @@ bool CGame::readConfig(const char *confName)
     return sfile != nullptr;
 }
 
-void CGame::animator()
+void CGame::animator(uint32_t ticks)
 {
     PairMap &swap = m_config[m_loadedTileSet].swap;
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)

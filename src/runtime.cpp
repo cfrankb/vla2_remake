@@ -263,7 +263,7 @@ void CRuntime::mainLoop()
 
     if (m_ticks % game.define(Animator) == 0)
     {
-        game.animator();
+        game.animator(m_ticks);
     }
 
     if (game.isPlayerDead())

@@ -45,7 +45,7 @@ public:
     void restartLevel();
     void nextLevel();
     void manageGravity();
-    void animator();
+    void animator(uint32_t ticks);
     uint32_t define(const char *name);
 
     enum
@@ -72,6 +72,8 @@ protected:
         MAX_POS = 255,
         NONE = 0,
         PLAYER_FRAME_CYCLE = 8,
+        PLAYER_MOVE_FRAMES = 7,
+        PLAYER_HIT_FRAME = 7,
         fontSize = 8,
         INVALID = -1,
         KILL_PLAYER = -1,
@@ -113,7 +115,8 @@ protected:
         speedCount = 9,
         FishFrameCycle = 1,
         InMangaFrameCycle = 2,
-        CanmibalDamage = 64
+        CanmibalDamage = 64,
+        PlayerHitDuration = 2
     };
     typedef struct
     {
@@ -163,6 +166,8 @@ protected:
     int m_jumpSeq;
     int m_jumpIndex;
     int m_jumpCooldown;
+    int m_playerFrameOffset;
+    int m_playerHitCountdown;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
