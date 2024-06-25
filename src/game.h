@@ -35,6 +35,7 @@ public:
     void preloadAssets();
     void manageMonsters(uint32_t ticks);
     void debugFrameMap(const char *outFile);
+    void debugLevel(const char *filename);
     void setLevel(int i);
     int level();
     int lives();
@@ -181,7 +182,7 @@ protected:
     uint8_t *getActorMap(const CActor &actor);
     void consumeAll();
     bool consumeObject(uint16_t j);
-    void doPickup(int j, CActor &entry);
+    void handleTrigger(int j, CActor &entry);
     void handleRemove(int j, CActor &entry);
     void handleChange(int j, CActor &entry);
     void handleTeleport(int j, CActor &entry);

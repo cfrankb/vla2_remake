@@ -47,7 +47,7 @@ public:
     bool isPlayerThere(int aim);
     bool move(int aim);
     bool canFall();
-    void debug();
+    void debug() const;
     void clear();
     void attackPlayer() const;
     void killPlayer() const;

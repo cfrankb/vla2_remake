@@ -20,6 +20,7 @@ public:
     void drawScreen(CFrame &screen, CFrameSet &frameSet);
     void debug(const char *filename);
     const char *stoName();
+    static const char *getTypeName(int typeId);
 
 protected:
     typedef struct
@@ -79,7 +80,6 @@ protected:
     void freeIms();
     void freeScr();
     void freeSto();
-    inline const char *getTypeName(int typeId);
     inline const char *getImageName(int imageID);
     inline const rgba_t &getPaletteColor(int i);
 

@@ -39,7 +39,7 @@ bool CActor::move(int aim)
     return true;
 }
 
-void CActor::debug()
+void CActor::debug() const
 {
     printf("type %x x=%d y=%d imageId=%.4x\n", type, x, y, imageId);
 }

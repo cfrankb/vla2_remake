@@ -171,6 +171,9 @@ void CRuntime::doInput()
             case SDLK_HOME:
                 m_game->nextLevel();
                 break;
+            case SDLK_END:
+                // m_game->debugLevel("out/level.txt");
+                break;
             case SDLK_LSHIFT:
                 m_joyState[BUTTON] = KEY_PRESSED;
                 break;

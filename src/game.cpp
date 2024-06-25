@@ -77,12 +77,12 @@ enum
     AIM_NONE = 255,
 };
 
-const uint8_t jumpUP[] = {UP, UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
 const uint8_t jumpDOWN[] = {};
-const uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, LEFT, LEFT, DOWN, LEFT, DOWN};
-const uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
-const uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
+const uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+const uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
 const uint8_t jumpDOWN_LEFT[] = {UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
 const uint8_t jumpDOWN_RIGHT[] = {UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
 
@@ -403,6 +403,11 @@ bool CGame::canMove(const CActor &actor, int aim)
                 }
             }
             if (mapEntry.bk() == TYPE_OBSTACLECLASS)
+            {
+                return false;
+            }
+            if (mapEntry.bk() == TYPE_LAVA &&
+                actor.type == TYPE_FLYPLAT)
             {
                 return false;
             }
@@ -1037,7 +1042,7 @@ void CGame::handleTeleport(int j, CActor &entry)
     printf("no matching dest with triggerkey: %.2x\n", entry.triggerKey);
 }
 
-void CGame::doPickup(int j, CActor &entry)
+void CGame::handleTrigger(int j, CActor &entry)
 {
     switch (entry.task)
     {
@@ -1056,6 +1061,7 @@ bool CGame::consumeObject(uint16_t j)
 {
     CActor &entry = (*m_script)[j];
     int points = INVALID;
+    bool consumed = true;
     switch (entry.type)
     {
     case TYPE_OXYGEN:
@@ -1063,7 +1069,8 @@ bool CGame::consumeObject(uint16_t j)
         m_oxygen += OxygenBonus;
         break;
     case TYPE_TRANSPORTER:
-        return false;
+        consumed = false;
+        break;
     case TYPE_DIAMOND:
         points = _50pts;
         break;
@@ -1111,7 +1118,7 @@ bool CGame::consumeObject(uint16_t j)
     }
 
     // doPickup (pickup triggers)
-    doPickup(j, entry);
+    handleTrigger(j, entry);
 
     // unmap entry
     unmapEntry(j, entry);
@@ -1128,7 +1135,7 @@ bool CGame::consumeObject(uint16_t j)
         entry.imageId = points;
     }
 
-    return true;
+    return consumed;
 }
 
 /// @brief
@@ -1628,5 +1635,58 @@ void CGame::debugFrameMap(const char *outFile)
     {
         fs.write(file);
         file.close();
+    }
+}
+
+void CGame::debugLevel(const char *filename)
+{
+    std::unordered_map<uint16_t, std::string> imageNames;
+    std::string mapFile = std::string("data/") + m_loadedTileSet + ".map";
+    printf("reading: %s\n", mapFile.c_str());
+    FILE *sfile = fopen(mapFile.c_str(), "rb");
+    if (sfile)
+    {
+        fseek(sfile, 0, SEEK_END);
+        size_t size = ftell(sfile);
+        fseek(sfile, 0, SEEK_SET);
+        printf("size: %d\n", size);
+        char *data = new char[size + 1];
+        data[size] = 0;
+        fread(data, size, 1, sfile);
+        fclose(sfile);
+        char *p = data;
+        uint16_t i = 0;
+        while (p && *p)
+        {
+            char *e = strstr(p, "\n");
+            if (e)
+            {
+                *e = 0;
+            }
+            if (*p)
+            {
+                imageNames[i] = p;
+            }
+            ++i;
+            p = e ? ++e : nullptr;
+        }
+        delete[] data;
+    }
+
+    printf("total images:%d\n", imageNames.size());
+
+    FILE *tfile = fopen(filename, "wb");
+    if (tfile)
+    {
+        fprintf(tfile, "imsfilename: %s\n", m_loadedTileSet.c_str());
+        fprintf(tfile, "tiles: %d\n\n", m_frameSet->getSize());
+
+        for (int i = 0; i < m_script->getSize(); ++i)
+        {
+            CActor &entry = (*m_script)[i];
+            fprintf(tfile, "#%d attr %x type %.2x (%s)\n", i, entry.attr, entry.type, CImsWrap::getTypeName(entry.type));
+            fprintf(tfile, "    u1 %x u2 %x imageId %d (%s)\n", entry.u1, entry.u2, entry.imageId, imageNames[entry.imageId].c_str());
+            fprintf(tfile, "    x:%d y:%d \n\n", entry.x, entry.y);
+        }
     }
 }
