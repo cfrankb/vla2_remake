@@ -181,7 +181,7 @@ bool CGame::loadLevel(int i)
     m_hp = define(DefaultHp);
     m_oxygen = define(DefaultOxygen);
     bool result = false;
-    printf("reading level %d from: %s\n", i + 1, m_scriptArchName.c_str());
+    printf("reading level %.2d from: %s\n", i + 1, m_scriptArchName.c_str());
     FILE *sfile = fopen(m_scriptArchName.c_str(), "rb");
     if (sfile)
     {
@@ -574,14 +574,13 @@ bool CGame::manageJump(const uint8_t *joyState)
         return false;
     }
 
+    unmapEntry(NONE, *m_player);
     if (m_jumpFlag)
     {
         const uint8_t &aim = g_jumpSeqs[m_jumpSeq].seq[m_jumpIndex];
         if (m_player->canMove(aim))
         {
-            unmapEntry(NONE, *m_player);
             m_player->move(aim);
-            mapEntry(NONE, *m_player);
         }
         else
         {
@@ -642,6 +641,7 @@ bool CGame::manageJump(const uint8_t *joyState)
             }
         }
     }
+    mapEntry(NONE, *m_player);
     return m_jumpFlag;
 }
 
@@ -649,19 +649,19 @@ void CGame::managePlayer(const uint8_t *joyState)
 {
     consumeAll();
 
+    unmapEntry(NONE, *m_player);
     for (uint8_t i = 0; i < sizeof(AIMS); ++i)
     {
         const uint8_t aim = AIMS[i];
         if (joyState[aim] &&
             (aim == UP ? m_player->testAim(aim) : m_player->canMove(aim)))
         {
-            unmapEntry(NONE, *m_player);
             m_player->move(aim);
             m_player->aim = aim;
-            mapEntry(NONE, *m_player);
             break;
         }
     }
+    mapEntry(NONE, *m_player);
 }
 
 void CGame::preloadAssets()
