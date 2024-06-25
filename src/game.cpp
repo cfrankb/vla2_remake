@@ -139,7 +139,7 @@ CGame::~CGame()
     }
 }
 
-bool CGame::init(const char *archname)
+bool CGame::init(const char *archname, const char *configfile)
 {
     m_scriptArchName = archname ? archname : DEFAULT_ARCHFILE;
     if (!CScriptArch::indexFromFile(m_scriptArchName.c_str(), m_scriptIndex, m_scriptCount))
@@ -149,7 +149,7 @@ bool CGame::init(const char *archname)
         return false;
     }
     printf("map count in index: %d\n", m_scriptCount);
-    if (!readConfig("data/vlamits2.cfg"))
+    if (!readConfig(configfile))
     {
         printf("failed to read configfile.\n");
     }
@@ -193,7 +193,7 @@ bool CGame::loadLevel(int i)
         m_script->sort();
         m_script->insertAt(0, CActor());
         m_goals = m_script->countType(TYPE_FLOWER);
-        printf("flowers: %d\n", m_goals);
+        // printf("flowers: %d\n", m_goals);
         int i = m_script->findPlayerIndex();
         m_player = nullptr;
         if (i != CScript::NOT_FOUND)
@@ -201,7 +201,7 @@ bool CGame::loadLevel(int i)
             CActor &entry = (*m_script)[i];
             m_player = &entry;
             entry.aim = CActor::AIM_DOWN;
-            printf("player found at: x=%d y=%d\n", entry.x, entry.y);
+            //  printf("player found at: x=%d y=%d\n", entry.x, entry.y);
         }
         else
         {
@@ -648,16 +648,12 @@ bool CGame::manageJump(const uint8_t *joyState)
 void CGame::managePlayer(const uint8_t *joyState)
 {
     consumeAll();
-    if (manageJump(joyState))
-    {
-        return;
-    }
 
     for (uint8_t i = 0; i < sizeof(AIMS); ++i)
     {
         const uint8_t aim = AIMS[i];
         if (joyState[aim] &&
-            m_player->canMove(aim))
+            (aim == UP ? m_player->testAim(aim) : m_player->canMove(aim)))
         {
             unmapEntry(NONE, *m_player);
             m_player->move(aim);
@@ -743,7 +739,7 @@ void CGame::attackPlayer(const CActor &actor)
         damage = KILL_PLAYER;
         break;
     case TYPE_CANNIBAL:
-        damage = KILL_PLAYER;
+        damage = CanmibalDamage;
         break;
     case TYPE_INMANGA:
         damage = KILL_PLAYER;
@@ -1091,7 +1087,6 @@ bool CGame::consumeObject(uint16_t j)
         }
         break;
     case TYPE_DEADLYITEM:
-        printf("TYPE_DEADLYITEM\n");
         entry.attackPlayer();
         break;
     default:
@@ -1194,10 +1189,6 @@ void CGame::startGame()
     m_lives = define(DefaultLives);
     m_mode = MODE_INTRO;
     m_jumpFlag = false;
-    if (m_loadedTileSet != "")
-    {
-        loadLevel(m_level);
-    }
 }
 
 void CGame::restartGame()
@@ -1435,6 +1426,15 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
     {
         *e = 0;
     }
+    char *m = strstr(p, "\r");
+    if (m)
+    {
+        *m = 0;
+    }
+    if (m > e)
+    {
+        e = m;
+    }
 
     char *c = strstr(p, "#");
     if (c)
@@ -1513,6 +1513,7 @@ void CGame::splitString(const std::string str, StringVector &list)
 
 bool CGame::readConfig(const char *confName)
 {
+    printf("parsing: %s\n", confName);
     m_config.clear();
     FILE *sfile = fopen(confName, "rb");
     if (sfile)

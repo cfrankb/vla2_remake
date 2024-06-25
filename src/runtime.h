@@ -1,5 +1,5 @@
 /*
-    cs3-runtime-sdl
+    vlamits2-runtime-sdl
     Copyright (C) 2024  Francois Blanchette
 
     This program is free software: you can redistribute it and/or modify
@@ -31,7 +31,7 @@ public:
     void run();
     bool SDLInit();
     void doInput();
-    bool init(const char *filearch, int startLevel = 0);
+    bool init(const char *filearch, const char *configfile, int startLevel = 0);
 
 private:
     enum

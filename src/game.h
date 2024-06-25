@@ -23,7 +23,7 @@ public:
 
     bool loadLevel(int i);
     const char *lastError();
-    bool init(const char *archname);
+    bool init(const char *archname, const char *configfile);
     int mode();
     void setMode(int mode);
     void drawScreen(CFrame &screen);
@@ -31,6 +31,7 @@ public:
     int playerSpeed();
     bool isPlayerDead();
     void managePlayer(const uint8_t *joyState);
+    bool manageJump(const uint8_t *joyState);
     void preloadAssets();
     void manageMonsters(uint32_t ticks);
     void debugFrameMap(const char *outFile);
@@ -111,7 +112,8 @@ protected:
         FleaDrain = 4,
         speedCount = 9,
         FishFrameCycle = 1,
-        InMangaFrameCycle = 2
+        InMangaFrameCycle = 2,
+        CanmibalDamage = 64
     };
     typedef struct
     {
@@ -185,7 +187,6 @@ protected:
     void attackPlayer(const CActor &actor);
     void killPlayer(const CActor &actor);
     void killPlayer();
-    bool manageJump(const uint8_t *joyState);
     void manageVamplant(int i, CActor &actor);
     void manageVCreatureVariant(int i, CActor &actor, const char *signcall, int frameCount);
     void manageFlyingPlatform(int i, CActor &actor);

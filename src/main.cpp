@@ -9,6 +9,7 @@
 
 #define FPS 30
 #define MAPARCH_FILE "data/levels.scrx"
+#define CONFIG_FILE "data/vlamits2.cfg"
 
 void loop_handler(void *arg)
 {
@@ -23,7 +24,7 @@ int main(int argc, char *args[])
 {
     int startLevel = argc > 1 ? atoi(args[1]) : 0;
     CRuntime runtime;
-    runtime.init(MAPARCH_FILE, startLevel);
+    runtime.init(MAPARCH_FILE, CONFIG_FILE, startLevel);
     runtime.SDLInit();
     runtime.paint();
 #ifdef WASM

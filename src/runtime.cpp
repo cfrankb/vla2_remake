@@ -1,5 +1,5 @@
 /*
-    cs3-runtime-sdl
+    vlamits-runtime-sdl
     Copyright (C) 2024  Francois Blanchette
 
     This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,9 @@
 
 #define WINDOW_TITLE "The Vlamits2 Runtime"
 #define IntroCountdown "IntroCountdown"
+#define JumpSpeed "JumpSpeed"
+#define Gravity "Gravity"
+#define Animator "Animator"
 
 CRuntime::CRuntime()
 {
@@ -253,25 +256,14 @@ void CRuntime::mainLoop()
 
     game.manageMonsters(m_ticks);
 
-    if (m_ticks % game.define("gravity") == 0)
+    if (m_ticks % game.define(Gravity) == 0)
     {
         game.manageGravity();
     }
 
-    if (m_ticks % game.define("animator") == 0)
+    if (m_ticks % game.define(Animator) == 0)
     {
         game.animator();
-    }
-
-    if (m_ticks % game.playerSpeed() == 0 && !game.isPlayerDead())
-    {
-        game.managePlayer(m_joyState);
-    }
-
-    if (game.goals() == 0)
-    {
-        m_countdown = game.define(IntroCountdown);
-        game.nextLevel();
     }
 
     if (game.isPlayerDead())
@@ -283,11 +275,29 @@ void CRuntime::mainLoop()
             game.setMode(CGame::MODE_GAMEOVER);
         }
     }
+    else
+    {
+        if (m_ticks % game.playerSpeed() == 0)
+        {
+            game.managePlayer(m_joyState);
+        }
+
+        if (m_ticks % game.define(JumpSpeed) == 0)
+        {
+            game.manageJump(m_joyState);
+        }
+
+        if (game.goals() == 0)
+        {
+            m_countdown = game.define(IntroCountdown);
+            game.nextLevel();
+        }
+    }
 
     ++m_ticks;
 }
 
-bool CRuntime::init(const char *filearch, int startLevel)
+bool CRuntime::init(const char *filearch, const char *configfile, int startLevel)
 {
     if (!m_assetPreloaded)
     {
@@ -297,7 +307,7 @@ bool CRuntime::init(const char *filearch, int startLevel)
 
     m_game->setMode(CGame::MODE_INTRO);
     m_game->setLevel(startLevel);
-    bool result = m_game->init(filearch);
+    bool result = m_game->init(filearch, configfile);
     if (result)
     {
         int level = m_game->level();

@@ -81,7 +81,6 @@ bool CScript::read(FILE *sfile)
     // read entry count
     fread(&m_size, sizeof(m_size), 1, sfile);
     m_max = m_size;
-    printf("entrycount: %d\n", m_size);
 
     // read tileset name
     char tileset[TILESET_NAME_MAX + 1];
