@@ -59,7 +59,10 @@ public:
         WHITE = 0xffffffff,
         PINK = 0xffd187e8,
         YELLOW = 0xff34ebeb,
-        GREEN = 0xff009000
+        GREEN = 0xff009000,
+        LIME = 0xff00ffbf,
+        LIGHTGRAY = 0xffd3d3d3,
+        BLUE = 0xffff901e,
     };
 
 protected:
@@ -117,7 +120,10 @@ protected:
         FishFrameCycle = 1,
         InMangaFrameCycle = 2,
         CanmibalDamage = 64,
-        PlayerHitDuration = 2
+        PlayerHitDuration = 2,
+        HealthBarHeight = 8,
+        HealthBarOffset = 4,
+        Coins4Life = 100,
     };
     typedef struct
     {
@@ -161,6 +167,7 @@ protected:
     int m_hp;
     int m_lives;
     int m_oxygen;
+    int m_coins;
     int m_level;
     int m_mode;
     bool m_jumpFlag;
@@ -202,6 +209,8 @@ protected:
     void parseGeneralOptions(const StringVector &list, int line);
     void parseTilesetOptions(std::string tileset, const StringVector &list, int line);
     void splitString(const std::string str, StringVector &list);
+    void drawRect(CFrame &frame, const rect_t &rect, const uint32_t color, bool fill);
+    uint16_t xdefine(const char *sig);
 
     friend class CActor;
 };

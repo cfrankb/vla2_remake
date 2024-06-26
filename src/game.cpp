@@ -535,7 +535,7 @@ void CGame::drawScreen(CFrame &screen)
 
     // draw game status
     char tmp[16];
-    int x = 0;
+    uint16_t x = 0;
     sprintf(tmp, "%.8d ", m_score);
     drawText(screen, x, 0, tmp, WHITE);
     x += strlen(tmp) * fontSize;
@@ -548,9 +548,23 @@ void CGame::drawScreen(CFrame &screen)
     drawText(screen, x, 0, tmp, PINK);
     x += strlen(tmp) * fontSize;
 
-    sprintf(tmp, "HP %.2d", m_hp);
-    drawText(screen, x, 0, tmp, GREEN);
+    sprintf(tmp, "COINS %.2d", m_coins);
+    drawText(screen, x, 0, tmp, BLUE);
     x += strlen(tmp) * fontSize;
+
+    // draw health bar
+    rect_t rect;
+    const int sectionHeight = HealthBarHeight + HealthBarOffset;
+    x = HealthBarOffset;
+    uint16_t y = screen.hei() - sectionHeight * 2;
+    rect = {x, y, std::min(m_hp / 2, screen.len() - HealthBarOffset), HealthBarHeight};
+    drawRect(screen, rect, LIME, true);
+    drawRect(screen, rect, WHITE, false);
+    // draw oxygen bar
+    y += sectionHeight;
+    rect = {x, y, std::min(m_oxygen / 2, screen.len() - HealthBarOffset), HealthBarHeight};
+    drawRect(screen, rect, LIGHTGRAY, true);
+    drawRect(screen, rect, WHITE, false);
 }
 
 CGame *CGame::getGame()
@@ -1057,6 +1071,18 @@ void CGame::handleTrigger(int j, CActor &entry)
     }
 }
 
+uint16_t CGame::xdefine(const char *sig)
+{
+    if (m_config[m_loadedTileSet].xdef.count(*_L(sig)))
+    {
+        return m_config[m_loadedTileSet].xdef[*_L(sig)];
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 bool CGame::consumeObject(uint16_t j)
 {
     CActor &entry = (*m_script)[j];
@@ -1072,7 +1098,18 @@ bool CGame::consumeObject(uint16_t j)
         consumed = false;
         break;
     case TYPE_DIAMOND:
-        points = _50pts;
+        if ((entry.imageId != 0) &&
+            (entry.imageId == xdefine("GOLD")))
+        {
+            points = _50pts;
+            m_coins += 10;
+        }
+        else
+        {
+            points = _25pts;
+            m_coins += 1;
+        }
+
         break;
     case TYPE_FLOWER:
         points = _100pts;
@@ -1115,6 +1152,12 @@ bool CGame::consumeObject(uint16_t j)
         break;
     default:
         printf("unhanled type: %.2x at %d\n", entry.type, j);
+    }
+
+    if (m_coins >= Coins4Life)
+    {
+        m_coins -= Coins4Life;
+        ++m_lives;
     }
 
     // doPickup (pickup triggers)
@@ -1214,11 +1257,11 @@ void CGame::startGame()
     m_lives = define(DefaultLives);
     m_mode = MODE_INTRO;
     m_jumpFlag = false;
+    m_coins = 0;
 }
 
 void CGame::restartGame()
 {
-    m_playerHitCountdown = 0;
     m_level = 0;
     startGame();
 }
@@ -1596,6 +1639,35 @@ uint32_t CGame::define(const char *name)
     {
         printf("define %s not found\n", name);
         return 0;
+    }
+}
+
+void CGame::drawRect(CFrame &frame, const rect_t &rect, const uint32_t color, bool fill)
+{
+    uint32_t *rgba = frame.getRGB();
+    const int rowPixels = frame.len();
+    if (fill)
+    {
+        for (int y = 0; y < rect.hei; y++)
+        {
+            for (int x = 0; x < rect.len; x++)
+            {
+                rgba[(rect.y + y) * rowPixels + rect.x + x] = color;
+            }
+        }
+    }
+    else
+    {
+        for (int y = 0; y < rect.hei; y++)
+        {
+            for (int x = 0; x < rect.len; x++)
+            {
+                if (y == 0 || y == rect.hei - 1 || x == 0 || x == rect.len - 1)
+                {
+                    rgba[(rect.y + y) * rowPixels + rect.x + x] = color;
+                }
+            }
+        }
     }
 }
 
