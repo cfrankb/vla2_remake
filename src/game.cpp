@@ -905,7 +905,7 @@ void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, i
     if (signcall != nullptr)
     {
         actor.imageId = xdefine(signcall) +
-                        frameCount * (actor.aim & 1) +
+                        frameCount * actor.aim +
                         actor.seqOffset;
     }
 
@@ -971,7 +971,7 @@ void CGame::manageMonsters(uint32_t ticks)
             int x = m_types[actor.type].speed;
             if (speeds[x] && actor.type == TYPE_POINTS)
             {
-                if (actor.y)
+                if ((actor.y) && (actor.y > m_player->y - 10))
                 {
                     --actor.y;
                 }
@@ -1145,7 +1145,7 @@ bool CGame::consumeObject(uint16_t j)
             (entry.imageId == xdefine("GOLD")))
         {
             points = _50pts;
-            m_coins += 10;
+            m_coins += 5;
         }
         else
         {
@@ -1305,6 +1305,7 @@ void CGame::restartGame()
     m_level = 0;
     m_underwaterCounter = 0;
     startGame();
+    loadLevel(m_level);
 }
 
 void CGame::restartLevel()
@@ -1662,7 +1663,9 @@ void CGame::animator(uint32_t ticks)
             actor.imageId = swap[actor.imageId];
             mapEntry(i, actor);
         }
-        else if (actor.type == TYPE_INMANGA)
+        else if (actor.type == TYPE_INMANGA ||
+                 actor.type == TYPE_GREENFLEA ||
+                 actor.type == TYPE_CANNIBAL)
         {
             unmapEntry(i, actor);
             actor.seqOffset ^= 1;

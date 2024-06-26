@@ -119,7 +119,7 @@ private:
         speedCount = 9,
         FishFrameCycle = 1,
         InMangaFrameCycle = 2,
-        CanmibalDamage = 64,
+        CanmibalDamage = 16,
         PlayerHitDuration = 2,
         HealthBarHeight = 8,
         HealthBarOffset = 4,

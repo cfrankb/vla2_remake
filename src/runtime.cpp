@@ -214,7 +214,14 @@ void CRuntime::drawLevelIntro(CFrame &screen)
         sprintf(t, "LEVEL %.2d", m_game->level() + 1);
         break;
     case CGame::MODE_RESTART:
-        sprintf(t, "LIVES LEFT %.2d", m_game->lives());
+        if (m_game->lives() > 1)
+        {
+            sprintf(t, "LIVES LEFT %.2d", m_game->lives());
+        }
+        else
+        {
+            strcpy(t, "LAST LIFE LEFT");
+        }
         break;
     case CGame::MODE_GAMEOVER:
         strcpy(t, "GAME OVER");
@@ -275,10 +282,14 @@ void CRuntime::mainLoop()
     if (game.isPlayerDead())
     {
         m_countdown = game.define(IntroCountdown);
-        game.restartLevel();
         if (game.lives() == 0)
         {
+            m_countdown = game.define(IntroCountdown);
             game.setMode(CGame::MODE_GAMEOVER);
+        }
+        else
+        {
+            game.restartLevel();
         }
     }
     else
