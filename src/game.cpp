@@ -272,7 +272,8 @@ bool CGame::mapEntry(int i, const CActor &entry, bool removed)
                 {
                     a.setBk(TYPE_BLANK);
                 }
-                else if (a.bk() != TYPE_SAND && a.bk() < entry.type)
+                else if (entry.type == TYPE_SAND ||
+                         (a.bk() != TYPE_SAND && a.bk() < entry.type))
                 {
                     a.setBk(entry.type);
                 }
@@ -369,6 +370,18 @@ bool CGame::calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect)
     return true;
 }
 
+bool CGame::canLeap(const CActor &actor, int aim)
+{
+    CActor tmp = actor;
+    if (aim != LEFT && aim != RIGHT)
+    {
+        return false;
+    }
+    return tmp.canMove(UP) &&
+           tmp.move(UP) &&
+           tmp.canMove(aim);
+}
+
 bool CGame::canMove(const CActor &actor, int aim)
 {
     rect_t rect;
@@ -391,6 +404,11 @@ bool CGame::canMove(const CActor &actor, int aim)
             const auto &mapEntry = m_map[key];
             if (CScript::isMonsterType(actor.type))
             {
+                if (mapEntry.bk() == TYPE_SAND &&
+                    actor.type == TYPE_FISH)
+                {
+                    return false;
+                }
                 if (actor.type != TYPE_FISH &&
                     (mapEntry.bk() == TYPE_BOTTOMWATER ||
                      mapEntry.bk() == TYPE_TOPWATER))
@@ -691,12 +709,32 @@ void CGame::managePlayer(const uint8_t *joyState)
     for (uint8_t i = 0; i < sizeof(AIMS); ++i)
     {
         const uint8_t aim = AIMS[i];
-        if (joyState[aim] &&
-            (aim == UP ? m_player->testAim(aim) : m_player->canMove(aim)))
+
+        if (joyState[aim])
         {
-            m_player->move(aim);
-            m_player->aim = aim;
-            break;
+            bool ok = false;
+            switch (aim)
+            {
+            case UP:
+                ok = m_player->testAim(aim);
+                break;
+            case DOWN:
+                ok = m_player->canMove(aim);
+                break;
+            case LEFT:
+            case RIGHT:
+                ok = m_player->canMove(aim);
+                if (!ok && (ok = m_player->canLeap(aim)))
+                {
+                    m_player->move(UP);
+                }
+            }
+            if (ok)
+            {
+                m_player->move(aim);
+                m_player->aim = aim;
+                break;
+            }
         }
     }
     mapEntry(NONE, *m_player);
@@ -1265,11 +1303,13 @@ void CGame::startGame()
 void CGame::restartGame()
 {
     m_level = 0;
+    m_underwaterCounter = 0;
     startGame();
 }
 
 void CGame::restartLevel()
 {
+    m_underwaterCounter = 0;
     m_playerHitCountdown = 0;
     m_jumpFlag = false;
     m_hp = define(DefaultHp);
@@ -1300,14 +1340,14 @@ uint8_t *CGame::getActorMap(const CActor &actor)
     return actor.type == TYPE_PLAYER ? nullptr : (*m_frameMap)[actor.imageId];
 }
 
-bool CGame::canFall(CActor &actor)
+bool CGame::canFall(const CActor &actor)
 {
     return isFalling(actor, HERE) &&
            isFalling(actor, DOWN) &&
            actor.canMove(CActor::AIM_DOWN);
 }
 
-bool CGame::isFalling(CActor &actor, int aim)
+bool CGame::isFalling(const CActor &actor, int aim)
 {
     if (actor.type == TYPE_FLYPLAT)
     {
@@ -1337,7 +1377,7 @@ bool CGame::isFalling(CActor &actor, int aim)
             const auto &mapEntry = m_map[key];
             uint8_t bk = mapEntry.bk();
             if (bk >= TYPE_LADDER && bk != TYPE_STOPCLASS &&
-                bk != TYPE_LAVA)
+                bk != TYPE_LAVA && bk != TYPE_TOPWATER)
             {
                 return false;
             }
@@ -1714,7 +1754,10 @@ void CGame::managePlayerOxygenControl()
             else
             {
                 m_playerHitCountdown = 1;
-                --m_hp;
+                if (m_hp)
+                {
+                    --m_hp;
+                }
             }
         }
     }

@@ -169,7 +169,10 @@ void CRuntime::doInput()
                 m_joyState[AIM_RIGHT] = KEY_PRESSED;
                 break;
             case SDLK_HOME:
-                m_game->nextLevel();
+                if (m_game->define("SkipLevel"))
+                {
+                    m_game->nextLevel();
+                }
                 break;
             case SDLK_END:
                 // m_game->debugLevel("out/level.txt");

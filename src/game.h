@@ -184,9 +184,10 @@ private:
     bool mapEntry(int i, const CActor &actor, bool removed = false);
     bool unmapEntry(int i, const CActor &actor);
     bool canMove(const CActor &actor, int aim);
+    bool canLeap(const CActor &actor, int aim);
     bool isPlayerThere(const CActor &actor, int aim);
-    bool isFalling(CActor &actor, int aim);
-    bool canFall(CActor &actor);
+    bool isFalling(const CActor &actor, int aim);
+    bool canFall(const CActor &actor);
     bool testAim(const CActor &actor, int aim);
     bool isUnderwater(const CActor &actor);
     uint8_t *getActorMap(const CActor &actor);

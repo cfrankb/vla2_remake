@@ -30,7 +30,7 @@ public:
     {
         uint8_t u1;
         uint8_t aim;
-        uint8_t triggerKey; // ???
+        uint8_t triggerKey;
     };
     union
     {
@@ -43,20 +43,19 @@ public:
     uint8_t x;
     uint8_t y;
 
-    bool canMove(int aim);
-    bool isPlayerThere(int aim);
+    bool canMove(int aim) const;
+    bool canLeap(int aim) const;
+    bool isPlayerThere(int aim) const;
     bool move(int aim);
-    bool canFall();
+    bool canFall() const;
     void debug() const;
     void clear();
     void attackPlayer() const;
     void killPlayer() const;
     void flipDir();
-    int findNextDir();
-    bool testAim(int aim);
-    bool isFalling(int aim);
-
-    friend class CGame;
+    int findNextDir() const;
+    bool testAim(int aim) const;
+    bool isFalling(int aim) const;
 };
 
 #endif

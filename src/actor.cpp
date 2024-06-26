@@ -11,9 +11,14 @@ CActor::~CActor()
 {
 }
 
-bool CActor::canMove(int aim)
+bool CActor::canMove(int aim) const
 {
     return CGame::getGame()->canMove(*this, aim);
+}
+
+bool CActor::canLeap(int aim) const
+{
+    return CGame::getGame()->canLeap(*this, aim);
 }
 
 bool CActor::move(int aim)
@@ -41,7 +46,7 @@ bool CActor::move(int aim)
 
 void CActor::debug() const
 {
-    printf("type %x x=%d y=%d imageId=%.4x\n", type, x, y, imageId);
+    printf("type %.2x x=%d y=%d u1=%.2x u2=%.2x imageId=%.4x\n", type, x, y, u1, u2, imageId);
 }
 
 void CActor::clear()
@@ -49,7 +54,7 @@ void CActor::clear()
     memset(this, 0, sizeof(CActor));
 }
 
-bool CActor::isPlayerThere(int aim)
+bool CActor::isPlayerThere(int aim) const
 {
     return CGame::getGame()->isPlayerThere(*this, aim);
 }
@@ -69,12 +74,12 @@ void CActor::flipDir()
     aim ^= 1;
 }
 
-bool CActor::canFall()
+bool CActor::canFall() const
 {
     return CGame::getGame()->canFall(*this);
 }
 
-int CActor::findNextDir()
+int CActor::findNextDir() const
 {
     static uint8_t AIMS[] = {
         AIM_DOWN, AIM_RIGHT, AIM_UP, AIM_LEFT,
@@ -95,12 +100,12 @@ int CActor::findNextDir()
     return AIM_NONE;
 }
 
-bool CActor::testAim(int aim)
+bool CActor::testAim(int aim) const
 {
     return CGame::getGame()->testAim(*this, aim);
 }
 
-bool CActor::isFalling(int aim)
+bool CActor::isFalling(int aim) const
 {
     return CGame::getGame()->isFalling(*this, aim);
 }
