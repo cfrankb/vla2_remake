@@ -65,7 +65,7 @@ public:
         BLUE = 0xffff901e,
     };
 
-protected:
+private:
     CGame();
     enum
     {
@@ -124,6 +124,7 @@ protected:
         HealthBarHeight = 8,
         HealthBarOffset = 4,
         Coins4Life = 100,
+        OxygenLostDelay = 10,
     };
     typedef struct
     {
@@ -176,6 +177,7 @@ protected:
     int m_jumpCooldown;
     int m_playerFrameOffset;
     int m_playerHitCountdown;
+    int m_underwaterCounter;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
@@ -186,6 +188,7 @@ protected:
     bool isFalling(CActor &actor, int aim);
     bool canFall(CActor &actor);
     bool testAim(const CActor &actor, int aim);
+    bool isUnderwater(const CActor &actor);
     uint8_t *getActorMap(const CActor &actor);
     void consumeAll();
     bool consumeObject(uint16_t j);
@@ -204,6 +207,7 @@ protected:
     void manageVCreatureVariant(int i, CActor &actor, const char *signcall, int frameCount);
     void manageFlyingPlatform(int i, CActor &actor);
     void manageDroneVariant(int i, CActor &actor, const char *signcall, int frameCount);
+    void managePlayerOxygenControl();
     bool readConfig(const char *confName);
     char *parseLine(int &line, std::string &tileset, char *p);
     void parseGeneralOptions(const StringVector &list, int line);

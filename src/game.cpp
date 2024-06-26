@@ -667,6 +667,9 @@ bool CGame::manageJump(const uint8_t *joyState)
 
 void CGame::managePlayer(const uint8_t *joyState)
 {
+
+    managePlayerOxygenControl();
+
     // animate player
     if (m_playerHitCountdown)
     {
@@ -822,8 +825,9 @@ void CGame::manageDroneVariant(int i, CActor &actor, const char *signcall, int f
             actor.flipDir();
         }
     }
-    actor.imageId = m_config[m_loadedTileSet].xdef[*_L(signcall)] +
-                    frameCount * (actor.aim & 1) + actor.u2;
+    actor.imageId = xdefine(signcall) +
+                    frameCount * (actor.aim & 1) +
+                    actor.seqOffset;
     mapEntry(i, actor);
 }
 
@@ -862,8 +866,9 @@ void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, i
 
     if (signcall != nullptr)
     {
-        actor.imageId = m_config[m_loadedTileSet].xdef[*_L(signcall)] +
-                        frameCount * (actor.aim & 1) + actor.u2;
+        actor.imageId = xdefine(signcall) +
+                        frameCount * (actor.aim & 1) +
+                        actor.seqOffset;
     }
 
     mapEntry(i, actor);
@@ -1109,7 +1114,11 @@ bool CGame::consumeObject(uint16_t j)
             points = _25pts;
             m_coins += 1;
         }
-
+        if (m_coins >= Coins4Life)
+        {
+            m_coins -= Coins4Life;
+            ++m_lives;
+        }
         break;
     case TYPE_FLOWER:
         points = _100pts;
@@ -1154,12 +1163,6 @@ bool CGame::consumeObject(uint16_t j)
         printf("unhanled type: %.2x at %d\n", entry.type, j);
     }
 
-    if (m_coins >= Coins4Life)
-    {
-        m_coins -= Coins4Life;
-        ++m_lives;
-    }
-
     // doPickup (pickup triggers)
     handleTrigger(j, entry);
 
@@ -1177,7 +1180,6 @@ bool CGame::consumeObject(uint16_t j)
         entry.type = define(ShowPoints) ? TYPE_POINTS : TYPE_EMPTY;
         entry.imageId = points;
     }
-
     return consumed;
 }
 
@@ -1668,6 +1670,58 @@ void CGame::drawRect(CFrame &frame, const rect_t &rect, const uint32_t color, bo
                 }
             }
         }
+    }
+}
+
+bool CGame::isUnderwater(const CActor &actor)
+{
+    rect_t rect;
+    if (!calcActorRect(actor, HERE, rect))
+    {
+        return false;
+    }
+
+    std::unordered_set<uint16_t> fwEntries;
+    for (int x = 0; x < rect.len; ++x)
+    {
+        const auto &key = CScript::toKey(rect.x + x, rect.y);
+        if (m_map.count(key) == 0)
+        {
+            // ignore empty locations
+            return false;
+        }
+        if (m_map[key].bk() == TYPE_BOTTOMWATER)
+        {
+            continue;
+        }
+        return false;
+    }
+
+    return true;
+}
+
+void CGame::managePlayerOxygenControl()
+{
+    if (isUnderwater(*m_player))
+    {
+        ++m_underwaterCounter;
+        if (m_underwaterCounter > OxygenLostDelay)
+        {
+            if (m_oxygen)
+            {
+                --m_oxygen;
+            }
+            else
+            {
+                m_playerHitCountdown = 1;
+                --m_hp;
+            }
+        }
+    }
+    else
+    {
+        m_underwaterCounter = 0;
+        m_oxygen = std::max(static_cast<uint32_t>(m_oxygen), define(DefaultOxygen));
     }
 }
 
