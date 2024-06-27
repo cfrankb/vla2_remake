@@ -39,7 +39,7 @@ static uint16_t g_points[] = {
     10000,
 };
 
-const int pointCount = sizeof(g_points) / sizeof(u_int16_t);
+const int pointCount = sizeof(g_points) / sizeof(uint16_t);
 
 static uint8_t AIMS[] = {
     CActor::AIM_UP,
@@ -1435,7 +1435,7 @@ void CGame::parseGeneralOptions(const StringVector &list, int line)
         }
         else
         {
-            printf("type must have 3 args. %d found on line %d\n", list.size(), line);
+            printf("type must have 3 args. %zu found on line %d\n", list.size(), line);
             for (int i = 0; i < list.size(); ++i)
             {
                 printf(" -->%d %s\n", i, list[i].c_str());
@@ -1452,7 +1452,7 @@ void CGame::parseGeneralOptions(const StringVector &list, int line)
         }
         else
         {
-            printf("define must have 3 args. %d found on line %d\n", list.size(), line);
+            printf("define must have 3 args. %zu found on line %d\n", list.size(), line);
             for (int i = 0; i < list.size(); ++i)
             {
                 printf(" -->%d %s\n", i, list[i].c_str());
@@ -1471,7 +1471,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
     {
         if (list.size() < 2)
         {
-            printf("hide list on line %d has %d params, minimum is 2.", line, list.size());
+            printf("hide list on line %d has %zu params, minimum is 2.", line, list.size());
         }
         else
         {
@@ -1486,7 +1486,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
     {
         if (list.size() != 3)
         {
-            printf("swap command  on line %d has %d params not 3.", line, list.size());
+            printf("swap command  on line %d has %zu params not 3.", line, list.size());
         }
         else
         {
@@ -1500,7 +1500,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
     {
         if (list.size() < 2)
         {
-            printf("xmap list on line %d has %d params, minimum is 2.", line, list.size());
+            printf("xmap list on line %d has %zu params, minimum is 2.", line, list.size());
         }
         else
         {
@@ -1515,7 +1515,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
     {
         if (list.size() < 2)
         {
-            printf("xdef list on line %d has %d params, must have 2.", line, list.size());
+            printf("xdef list on line %d has %zu params, must have 2.", line, list.size());
         }
         else
         {
@@ -1821,7 +1821,6 @@ void CGame::debugLevel(const char *filename)
         fseek(sfile, 0, SEEK_END);
         size_t size = ftell(sfile);
         fseek(sfile, 0, SEEK_SET);
-        printf("size: %d\n", size);
         char *data = new char[size + 1];
         data[size] = 0;
         fread(data, size, 1, sfile);
@@ -1845,7 +1844,7 @@ void CGame::debugLevel(const char *filename)
         delete[] data;
     }
 
-    printf("total images:%d\n", imageNames.size());
+    printf("total images:%zu\n", imageNames.size());
 
     FILE *tfile = fopen(filename, "wb");
     if (tfile)
