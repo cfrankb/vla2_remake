@@ -88,14 +88,14 @@ private:
     {
         HERE = 255,
         PLAYER_RECT = 2,
-        fntBlockSize = 8,
+        FNT_BLOCK_SIZE = 8,
         BASE_ENTRY = 1,
         MAX_POS = 255,
         NONE = 0,
         PLAYER_FRAME_CYCLE = 8,
         PLAYER_MOVE_FRAMES = 7,
         PLAYER_HIT_FRAME = 7,
-        fontSize = 8,
+        FONT_SIZE = 8,
         INVALID = -1,
         KILL_PLAYER = -1,
         BUTTON = 4,
@@ -128,7 +128,7 @@ private:
         OxygenAdd = 2,
         OxygenDrain = 1,
         OxygenBonus = 4,
-        FishDrain = 20,
+        FishDrain = 10,
         PlantDrain = 4,
         VCreaDrain = 4,
         InMangaBite = -1,
@@ -230,7 +230,7 @@ private:
     char *parseLine(int &line, std::string &tileset, char *p);
     void parseGeneralOptions(const StringVector &list, int line);
     void parseTilesetOptions(std::string tileset, const StringVector &list, int line);
-    void splitString(const std::string str, StringVector &list);
+    void splitString(const std::string &str, StringVector &list);
     void drawRect(CFrame &frame, const rect_t &rect, const uint32_t color, bool fill);
     uint16_t xdefine(const char *sig);
 

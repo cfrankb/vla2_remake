@@ -228,7 +228,7 @@ const char *CImsWrap::getImageName(int imageID)
 
 const char *CImsWrap::getTypeName(int typeId)
 {
-    const static typeDef_t typeDefs[] = {
+    const static typeDef_t typeDefs[]{
         _C(TYPE_BLANK),
         _C(TYPE_PLAYER),
         _C(TYPE_OXYGEN),
@@ -296,7 +296,7 @@ bool CImsWrap::readSCR(const char *scrFilename)
 const CImsWrap::rgba_t &CImsWrap::getPaletteColor(int i)
 {
     // original color palette
-    static const uint32_t colors[] = {
+    static const uint32_t colors[]{
         0x00000000, 0xffab0303, 0xff03ab03, 0xffabab03, 0xff0303ab, 0xffab03ab, 0xff0357ab, 0xffababab,
         0xff575757, 0xffff5757, 0xff57ff57, 0xffffff57, 0xff5757ff, 0xffff57ff, 0xff57ffff, 0xffffffff,
         0xff000000, 0xff171717, 0xff232323, 0xff2f2f2f, 0xff3b3b3b, 0xff474747, 0xff535353, 0xff636363,
@@ -373,7 +373,7 @@ void CImsWrap::toFrameSet(CFrameSet &frameSet, FILE *mapFile)
     frameSet.forget();
     for (int i = 0; i < m_imgCount; ++i)
     {
-        auto lookup = m_imsLookup[i];
+        auto &lookup = m_imsLookup[i];
         if (lookup.name[0] == '+')
         {
             break;
@@ -383,21 +383,21 @@ void CImsWrap::toFrameSet(CFrameSet &frameSet, FILE *mapFile)
             fprintf(mapFile, "%.4x %s\n", i, lookup.name.c_str());
         }
 
-        auto entry = lookup.ptrEntry;
+        const auto &entry = lookup.ptrEntry;
         uint16_t *fntData = &entry->fntData;
-        CFrame *frame = new CFrame(fntBlockSize * entry->len, fntBlockSize * entry->hei);
+        CFrame *frame = new CFrame(FNT_BLOCK_SIZE * entry->len, FNT_BLOCK_SIZE * entry->hei);
         for (int y = 0; y < entry->hei; ++y)
         {
             for (int x = 0; x < entry->len; ++x)
             {
-                auto fntBlock = *fntData;
-                auto tile = m_tileData[fntBlock];
+                const auto fntBlock = *fntData;
+                auto &tile = m_tileData[fntBlock];
                 auto pixels = tile.pixels;
-                for (int yy = 0; yy < fntBlockSize; ++yy)
+                for (int yy = 0; yy < FNT_BLOCK_SIZE; ++yy)
                 {
-                    for (int xx = 0; xx < fntBlockSize; ++xx)
+                    for (int xx = 0; xx < FNT_BLOCK_SIZE; ++xx)
                     {
-                        auto &rgba = frame->at(x * fntBlockSize + xx, y * fntBlockSize + yy);
+                        auto &rgba = frame->at(x * FNT_BLOCK_SIZE + xx, y * FNT_BLOCK_SIZE + yy);
                         const rgba_t &color = getPaletteColor(*pixels++);
                         rgba = *(reinterpret_cast<const uint32_t *>(&color));
                     }
@@ -414,9 +414,9 @@ void CImsWrap::drawScreen(CFrame &screen, CFrameSet &frameSet)
     screen.fill(0xff000000);
     for (int i = 0; i < m_entryCount; ++i)
     {
-        auto entry = m_script[i];
-        int x = entry.x * fntBlockSize;
-        int y = entry.y * fntBlockSize;
+        const auto &entry = m_script[i];
+        int x = entry.x * FNT_BLOCK_SIZE;
+        int y = entry.y * FNT_BLOCK_SIZE;
         if (entry.imageId >= frameSet.getSize())
         {
             printf("imageID out of bound: %d [%s]\n", entry.imageId, getTypeName(entry.type));

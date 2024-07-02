@@ -145,7 +145,7 @@ void CScript::growArray()
     if (m_size == m_max)
     {
         m_max += GROW_BY;
-        CActor *tmp = new CActor[m_max];
+        CActor *tmp{new CActor[m_max]};
         for (int i = 0; i < m_size; ++i)
         {
             tmp[i] = m_script[i];
@@ -225,7 +225,7 @@ void CScript::sort()
     int j = 0;
     for (int i = 0; i < m_size; ++i)
     {
-        const CActor &entry = (m_script)[i];
+        const CActor &entry{(m_script)[i]};
         if (CScript::isBackgroundType(entry.type))
         {
             tmp[j++] = entry;
@@ -233,7 +233,7 @@ void CScript::sort()
     }
     for (int i = 0; i < m_size; ++i)
     {
-        const CActor &entry = (m_script)[i];
+        const CActor &entry{(m_script)[i]};
         if (!CScript::isBackgroundType(entry.type))
         {
             tmp[j++] = entry;

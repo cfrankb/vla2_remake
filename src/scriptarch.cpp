@@ -46,7 +46,7 @@ bool CScriptArch::read(const char *filename)
     if (sfile)
     {
         forget();
-        char signature[4];
+        char signature[4]{0, 0, 0, 0};
         uint16_t version;
         uint16_t count;
         uint32_t indexPtr;

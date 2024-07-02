@@ -54,12 +54,11 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &
 
     int count = frameSet.getSize();
     m_mapIndex = new uint8_t *[count];
-
     m_dataSize = 0;
     for (int i = 0; i < count; ++i)
     {
         CFrame &frame = *frameSet[i];
-        m_dataSize += frame.len() / fntTileSize * frame.hei() / fntTileSize;
+        m_dataSize += frame.len() / FNT_BLOCK_SIZE * frame.hei() / FNT_BLOCK_SIZE;
     }
 
     m_mapData = new uint8_t[m_dataSize];
@@ -69,12 +68,12 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &
     {
         CFrame &frame = *frameSet[i];
         m_mapIndex[i] = p;
-        for (int y = 0; y < frame.hei() / fntTileSize; ++y)
+        for (int y = 0; y < frame.hei() / FNT_BLOCK_SIZE; ++y)
         {
-            for (int x = 0; x < frame.len() / fntTileSize; ++x)
+            for (int x = 0; x < frame.len() / FNT_BLOCK_SIZE; ++x)
             {
                 const uint8_t score = xmap.count(i) == 0
-                                          ? scoreFromTile(frame, x * fntTileSize, y * fntTileSize)
+                                          ? scoreFromTile(frame, x * FNT_BLOCK_SIZE, y * FNT_BLOCK_SIZE)
                                           : 0xff;
                 *p++ = score >= threshold ? score : 0;
             }
@@ -85,9 +84,9 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &
 int CFrameMap::scoreFromTile(CFrame &frame, int baseX, int baseY)
 {
     int score = 0;
-    for (int y = 0; y < fntTileSize; ++y)
+    for (int y = 0; y < FNT_BLOCK_SIZE; ++y)
     {
-        for (int x = 0; x < fntTileSize; ++x)
+        for (int x = 0; x < FNT_BLOCK_SIZE; ++x)
         {
             uint32_t &pixel = frame.at(baseX + x, baseY + y);
             score += (pixel >> 24) & 1;

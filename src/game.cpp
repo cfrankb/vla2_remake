@@ -40,7 +40,7 @@
 
 CGame *g_game = nullptr;
 
-static uint16_t g_points[] = {
+static uint16_t g_points[]{
     10,
     15,
     25,
@@ -58,7 +58,7 @@ static uint16_t g_points[] = {
 
 const int pointCount = sizeof(g_points) / sizeof(uint16_t);
 
-static uint8_t AIMS[] = {
+static uint8_t AIMS[]{
     CActor::AIM_UP,
     CActor::AIM_DOWN,
     CActor::AIM_LEFT,
@@ -94,16 +94,16 @@ enum
     AIM_NONE = 255,
 };
 
-const uint8_t jumpUP[] = {UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpDOWN[] = {};
-const uint8_t jumpLEFT[] = {UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
-const uint8_t jumpRIGHT[] = {UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
-const uint8_t jumpUP_LEFT[] = {UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpUP_RIGHT[] = {UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpDOWN_LEFT[] = {UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
-const uint8_t jumpDOWN_RIGHT[] = {UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
+const uint8_t jumpUP[]{UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpDOWN[]{};
+const uint8_t jumpLEFT[]{UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
+const uint8_t jumpRIGHT[]{UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+const uint8_t jumpUP_LEFT[]{UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpUP_RIGHT[]{UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
+const uint8_t jumpDOWN_LEFT[]{UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
+const uint8_t jumpDOWN_RIGHT[]{UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
 
-const jumpSeq_t g_jumpSeqs[] = {
+const jumpSeq_t g_jumpSeqs[]{
     _J(jumpUP, UP),
     _J(jumpDOWN, DOWN),
     _J(jumpLEFT, LEFT),
@@ -235,7 +235,7 @@ bool CGame::loadLevel(int i)
     }
 
     // load tileset
-    const std::string tileset = m_script->tileset();
+    const std::string tileset{m_script->tileset()};
     if (result &&
         (m_loadedTileSet != tileset) &&
         !loadTileset(tileset.c_str()))
@@ -258,7 +258,7 @@ void CGame::mapScript(CScript *script)
     m_map.clear();
     for (int i = BASE_ENTRY; i < script->getSize(); ++i)
     {
-        const CActor &entry = (*script)[i];
+        const CActor &entry{(*script)[i]};
         mapEntry(i, entry);
     }
 }
@@ -389,7 +389,7 @@ bool CGame::calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect)
 
 bool CGame::canLeap(const CActor &actor, int aim)
 {
-    CActor tmp = actor;
+    CActor tmp{actor};
     if (aim != LEFT && aim != RIGHT)
     {
         return false;
@@ -467,8 +467,8 @@ void CGame::sizeFrame(const CActor &entry, int &len, int &hei) const
     else
     {
         const CFrame *frame = (*m_frameSet)[entry.imageId];
-        len = frame->len() / fntBlockSize;
-        hei = frame->hei() / fntBlockSize;
+        len = frame->len() / FNT_BLOCK_SIZE;
+        hei = frame->hei() / FNT_BLOCK_SIZE;
     }
 }
 
@@ -505,8 +505,8 @@ void CGame::drawScreen(CFrame &screen)
     const std::unordered_set<uint16_t> &hide = m_config[m_loadedTileSet].hide;
     const int scrLen = screen.len();
     const int scrHei = screen.hei();
-    const int rows = screen.hei() / fntBlockSize;
-    const int cols = screen.len() / fntBlockSize;
+    const int rows = screen.hei() / FNT_BLOCK_SIZE;
+    const int cols = screen.len() / FNT_BLOCK_SIZE;
     const int hx = cols / 2;
     const int hy = rows / 2;
     const int mx = m_player->x < hx ? 0 : m_player->x - hx;
@@ -514,7 +514,7 @@ void CGame::drawScreen(CFrame &screen)
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
         CFrame *frame;
-        const auto &entry = (*m_script)[i];
+        const auto &entry{(*m_script)[i]};
         if (entry.type == TYPE_PLAYER)
         {
             frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE +
@@ -534,8 +534,8 @@ void CGame::drawScreen(CFrame &screen)
         {
             frame = (*m_frameSet)[entry.imageId];
         }
-        const int fcols = frame->len() / fntBlockSize;
-        const int frows = frame->hei() / fntBlockSize;
+        const int fcols = frame->len() / FNT_BLOCK_SIZE;
+        const int frows = frame->hei() / FNT_BLOCK_SIZE;
         const int rx = int(entry.x) - mx;
         const int ry = int(entry.y) - my;
         if ((rx < cols) &&
@@ -549,15 +549,15 @@ void CGame::drawScreen(CFrame &screen)
             const int fhei = frows - offsetY;
             const int sx = rx > 0 ? rx : 0;
             const int sy = ry > 0 ? ry : 0;
-            for (int y = 0; y < fhei * fntBlockSize; ++y)
+            for (int y = 0; y < fhei * FNT_BLOCK_SIZE; ++y)
             {
-                if (sy * fntBlockSize + y >= scrHei)
+                if (sy * FNT_BLOCK_SIZE + y >= scrHei)
                     break;
-                uint32_t *rgba = &screen.at(sx * fntBlockSize, sy * fntBlockSize + y);
-                const uint32_t *pixel = &frame->at(offsetX * fntBlockSize, offsetY * fntBlockSize + y);
-                for (int x = 0; x < flen * fntBlockSize; ++x)
+                uint32_t *rgba = &screen.at(sx * FNT_BLOCK_SIZE, sy * FNT_BLOCK_SIZE + y);
+                const uint32_t *pixel = &frame->at(offsetX * FNT_BLOCK_SIZE, offsetY * FNT_BLOCK_SIZE + y);
+                for (int x = 0; x < flen * FNT_BLOCK_SIZE; ++x)
                 {
-                    if (sx * fntBlockSize + x >= scrLen)
+                    if (sx * FNT_BLOCK_SIZE + x >= scrLen)
                         break;
                     if (pixel[x])
                     {
@@ -573,19 +573,19 @@ void CGame::drawScreen(CFrame &screen)
     uint16_t x = 0;
     sprintf(tmp, "%.8d ", m_score);
     drawText(screen, x, 0, tmp, WHITE);
-    x += strlen(tmp) * fontSize;
+    x += strlen(tmp) * FONT_SIZE;
 
     sprintf(tmp, "FLOWERS %.2d ", m_goals);
     drawText(screen, x, 0, tmp, YELLOW);
-    x += strlen(tmp) * fontSize;
+    x += strlen(tmp) * FONT_SIZE;
 
     sprintf(tmp, "LIVES %.2d ", m_lives);
     drawText(screen, x, 0, tmp, PINK);
-    x += strlen(tmp) * fontSize;
+    x += strlen(tmp) * FONT_SIZE;
 
     sprintf(tmp, "COINS %.2d", m_coins);
     drawText(screen, x, 0, tmp, BLUE);
-    x += strlen(tmp) * fontSize;
+    x += strlen(tmp) * FONT_SIZE;
 
     // draw health bar
     rect_t rect;
@@ -815,8 +815,7 @@ void CGame::killPlayer()
 
 void CGame::attackPlayer(const CActor &actor)
 {
-    int damage = 0;
-
+    int damage{0};
     switch (actor.type)
     {
     case TYPE_FISH:
@@ -931,8 +930,8 @@ void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, i
 
 void CGame::manageFlyingPlatform(int i, CActor &actor)
 {
-    uint8_t aim = actor.aim;
-    uint8_t pAim = NOT_FOUND;
+    uint8_t aim{actor.aim};
+    uint8_t pAim{NOT_FOUND};
     if (aim == UP || aim == LEFT || aim == RIGHT)
     {
         if (actor.isPlayerThere(aim))
@@ -982,7 +981,7 @@ void CGame::manageMonsters(uint32_t ticks)
 
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
-        CActor &actor = (*m_script)[i];
+        CActor &actor{(*m_script)[i]};
         if (!CScript::isMonsterType(actor.type))
         {
             int x = m_types[actor.type].speed;
@@ -1036,22 +1035,22 @@ void CGame::drawText(CFrame &frame, int x, int y, const char *text, const uint32
 {
     uint32_t *rgba = frame.getRGB();
     const int rowPixels = frame.len();
-    const int fontOffset = fontSize;
+    const int fontOffset = FONT_SIZE;
     const int textSize = strlen(text);
     for (int i = 0; i < textSize; ++i)
     {
-        const uint8_t c = static_cast<uint8_t>(text[i]) - ' ';
+        const uint8_t c{static_cast<uint8_t>(text[i] - ' ')};
         uint8_t *font = m_fontData + c * fontOffset;
-        for (int yy = 0; yy < fontSize; ++yy)
+        for (int yy = 0; yy < FONT_SIZE; ++yy)
         {
-            uint8_t bitFilter = 1;
-            for (int xx = 0; xx < fontSize; ++xx)
+            uint8_t bitFilter{1};
+            for (int xx = 0; xx < FONT_SIZE; ++xx)
             {
                 rgba[(yy + y) * rowPixels + xx + x] = font[yy] & bitFilter ? color : BLACK;
                 bitFilter = bitFilter << 1;
             }
         }
-        x += fontSize;
+        x += FONT_SIZE;
     }
 }
 
@@ -1064,7 +1063,7 @@ void CGame::handleRemove(int j, CActor &entry)
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
-        CActor &cur = (*m_script)[i];
+        CActor &cur{(*m_script)[i]};
         if (i == j)
             continue;
         if (cur.triggerKey == entry.triggerKey)
@@ -1081,7 +1080,7 @@ void CGame::handleChange(int j, CActor &entry)
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
-        CActor &cur = (*m_script)[i];
+        CActor &cur{(*m_script)[i]};
         if (i == j)
             continue;
         if (cur.triggerKey == entry.triggerKey)
@@ -1099,7 +1098,7 @@ void CGame::handleTeleport(int j, CActor &entry)
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
-        CActor &cur = (*m_script)[i];
+        CActor &cur{(*m_script)[i]};
         if (i == j)
             continue;
         if ((cur.triggerKey == entry.triggerKey) &&
@@ -1145,7 +1144,7 @@ uint16_t CGame::xdefine(const char *sig)
 
 bool CGame::consumeObject(uint16_t j)
 {
-    CActor &entry = (*m_script)[j];
+    CActor &entry{(*m_script)[j]};
     int points = INVALID;
     bool consumed = true;
     switch (entry.type)
@@ -1268,7 +1267,7 @@ void CGame::consumeAll()
 
             for (int i = 0; i < CMapEntry::fwCount; ++i)
             {
-                uint16_t j = a.fwEntry(i);
+                uint16_t j{a.fwEntry(i)};
                 if (j == NONE)
                     continue;
                 if (fwEntries.count(j) == 0)
@@ -1406,7 +1405,7 @@ bool CGame::isFalling(const CActor &actor, int aim)
 
 bool CGame::testAim(const CActor &actor, int aim)
 {
-    CActor tmp = actor;
+    CActor tmp{actor};
     if (!tmp.canMove(aim))
     {
         return false;
@@ -1423,7 +1422,7 @@ void CGame::manageGravity()
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
-        CActor &actor = (*m_script)[i];
+        CActor &actor{(*m_script)[i]};
         if ((CScript::isMonsterType(actor.type) || (actor.type == TYPE_PLAYER)) &&
             (actor.type != TYPE_FLYPLAT) &&
             (actor.type != TYPE_FISH) &&
@@ -1446,14 +1445,14 @@ void CGame::parseGeneralOptions(const StringVector &list, int line)
     {
         if (list.size() == 3)
         {
-            uint16_t val1 = std::strtoul(list[1].c_str(), nullptr, 16);
-            uint16_t val2 = std::strtoul(list[2].c_str(), nullptr, 16);
+            uint16_t val1{static_cast<decltype(val1)>(std::strtoul(list[1].c_str(), nullptr, 16))};
+            uint16_t val2{static_cast<decltype(val2)>(std::strtoul(list[2].c_str(), nullptr, 16))};
             m_types[val1].speed = val2;
         }
         else
         {
             printf("type must have 3 args. %zu found on line %d\n", list.size(), line);
-            for (int i = 0; i < list.size(); ++i)
+            for (size_t i = 0; i < list.size(); ++i)
             {
                 printf(" -->%d %s\n", i, list[i].c_str());
             }
@@ -1463,14 +1462,14 @@ void CGame::parseGeneralOptions(const StringVector &list, int line)
     {
         if (list.size() == 3)
         {
-            const std::string &key = list[1];
-            uint16_t val = std::strtoul(list[2].c_str(), nullptr, 10);
+            const std::string &key{list[1]};
+            uint16_t val{static_cast<decltype(val)>(std::strtoul(list[2].c_str(), nullptr, 10))};
             m_defines[key] = val;
         }
         else
         {
             printf("define must have 3 args. %zu found on line %d\n", list.size(), line);
-            for (int i = 0; i < list.size(); ++i)
+            for (size_t i = 0; i < list.size(); ++i)
             {
                 printf(" -->%d %s\n", i, list[i].c_str());
             }
@@ -1492,9 +1491,9 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
         }
         else
         {
-            for (int i = 1; i < list.size(); ++i)
+            for (size_t i = 1; i < list.size(); ++i)
             {
-                uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
+                uint16_t val{static_cast<decltype(val)>(std::strtoul(list[i].c_str(), nullptr, 16))};
                 m_config[tileset].hide.insert(val);
             }
         }
@@ -1507,8 +1506,8 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
         }
         else
         {
-            uint16_t val1 = std::strtoul(list[1].c_str(), nullptr, 16);
-            uint16_t val2 = std::strtoul(list[2].c_str(), nullptr, 16);
+            uint16_t val1{static_cast<decltype(val1)>(std::strtoul(list[1].c_str(), nullptr, 16))};
+            uint16_t val2{static_cast<decltype(val2)>(std::strtoul(list[2].c_str(), nullptr, 16))};
             m_config[tileset].swap[val1] = val2;
             m_config[tileset].swap[val2] = val1;
         }
@@ -1523,7 +1522,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
         {
             for (int i = 1; i < list.size(); ++i)
             {
-                uint16_t val = std::strtoul(list[i].c_str(), nullptr, 16);
+                uint16_t val{static_cast<decltype(val)>(std::strtoul(list[i].c_str(), nullptr, 16))};
                 m_config[tileset].xmap.insert(val);
             }
         }
@@ -1536,9 +1535,9 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
         }
         else
         {
-            uint32_t key;
+            uint32_t key{0};
             memcpy(&key, list[1].c_str(), sizeof(key));
-            uint16_t val = std::strtoul(list[2].c_str(), nullptr, 16);
+            uint16_t val{static_cast<decltype(val)>(std::strtoul(list[2].c_str(), nullptr, 16))};
             m_config[tileset].xdef[key] = val;
         }
     }
@@ -1620,7 +1619,7 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
     return e ? ++e : nullptr;
 }
 
-void CGame::splitString(const std::string str, StringVector &list)
+void CGame::splitString(const std::string &str, StringVector &list)
 {
     int i = 0;
     unsigned int j = 0;
@@ -1741,7 +1740,6 @@ bool CGame::isUnderwater(const CActor &actor)
         return false;
     }
 
-    std::unordered_set<uint16_t> fwEntries;
     for (int x = 0; x < rect.len; ++x)
     {
         const auto &key = CScript::toKey(rect.x + x, rect.y);
@@ -1795,21 +1793,21 @@ void CGame::debugFrameMap(const char *outFile)
     {
         CFrame *frame = new CFrame((*m_frameSet)[i]);
         uint8_t *map = m_frameMap->mapPtr(i);
-        for (int j = 0; j < frame->hei() / fntBlockSize; ++j)
+        for (int j = 0; j < frame->hei() / FNT_BLOCK_SIZE; ++j)
         {
-            for (int k = 0; k < frame->len() / fntBlockSize; ++k)
+            for (int k = 0; k < frame->len() / FNT_BLOCK_SIZE; ++k)
             {
                 uint8_t c = *map++;
-                uint8_t *p = &m_fontData[c * fntBlockSize];
+                uint8_t *p = &m_fontData[c * FNT_BLOCK_SIZE];
 
-                for (int y = 0; y < fntBlockSize; ++y)
+                for (int y = 0; y < FNT_BLOCK_SIZE; ++y)
                 {
                     uint8_t bits = p[y];
-                    for (int x = 0; x < fntBlockSize; ++x)
+                    for (int x = 0; x < FNT_BLOCK_SIZE; ++x)
                     {
                         if (bits & 1)
                         {
-                            frame->at(k * fntBlockSize + x, j * fntBlockSize + y) = 0xff00ffff;
+                            frame->at(k * FNT_BLOCK_SIZE + x, j * FNT_BLOCK_SIZE + y) = 0xff00ffff;
                         }
                         bits = bits >> 1;
                     }
@@ -1871,7 +1869,7 @@ void CGame::debugLevel(const char *filename)
 
         for (int i = 0; i < m_script->getSize(); ++i)
         {
-            CActor &entry = (*m_script)[i];
+            const CActor &entry = (*m_script)[i];
             fprintf(tfile, "#%d attr %x type %.2x (%s)\n", i, entry.attr, entry.type, CImsWrap::getTypeName(entry.type));
             fprintf(tfile, "    u1 %x u2 %x imageId %d (%s)\n", entry.u1, entry.u2, entry.imageId, imageNames[entry.imageId].c_str());
             fprintf(tfile, "    x:%d y:%d \n\n", entry.x, entry.y);

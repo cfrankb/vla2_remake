@@ -31,7 +31,6 @@ public:
 
     bool write(const char *filename);
     bool read(const char *filename);
-
     void fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &xmap);
     uint8_t *mapPtr(int i);
     uint8_t *operator[](int i);
@@ -39,13 +38,12 @@ public:
 private:
     enum
     {
-        fntTileSize = 8,
+        FNT_BLOCK_SIZE = 8,
         threshold = 16
     };
     uint8_t **m_mapIndex;
     uint8_t *m_mapData;
     int m_dataSize;
-
     int scoreFromTile(CFrame &frame, int baseX, int baseY);
     void forget();
 };

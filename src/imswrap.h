@@ -88,7 +88,7 @@ protected:
     enum
     {
         IMSNAME_MAX = 8192,
-        fntBlockSize = 8
+        FNT_BLOCK_SIZE = 8
     };
 
     int getImageCount(uint8_t *imsTable);
