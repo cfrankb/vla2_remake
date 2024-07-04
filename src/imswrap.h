@@ -40,33 +40,33 @@ public:
     static const char *getTypeName(int typeId);
 
 protected:
-    typedef struct
+    using fntEntry_t = struct
     {
         uint8_t pixels[64];
-    } fntEntry_t;
+    };
 
-    typedef struct
+    using stoEntry_t = struct
     {
         uint8_t task;
         uint8_t objtype;
         uint16_t imageID;
-    } stoEntry_t;
+    };
 
-    typedef struct
+    using imsEntry_t = struct
     {
         uint16_t offsetNext;
         uint16_t len;
         uint16_t hei;
         uint16_t fntData;
-    } imsEntry_t;
+    };
 
-    typedef struct
+    using imsLookup_t = struct
     {
         imsEntry_t *ptrEntry;
         std::string name;
-    } imsLookup_t;
+    };
 
-    typedef struct
+    using scriptEntry_t = struct
     {
         uint8_t attr;
         uint8_t type; // objType
@@ -75,15 +75,15 @@ protected:
         uint16_t imageId;
         uint8_t x;
         uint8_t y;
-    } scriptEntry_t;
+    };
 
-    typedef struct
+    using rgba_t = struct
     {
         uint8_t red;
         uint8_t green;
         uint8_t blue;
         uint8_t alpha;
-    } rgba_t;
+    };
 
     enum
     {

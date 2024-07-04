@@ -20,7 +20,7 @@
 #include <cstdio>
 #include <cstring>
 
-static const char *SIGNATURE = "SCRX";
+constexpr static const char SIGNATURE[]{"SCRX"};
 
 CScriptArch::CScriptArch()
 {
@@ -94,7 +94,7 @@ bool CScriptArch::read(const char *filename)
 /// @brief
 /// @param filename
 /// @return
-bool CScriptArch::write(const char *filename)
+bool CScriptArch::write(const char *filename) const
 {
     FILE *tfile = fopen(filename, "wb");
     if (tfile)
@@ -161,7 +161,7 @@ void CScriptArch::forget()
     m_max = 0;
 }
 
-int CScriptArch::getSize()
+int CScriptArch::getSize() const
 {
     return m_size;
 }

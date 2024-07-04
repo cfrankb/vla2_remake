@@ -29,14 +29,14 @@
 #include "scriptarch.h"
 #include "struct.h"
 
-typedef struct
+using filedef_t = struct
 {
     const char *imsFile;
     const char *scrFile;
     const char *name;
-} filedef_t;
+};
 
-const filedef_t filedefs[] = {
+constexpr filedef_t filedefs[] = {
     //   {"intro.ims", "_lev00.scr", "il est temps de partir."},
     {"jungle.ims", "_lev01.scr", "et voila que commence ton aventure_"},
     {"jungle.ims", "_lev02.scr", "attention de ne pas tomber!"},
@@ -95,7 +95,7 @@ void exportIms()
 void debugScr()
 {
     CImsWrap ims;
-    size_t count = sizeof(filedefs) / sizeof(filedef_t);
+    constexpr size_t count = sizeof(filedefs) / sizeof(filedef_t);
     for (size_t i = 0; i < count; ++i)
     {
         const filedef_t &def = filedefs[i];
@@ -138,7 +138,7 @@ bool compositeLevel(std::string imsFile, std::string scrFile, std::string outFil
 
 void compositeAll()
 {
-    size_t count = sizeof(filedefs) / sizeof(filedef_t);
+    constexpr size_t count = sizeof(filedefs) / sizeof(filedef_t);
     for (size_t i = 0; i < count; ++i)
     {
         const filedef_t &def = filedefs[i];
@@ -164,7 +164,7 @@ bool createScriptArch()
 {
     CScriptArch arch;
     CImsWrap ims;
-    size_t count = sizeof(filedefs) / sizeof(filedef_t);
+    constexpr size_t count = sizeof(filedefs) / sizeof(filedef_t);
     for (size_t i = 0; i < count; ++i)
     {
         const filedef_t &def = filedefs[i];

@@ -39,7 +39,7 @@ private:
     enum
     {
         FNT_BLOCK_SIZE = 8,
-        threshold = 16
+        THRESHOLD = 16,
     };
     uint8_t **m_mapIndex;
     uint8_t *m_mapData;

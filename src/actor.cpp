@@ -98,7 +98,7 @@ bool CActor::canFall() const
 
 int CActor::findNextDir() const
 {
-    static uint8_t AIMS[] = {
+    constexpr static uint8_t AIMS[] = {
         AIM_DOWN, AIM_RIGHT, AIM_UP, AIM_LEFT,
         AIM_UP, AIM_LEFT, AIM_DOWN, AIM_RIGHT,
         AIM_RIGHT, AIM_UP, AIM_LEFT, AIM_DOWN,

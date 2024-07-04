@@ -75,7 +75,7 @@ void CFrameMap::fromFrameSet(CFrameSet &frameSet, std::unordered_set<uint16_t> &
                 const uint8_t score = xmap.count(i) == 0
                                           ? scoreFromTile(frame, x * FNT_BLOCK_SIZE, y * FNT_BLOCK_SIZE)
                                           : 0xff;
-                *p++ = score >= threshold ? score : 0;
+                *p++ = score >= THRESHOLD ? score : 0;
             }
         }
     }

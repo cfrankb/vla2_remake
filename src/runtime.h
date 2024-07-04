@@ -49,12 +49,12 @@ private:
         FONT_SIZE = 8,
     };
 
-    typedef struct
+    using App = struct
     {
         SDL_Renderer *renderer;
         SDL_Window *window;
         SDL_Texture *texture;
-    } App;
+    };
 
     App m_app;
     CGame *m_game;

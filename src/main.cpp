@@ -24,9 +24,9 @@
 #include <emscripten.h>
 #endif
 
-#define FPS 30
-#define MAPARCH_FILE "data/levels.scrx"
-#define CONFIG_FILE "data/vlamits2.cfg"
+constexpr int FPS = 30;
+constexpr const char MAPARCH_FILE[] = "data/levels.scrx";
+constexpr const char CONFIG_FILE[] = "data/vlamits2.cfg";
 
 void loop_handler(void *arg)
 {

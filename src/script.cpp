@@ -100,7 +100,7 @@ bool CScript::read(FILE *sfile)
     m_max = m_size;
 
     // read tileset name
-    char tileset[TILESET_NAME_MAX + 1];
+    char tileset[TILESET_NAME_MAX + 1]{};
     memset(tileset, 0, sizeof(tileset));
     fread(tileset, TILESET_NAME_MAX, 1, sfile);
     m_tileset = tileset;
@@ -110,17 +110,16 @@ bool CScript::read(FILE *sfile)
     fread(m_script, sizeof(CActor) * m_size, 1, sfile);
 
     // read scriptname
-    char name[SCRIPTNAME_MAX + 1];
+    char name[SCRIPTNAME_MAX + 1]{};
     memset(name, 0, sizeof(name));
     uint8_t size = 0;
     fread(&size, sizeof(uint8_t), 1, sfile);
     fread(name, size, 1, sfile);
     m_name = name;
-
     return true;
 }
 
-std::string CScript::name()
+std::string CScript::name() const
 {
     return m_name;
 }
@@ -130,7 +129,7 @@ void CScript::setName(const std::string &name)
     m_name = name;
 }
 
-std::string CScript::tileset()
+std::string CScript::tileset() const
 {
     return m_tileset;
 }
@@ -183,7 +182,7 @@ void CScript::removeAt(int i)
     --m_size;
 }
 
-int CScript::findPlayerIndex()
+int CScript::findPlayerIndex() const
 {
     for (int i = 0; i < m_size; ++i)
     {
@@ -195,7 +194,7 @@ int CScript::findPlayerIndex()
     return NOT_FOUND;
 }
 
-int CScript::countType(uint8_t type)
+int CScript::countType(uint8_t type) const
 {
     int count = 0;
     for (int i = 0; i < m_size; ++i)

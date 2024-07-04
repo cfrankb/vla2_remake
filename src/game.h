@@ -30,8 +30,8 @@ class CFrameMap;
 class CFrame;
 class CActor;
 
-typedef std::vector<std::string> StringVector;
-typedef std::unordered_map<uint16_t, uint16_t> PairMap;
+using StringVector = std::vector<std::string>;
+using PairMap = std::unordered_map<uint16_t, uint16_t>;
 
 class CGame
 {
@@ -143,26 +143,26 @@ private:
         Coins4Life = 100,
         OxygenLostDelay = 10,
     };
-    typedef struct
+    using rect_t = struct
     {
         uint16_t x;
         uint16_t y;
         int len;
         int hei;
-    } rect_t;
+    };
 
-    typedef struct
+    using config_t = struct
     {
         std::unordered_map<uint32_t, uint16_t> xdef;
         std::unordered_set<uint16_t> hide;
         std::unordered_set<uint16_t> xmap;
         PairMap swap;
-    } config_t;
+    };
 
-    typedef struct
+    using type_t = struct
     {
         uint8_t speed;
-    } type_t;
+    };
 
     CFrameSet *m_frameSet;
     std::string m_scriptArchName;

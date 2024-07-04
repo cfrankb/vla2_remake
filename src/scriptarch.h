@@ -31,11 +31,11 @@ public:
     ~CScriptArch();
 
     bool read(const char *filename);
-    bool write(const char *filename);
+    bool write(const char *filename) const;
     void add(CActor *scriptArray, uint32_t size);
     void add(CScript *script);
     void forget();
-    int getSize();
+    int getSize() const;
     inline CScript *operator[](int i);
     inline CScript *at(int i);
     static bool indexFromFile(const char *filename, uint32_t *&index, uint32_t &size);

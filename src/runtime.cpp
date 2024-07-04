@@ -22,11 +22,11 @@
 #include <cstring>
 #include "shared/FileWrap.h"
 
-#define WINDOW_TITLE "The Vlamits2 Runtime"
-#define IntroCountdown "IntroCountdown"
-#define JumpSpeed "JumpSpeed"
-#define Gravity "Gravity"
-#define Animator "Animator"
+constexpr const char WINDOW_TITLE[] = "The Vlamits2 Runtime";
+constexpr const char IntroCountdown[] = "IntroCountdown";
+constexpr const char JumpSpeed[] = "JumpSpeed";
+constexpr const char Gravity[] = "Gravity";
+constexpr const char Animator[] = "Animator";
 
 CRuntime::CRuntime()
 {
@@ -52,8 +52,8 @@ CRuntime::~CRuntime()
 
 void CRuntime::paint()
 {
-    CFrame bitmap(WIDTH, HEIGHT);
-
+    static CFrame bitmap{WIDTH, HEIGHT};
+    bitmap.clear();
     switch (m_game->mode())
     {
     case CGame::MODE_INTRO:

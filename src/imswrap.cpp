@@ -30,11 +30,11 @@
         cl, #cl \
     }
 
-typedef struct
+using typeDef_t = struct
 {
     int typeId;
     const char *typeName;
-} typeDef_t;
+};
 
 CImsWrap::CImsWrap()
 {

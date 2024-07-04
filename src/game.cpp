@@ -28,19 +28,19 @@
 #include "framemap.h"
 #include "actor.h"
 
-#define DEFAULT_ARCHFILE "data/levels.scrx"
-#define DefaultHp "DefaultHp"
-#define DefaultOxygen "DefaultOxygen"
-#define JumpCooldown "JumpCooldown"
-#define DefaultLives "DefaultLives"
-#define MaxHP "MaxHP"
-#define FlowerHpBonus "FlowerHpBonus"
-#define LevelCompletionBonus "LevelCompletionBonus"
-#define ShowPoints "ShowPoints"
+constexpr const char DEFAULT_ARCHFILE[]{"data/levels.scrx"};
+constexpr const char DefaultHp[]{"DefaultHp"};
+constexpr const char DefaultOxygen[]{"DefaultOxygen"};
+constexpr const char JumpCooldown[]{"JumpCooldown"};
+constexpr const char DefaultLives[]{"DefaultLives"};
+constexpr const char MaxHP[]{"MaxHP"};
+constexpr const char FlowerHpBonus[]{"FlowerHpBonus"};
+constexpr const char LevelCompletionBonus[]{"LevelCompletionBonus"};
+constexpr const char ShowPoints[]{"ShowPoints"};
 
 CGame *g_game = nullptr;
 
-static uint16_t g_points[]{
+constexpr uint16_t g_points[]{
     10,
     15,
     25,
@@ -56,9 +56,9 @@ static uint16_t g_points[]{
     10000,
 };
 
-const int pointCount = sizeof(g_points) / sizeof(uint16_t);
+constexpr int pointCount = sizeof(g_points) / sizeof(uint16_t);
 
-static uint8_t AIMS[]{
+constexpr uint8_t AIMS[]{
     CActor::AIM_UP,
     CActor::AIM_DOWN,
     CActor::AIM_LEFT,
@@ -73,12 +73,12 @@ static uint8_t AIMS[]{
 
 #define _L(_s_) reinterpret_cast<const uint32_t *>(_s_)
 
-typedef struct
+using jumpSeq_t = struct
 {
     const uint8_t *seq;
     const int count;
     const uint8_t aim;
-} jumpSeq_t;
+};
 
 enum
 {
@@ -94,16 +94,16 @@ enum
     AIM_NONE = 255,
 };
 
-const uint8_t jumpUP[]{UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpDOWN[]{};
-const uint8_t jumpLEFT[]{UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
-const uint8_t jumpRIGHT[]{UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
-const uint8_t jumpUP_LEFT[]{UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpUP_RIGHT[]{UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
-const uint8_t jumpDOWN_LEFT[]{UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
-const uint8_t jumpDOWN_RIGHT[]{UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
+constexpr uint8_t jumpUP[]{UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
+constexpr uint8_t jumpDOWN[]{};
+constexpr uint8_t jumpLEFT[]{UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
+constexpr uint8_t jumpRIGHT[]{UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
+constexpr uint8_t jumpUP_LEFT[]{UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
+constexpr uint8_t jumpUP_RIGHT[]{UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
+constexpr uint8_t jumpDOWN_LEFT[]{UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
+constexpr uint8_t jumpDOWN_RIGHT[]{UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
 
-const jumpSeq_t g_jumpSeqs[]{
+constexpr jumpSeq_t g_jumpSeqs[]{
     _J(jumpUP, UP),
     _J(jumpDOWN, DOWN),
     _J(jumpLEFT, LEFT),
@@ -189,7 +189,7 @@ bool CGame::loadTileset(const char *tileset)
     ims.toFrameSet(*m_frameSet, nullptr);
     m_loadedTileSet = tileset;
     m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
-    m_frameMap->write("out/fmap.dat");
+    // m_frameMap->write("out/fmap.dat");
     return true;
 }
 
@@ -761,11 +761,11 @@ void CGame::preloadAssets()
 {
     CFileWrap file;
 
-    typedef struct
+    using asset_t = struct
     {
         const char *filename;
         CFrameSet **frameset;
-    } asset_t;
+    };
 
     asset_t assets[] = {
         {"data/annie.obl", &m_annie},
