@@ -245,6 +245,7 @@ bool CGame::loadLevel(int i)
     }
     // map script
     mapScript(m_script);
+    m_levelHeight = findLevelHeight();
     return result;
 }
 
@@ -1435,6 +1436,10 @@ void CGame::manageGravity()
             unmapEntry(i, actor);
             actor.move(CActor::AIM_DOWN);
             mapEntry(i, actor);
+            if (actor.type == TYPE_PLAYER && actor.y > m_levelHeight)
+            {
+                killPlayer();
+            }
         }
     }
 }
@@ -1535,8 +1540,7 @@ void CGame::parseTilesetOptions(std::string tileset, const StringVector &list, i
         }
         else
         {
-            uint32_t key{0};
-            memcpy(&key, list[1].c_str(), sizeof(key));
+            uint32_t key{*_L(list[1].c_str())};
             uint16_t val{static_cast<decltype(val)>(std::strtoul(list[2].c_str(), nullptr, 16))};
             m_config[tileset].xdef[key] = val;
         }
@@ -1823,6 +1827,19 @@ void CGame::debugFrameMap(const char *outFile)
         fs.write(file);
         file.close();
     }
+}
+
+int CGame::findLevelHeight()
+{
+    int len, hei;
+    int maxY = 0;
+    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
+    {
+        CActor &cur{(*m_script)[i]};
+        sizeFrame(cur, len, hei);
+        maxY = std::max(maxY, cur.y + hei);
+    }
+    return maxY;
 }
 
 void CGame::debugLevel(const char *filename)

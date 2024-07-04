@@ -178,6 +178,7 @@ void CRuntime::doInput()
                 // m_game->debugLevel("out/level.txt");
                 break;
             case SDLK_LSHIFT:
+            case SDLK_SPACE:
                 m_joyState[BUTTON] = KEY_PRESSED;
                 break;
             default:

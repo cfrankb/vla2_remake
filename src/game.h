@@ -195,9 +195,11 @@ private:
     int m_playerFrameOffset;
     int m_playerHitCountdown;
     int m_underwaterCounter;
+    int m_levelHeight;
 
     bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
+    int findLevelHeight();
     bool mapEntry(int i, const CActor &actor, bool removed = false);
     bool unmapEntry(int i, const CActor &actor);
     bool canMove(const CActor &actor, int aim);

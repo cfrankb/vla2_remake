@@ -79,7 +79,7 @@ public:
                (type != TYPE_PLAYER) &&
                (type != TYPE_BLANK);
     }
-    static inline bool isSystemType(const uint8_t type)
+    constexpr static inline bool isSystemType(const uint8_t type)
     {
         return type == TYPE_STOPCLASS || type == TYPE_EMPTY;
     }
