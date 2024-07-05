@@ -974,7 +974,7 @@ void CFrame::shiftUP()
     // copy first line to last
     memcpy(&at(0, m_nHei - 1), t, sizeof(uint32_t) * m_nLen);
 
-    delete []t;
+    delete[] t;
 }
 
 void CFrame::shiftDOWN()
@@ -992,8 +992,7 @@ void CFrame::shiftDOWN()
 
     // copy first line to last
     memcpy(m_rgb, t, sizeof(uint32_t) * m_nLen);
-    delete []t;
-
+    delete[] t;
 }
 
 void CFrame::shiftLEFT()

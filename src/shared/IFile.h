@@ -24,28 +24,27 @@
 class IFile
 {
 public:
-
     virtual ~IFile(){};
 
-    virtual IFile & operator >> (std::string & str)=0;
-    virtual IFile & operator << (const std::string & str)=0;
-    virtual IFile & operator += (const std::string & str)=0;
+    virtual IFile &operator>>(std::string &str) = 0;
+    virtual IFile &operator<<(const std::string &str) = 0;
+    virtual IFile &operator+=(const std::string &str) = 0;
 
-    virtual IFile & operator >> (int & n)=0;
-    virtual IFile & operator << (int n)=0;
+    virtual IFile &operator>>(int &n) = 0;
+    virtual IFile &operator<<(int n) = 0;
 
-    virtual IFile & operator >> (bool & b)=0;
-    virtual IFile & operator << (bool b)=0;
-    virtual IFile & operator += (const char *)=0;
+    virtual IFile &operator>>(bool &b) = 0;
+    virtual IFile &operator<<(bool b) = 0;
+    virtual IFile &operator+=(const char *) = 0;
 
-    virtual bool open(const char *filename, const char *mode= "rb")=0;
-    virtual int read(void *buf, int size)=0;
-    virtual int write(const void *buf, int size)=0;
+    virtual bool open(const char *filename, const char *mode = "rb") = 0;
+    virtual int read(void *buf, int size) = 0;
+    virtual int write(const void *buf, int size) = 0;
 
-    virtual void close()=0;
-    virtual long getSize()=0;
-    virtual void seek(long i)=0;
-    virtual long tell()=0;
+    virtual void close() = 0;
+    virtual long getSize() = 0;
+    virtual void seek(long i) = 0;
+    virtual long tell() = 0;
 };
 
-#endif // IFILE_H 
+#endif // IFILE_H

@@ -24,9 +24,8 @@ class ISerial
 {
 public:
     virtual ~ISerial(){};
-    virtual bool read(IFile & file)=0;
-    virtual bool write(IFile & file)=0;
+    virtual bool read(IFile &file) = 0;
+    virtual bool write(IFile &file) = 0;
 };
-
 
 #endif
