@@ -63,4 +63,4 @@ $(TARGET): $(DEPS)
 	$(CXX) $(CXXFLAGS) $(DEPS) $(LIBS) $(PARGS) -o $@
 
 clean:
-	rm -f $(BPATH)/*
+	rm -rf $(BPATH)/*

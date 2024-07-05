@@ -42,12 +42,11 @@ CRuntime::~CRuntime()
     SDL_DestroyTexture(m_app.texture);
     SDL_DestroyRenderer(m_app.renderer);
     SDL_DestroyWindow(m_app.window);
-    SDL_Quit();
-
     if (m_game)
     {
         delete m_game;
     }
+    SDL_Quit();
 }
 
 void CRuntime::paint()
@@ -123,66 +122,35 @@ void CRuntime::run()
     mainLoop();
 }
 
-void CRuntime::doInput()
+bool CRuntime::doInput()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event))
     {
+        uint8_t keyState = KEY_RELEASED;
         switch (event.type)
         {
+        case SDL_KEYDOWN:
+            keyState = KEY_PRESSED;
         case SDL_KEYUP:
             switch (event.key.keysym.sym)
             {
             case SDLK_UP:
-                m_joyState[AIM_UP] = KEY_RELEASED;
-                break;
+                m_joyState[AIM_UP] = keyState;
+                continue;
             case SDLK_DOWN:
-                m_joyState[AIM_DOWN] = KEY_RELEASED;
-                break;
+                m_joyState[AIM_DOWN] = keyState;
+                continue;
             case SDLK_LEFT:
-                m_joyState[AIM_LEFT] = KEY_RELEASED;
-                break;
+                m_joyState[AIM_LEFT] = keyState;
+                continue;
             case SDLK_RIGHT:
-                m_joyState[AIM_RIGHT] = KEY_RELEASED;
-                break;
-            case SDLK_LSHIFT:
-                m_joyState[BUTTON] = KEY_RELEASED;
-                break;
-            default:
-                break;
-            }
-            break;
-
-        case SDL_KEYDOWN:
-            switch (event.key.keysym.sym)
-            {
-            case SDLK_UP:
-                m_joyState[AIM_UP] = KEY_PRESSED;
-                break;
-            case SDLK_DOWN:
-                m_joyState[AIM_DOWN] = KEY_PRESSED;
-                break;
-            case SDLK_LEFT:
-                m_joyState[AIM_LEFT] = KEY_PRESSED;
-                break;
-            case SDLK_RIGHT:
-                m_joyState[AIM_RIGHT] = KEY_PRESSED;
-                break;
-            case SDLK_HOME:
-                if (m_game->define("SkipLevel"))
-                {
-                    m_game->nextLevel();
-                }
-                break;
-            case SDLK_END:
-                // m_game->debugLevel("out/level.txt");
-                break;
-            case SDLK_LSHIFT:
+                m_joyState[AIM_RIGHT] = keyState;
+                continue;
             case SDLK_SPACE:
-                m_joyState[BUTTON] = KEY_PRESSED;
-                break;
-            default:
-                break;
+            case SDLK_LSHIFT:
+                m_joyState[BUTTON] = keyState;
+                continue;
             }
             break;
 
@@ -194,16 +162,16 @@ void CRuntime::doInput()
             break;
 
         case SDL_QUIT:
-#ifdef WASM
-            //           emscripten_cancel_main_loop();
+#ifndef WASM
+            return false;
 #endif
-            exit(0);
-            break;
 
         default:
             break;
         }
     }
+
+    return true;
 }
 
 void CRuntime::drawLevelIntro(CFrame &screen)

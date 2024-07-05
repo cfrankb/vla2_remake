@@ -19,6 +19,7 @@
 #define __SCRIPTARCH
 
 #include <cstdint>
+#include <memory>
 #include "script.h"
 
 class CScript;
@@ -32,7 +33,7 @@ public:
 
     bool read(const char *filename);
     bool write(const char *filename) const;
-    void add(CActor *scriptArray, uint32_t size);
+    void add(std::unique_ptr<CActor[]> &scriptArray, uint32_t size);
     void add(CScript *script);
     void forget();
     int getSize() const;
@@ -52,7 +53,7 @@ private:
 
     uint32_t m_size;
     uint32_t m_max;
-    CScript **m_scripts;
+    std::unique_ptr<CScript *[]> m_scripts;
 };
 
 #endif

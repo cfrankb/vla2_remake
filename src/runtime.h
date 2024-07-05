@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
 class CGame;
@@ -30,7 +31,7 @@ public:
     void paint();
     void run();
     bool SDLInit();
-    void doInput();
+    bool doInput();
     bool init(const char *filearch, const char *configfile, int startLevel = 0);
 
 private:

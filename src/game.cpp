@@ -38,7 +38,7 @@ constexpr const char FlowerHpBonus[]{"FlowerHpBonus"};
 constexpr const char LevelCompletionBonus[]{"LevelCompletionBonus"};
 constexpr const char ShowPoints[]{"ShowPoints"};
 
-CGame *g_game = nullptr;
+static CGame *g_game = nullptr;
 
 constexpr uint16_t g_points[]{
     10,
@@ -116,15 +116,23 @@ constexpr jumpSeq_t g_jumpSeqs[]{
 
 CGame::CGame()
 {
+    printf("creating game singleton\n");
     m_frameSet = new CFrameSet;
     m_scriptCount = 0;
     m_script = new CScript;
     m_frameMap = new CFrameMap;
+    m_scriptIndex = nullptr;
     m_loadedTileSet = "";
+    m_player = nullptr;
+    m_annie = nullptr;
+    m_points = nullptr;
+    m_score = 0;
 }
 
 CGame::~CGame()
 {
+    printf("deleting game singleton\n");
+
     if (m_annie)
     {
         delete m_annie;
@@ -189,7 +197,6 @@ bool CGame::loadTileset(const char *tileset)
     ims.toFrameSet(*m_frameSet, nullptr);
     m_loadedTileSet = tileset;
     m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
-    // m_frameMap->write("out/fmap.dat");
     return true;
 }
 
@@ -514,7 +521,7 @@ void CGame::drawScreen(CFrame &screen)
     const int my = m_player->y < hy ? 0 : m_player->y - hy;
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
-        CFrame *frame;
+        CFrame *frame{nullptr};
         const auto &entry{(*m_script)[i]};
         if (entry.type == TYPE_PLAYER)
         {
@@ -589,11 +596,10 @@ void CGame::drawScreen(CFrame &screen)
     x += strlen(tmp) * FONT_SIZE;
 
     // draw health bar
-    rect_t rect;
     const int sectionHeight = HealthBarHeight + HealthBarOffset;
     x = HealthBarOffset;
     uint16_t y = screen.hei() - sectionHeight * 2;
-    rect = {x, y, std::min(m_hp / 2, screen.len() - HealthBarOffset), HealthBarHeight};
+    rect_t rect{x, y, std::min(m_hp / 2, screen.len() - HealthBarOffset), HealthBarHeight};
     drawRect(screen, rect, LIME, true);
     drawRect(screen, rect, WHITE, false);
     // draw oxygen bar
@@ -1315,6 +1321,8 @@ void CGame::startGame()
     m_mode = MODE_INTRO;
     m_jumpFlag = false;
     m_coins = 0;
+    m_score = 0;
+    m_jumpCooldown = 0;
 }
 
 void CGame::restartGame()
@@ -1327,6 +1335,7 @@ void CGame::restartGame()
 
 void CGame::restartLevel()
 {
+    m_jumpCooldown = 0;
     m_underwaterCounter = 0;
     m_playerHitCountdown = 0;
     m_jumpFlag = false;
@@ -1611,7 +1620,7 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
         {
             printf("empty list on line %d\n", line);
         }
-        else if (tileset == "")
+        else if (tileset.size() == 0)
         {
             parseGeneralOptions(list, line);
         }

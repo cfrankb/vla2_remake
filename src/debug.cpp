@@ -20,6 +20,7 @@
 #include <cctype>
 #include <cstring>
 #include <string>
+#include <memory>
 
 #include "imswrap.h"
 #include "shared/FrameSet.h"
@@ -177,10 +178,10 @@ bool createScriptArch()
             fread(&dataLenght, 2, 1, sfileSCR);
             fseek(sfileSCR, 16, SEEK_CUR);
             auto entryCount = dataLenght / sizeof(scriptEntry_t);
-            scriptEntry_t *scriptData = new scriptEntry_t[entryCount];
-            fread(scriptData, dataLenght, 1, sfileSCR);
+            std::unique_ptr<CActor[]> scriptData = std::make_unique<CActor[]>(entryCount);
+            fread(scriptData.get(), dataLenght, 1, sfileSCR);
             fclose(sfileSCR);
-            CScript *script = new CScript(reinterpret_cast<CActor *>(scriptData), entryCount);
+            CScript *script = new CScript(scriptData, entryCount);
             std::string tileset = def.imsFile;
             auto j = tileset.find(".");
             if (j != std::string::npos)

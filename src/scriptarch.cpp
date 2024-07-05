@@ -26,7 +26,7 @@ CScriptArch::CScriptArch()
 {
     m_size = 0;
     m_max = GROW_BY;
-    m_scripts = new CScript *[m_max];
+    m_scripts = std::make_unique<CScript *[]>(m_max);
 }
 
 CScriptArch::~CScriptArch()
@@ -75,14 +75,13 @@ bool CScriptArch::read(const char *filename)
         fseek(sfile, indexPtr, SEEK_SET);
         printf("indexPtr: %.8x\n", indexPtr);
         fread(index, sizeof(uint32_t) * m_size, 1, sfile);
-        m_scripts = new CScript *[m_max];
+        m_scripts = std::make_unique<CScript *[]>(m_size);
 
         // read individual scripts
         for (int i = 0; i < count; ++i)
         {
             printf("--> script:%d [index: 0x%.8x]\n", i, index[i]);
             fseek(sfile, index[i], SEEK_SET);
-            m_scripts[i] = new CScript();
             m_scripts[i]->read(sfile);
         }
         delete[] index;
@@ -132,16 +131,18 @@ void CScriptArch::add(CScript *script)
     if (m_size == m_max)
     {
         m_max += GROW_BY;
-        CScript **tmp = new CScript *[m_max];
-        memcpy(tmp, m_scripts, sizeof(CScript *) * m_size);
-        delete[] m_scripts;
-        m_scripts = tmp;
+        std::unique_ptr<CScript *[]> tmp = std::make_unique<CScript *[]>(m_max);
+        for (int i = 0; i < m_size; ++i)
+        {
+            tmp[i] = m_scripts[i];
+        }
+        m_scripts = std::move(tmp);
     }
     m_scripts[m_size] = script;
     ++m_size;
 }
 
-void CScriptArch::add(CActor *scriptArray, uint32_t size)
+void CScriptArch::add(std::unique_ptr<CActor[]> &scriptArray, uint32_t size)
 {
     add(new CScript(scriptArray, size));
 }
@@ -154,7 +155,6 @@ void CScriptArch::forget()
         {
             delete m_scripts[i];
         }
-        delete[] m_scripts;
     }
     m_scripts = nullptr;
     m_size = 0;

@@ -20,6 +20,7 @@
 #include <string>
 #include <cstdint>
 #include <cstdio>
+#include <memory>
 #include "defs.h"
 #include "actor.h"
 
@@ -34,11 +35,10 @@ public:
     };
 
     CScript();
-    CScript(CActor *script, uint32_t size);
+    CScript(std::unique_ptr<CActor[]> &script, uint32_t size);
     ~CScript();
 
     void forget();
-    void copy(CActor *script, int count);
     bool write(FILE *tfile);
     bool read(FILE *sfile);
     std::string name() const;
@@ -49,9 +49,9 @@ public:
     {
         return m_size;
     }
-    constexpr inline CActor &operator[](int i)
+    inline CActor &operator[](int i)
     {
-        return m_script[i];
+        return m_script.get()[i];
     }
     constexpr static inline uint32_t toKey(const uint8_t x, const uint8_t y)
     {
@@ -86,23 +86,22 @@ public:
     int add(const CActor &entry);
     int insertAt(int i, const CActor &entry);
     void removeAt(int i);
-    constexpr inline CActor &at(int i)
+    inline CActor &at(int i)
     {
         return (*this)[i];
     }
-    constexpr inline const CActor &peekAt(int i) const
+    inline const CActor &peekAt(int i) const
     {
-        return m_script[i];
+        return m_script.get()[i];
     }
     int findPlayerIndex() const;
     int countType(uint8_t type) const;
-    void replace(CActor *script, uint32_t size);
     void sort();
 
 private:
     std::string m_name;
     std::string m_tileset;
-    CActor *m_script;
+    std::unique_ptr<CActor[]> m_script;
     uint32_t m_size;
     uint32_t m_max;
     enum
