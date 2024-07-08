@@ -356,7 +356,7 @@ void CImsWrap::debug(const char *filename)
 
         fprintf(tfile, "\nstoName: %s\n", m_stoName.c_str());
         fprintf(tfile, "    m_entryCount: %d\n", m_entryCount);
-        fprintf(tfile, "    m_entryCount * size: %d\n\n", m_entryCount * sizeof(scriptEntry_t));
+        fprintf(tfile, "    m_entryCount * size: %lu\n\n", m_entryCount * sizeof(scriptEntry_t));
 
         for (int i = 0; i < m_entryCount; ++i)
         {

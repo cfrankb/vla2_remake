@@ -133,7 +133,7 @@ void CScript::growArray()
         {
             tmp.get()[i] = m_script.get()[i];
         }
-        m_script = std::move(tmp);
+        m_script.swap(tmp);
     }
 }
 
@@ -194,12 +194,13 @@ void CScript::sort()
 {
     std::unique_ptr<CActor[]> tmp = std::make_unique<CActor[]>(m_size);
     int j = 0;
+    CActor *t = tmp.get();
     for (int i = 0; i < m_size; ++i)
     {
         const CActor &entry{(m_script.get())[i]};
         if (CScript::isBackgroundType(entry.type))
         {
-            tmp.get()[j++] = entry;
+            t[j++] = entry;
         }
     }
     for (int i = 0; i < m_size; ++i)
@@ -207,8 +208,8 @@ void CScript::sort()
         const CActor &entry{(m_script.get())[i]};
         if (!CScript::isBackgroundType(entry.type))
         {
-            tmp.get()[j++] = entry;
+            t[j++] = entry;
         }
     }
-    m_script = std::move(tmp);
+    m_script.swap(tmp);
 }

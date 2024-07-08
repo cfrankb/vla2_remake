@@ -188,12 +188,23 @@ bool CScriptArch::indexFromFile(const char *filename, uint32_t *&index, uint32_t
     if (sfile)
     {
         char signature[4];
-        uint16_t version;
-        uint16_t dwCount;
+        uint16_t version = 0;
+        uint16_t dwCount = 0;
         uint32_t indexOffset = 0;
-        // TODO check signature/version
         fread(signature, sizeof(signature), 1, sfile);
         fread(&version, sizeof(version), 1, sfile);
+        if (memcmp(signature, SIGNATURE, sizeof(signature)) != 0)
+        {
+            printf("invalid signature: %s\n", signature);
+            fclose(sfile);
+            return false;
+        }
+        if (version > VERSION)
+        {
+            printf("invalid version: %d\n", version);
+            fclose(sfile);
+            return false;
+        }
         fread(&dwCount, sizeof(dwCount), 1, sfile);
         fread(&indexOffset, sizeof(indexOffset), 1, sfile);
         fseek(sfile, indexOffset, SEEK_SET);

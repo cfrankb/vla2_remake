@@ -219,7 +219,6 @@ bool CGame::loadLevel(int i)
         m_goals = m_script->countType(TYPE_FLOWER);
         // printf("flowers: %d\n", m_goals);
         int i = m_script->findPlayerIndex();
-        m_player = nullptr;
         if (i != CScript::NOT_FOUND)
         {
             CActor &entry = (*m_script)[i];
@@ -229,6 +228,7 @@ bool CGame::loadLevel(int i)
         }
         else
         {
+            m_player = nullptr;
             m_lastError = "no player found";
             printf("%s\n", m_lastError.c_str());
             return false;
@@ -1468,7 +1468,7 @@ void CGame::parseGeneralOptions(const StringVector &list, int line)
             printf("type must have 3 args. %zu found on line %d\n", list.size(), line);
             for (size_t i = 0; i < list.size(); ++i)
             {
-                printf(" -->%d %s\n", i, list[i].c_str());
+                printf(" -->%zu %s\n", i, list[i].c_str());
             }
         }
     }
@@ -1485,7 +1485,7 @@ void CGame::parseGeneralOptions(const StringVector &list, int line)
             printf("define must have 3 args. %zu found on line %d\n", list.size(), line);
             for (size_t i = 0; i < list.size(); ++i)
             {
-                printf(" -->%d %s\n", i, list[i].c_str());
+                printf(" -->%zu %s\n", i, list[i].c_str());
             }
         }
     }
