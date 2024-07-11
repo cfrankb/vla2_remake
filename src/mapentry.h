@@ -32,7 +32,7 @@ private:
 public:
     enum
     {
-        fwCount = sizeof(m_fwEntry) / sizeof(uint16_t)
+        fwCount = sizeof(m_fwEntry) / sizeof(decltype(*m_fwEntry))
     };
 
     uint16_t fwEntry(int i) const

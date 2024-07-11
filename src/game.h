@@ -23,6 +23,7 @@
 #include <unordered_set>
 #include <vector>
 #include "mapentry.h"
+#include "actor.h"
 
 class CFrameSet;
 class CScript;
@@ -117,7 +118,30 @@ private:
         _2000pts,
         _5000pts,
         _10000pts,
+        PointCount
     };
+
+    static constexpr uint16_t m_pointValues[]{
+        10,
+        15,
+        25,
+        50,
+        100,
+        200,
+        300,
+        400,
+        500,
+        1000,
+        2000,
+        5000,
+        10000,
+    };
+
+    static constexpr const uint8_t AIMS[] = {
+        CActor::AIM_UP,
+        CActor::AIM_DOWN,
+        CActor::AIM_LEFT,
+        CActor::AIM_RIGHT};
 
     enum // game constants
     {
@@ -133,9 +157,12 @@ private:
         VCreaDrain = 4,
         InMangaBite = -1,
         FleaDrain = 4,
+        FleaFrameCycle = 2,
         speedCount = 9,
         FishFrameCycle = 1,
         InMangaFrameCycle = 2,
+        VCreaFrameCycle = 0,
+        CannibalFrameCycle = 3,
         CanmibalDamage = 16,
         PlayerHitDuration = 2,
         HealthBarHeight = 8,
@@ -213,9 +240,9 @@ private:
     void consumeAll();
     bool consumeObject(uint16_t j);
     void handleTrigger(int j, CActor &entry);
-    void handleRemove(int j, CActor &entry);
-    void handleChange(int j, CActor &entry);
-    void handleTeleport(int j, CActor &entry);
+    void handleRemove(int j, const CActor &entry);
+    void handleChange(int j, const CActor &entry);
+    void handleTeleport(int j, const CActor &entry);
     void addToScore(int score);
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;

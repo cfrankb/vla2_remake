@@ -29,6 +29,7 @@ CScript::CScript()
 
 CScript::CScript(std::unique_ptr<CActor[]> &script, uint32_t size)
 {
+    // TODO: check this
     m_script = std::move(script);
     m_size = size;
     m_max = m_size;
@@ -103,6 +104,40 @@ bool CScript::read(FILE *sfile)
     return true;
 }
 
+bool CScript::fromMemory(const uint8_t *data)
+{
+    forget();
+
+    // read entry count
+    uint8_t *p = const_cast<uint8_t *>(data);
+    auto memread = [&p](auto __m__, auto __u__)
+    {
+        memcpy(p, __m__, __u__);
+        p += __u__;
+    };
+    memread(&m_size, sizeof(m_size));
+    m_max = m_size;
+
+    // read tileset name
+    char tileset[TILESET_NAME_MAX + 1]{};
+    memset(tileset, 0, sizeof(tileset));
+    memread(tileset, TILESET_NAME_MAX);
+    m_tileset = tileset;
+
+    // read script
+    m_script = std::make_unique<CActor[]>(m_size);
+    memread(m_script.get(), sizeof(CActor) * m_size);
+
+    // read scriptname
+    char name[SCRIPTNAME_MAX + 1]{};
+    memset(name, 0, sizeof(name));
+    uint8_t size = 0;
+    memread(&size, sizeof(uint8_t));
+    memread(name, size);
+    m_name = name;
+    return true;
+}
+
 std::string CScript::name() const
 {
     return m_name;
@@ -129,9 +164,11 @@ void CScript::growArray()
     {
         m_max += GROW_BY;
         std::unique_ptr<CActor[]> tmp = std::make_unique<CActor[]>(m_max);
+        CActor *t = tmp.get();
+        CActor *s = m_script.get();
         for (int i = 0; i < m_size; ++i)
         {
-            tmp.get()[i] = m_script.get()[i];
+            t[i] = s[i];
         }
         m_script.swap(tmp);
     }
@@ -147,9 +184,10 @@ int CScript::add(const CActor &entry)
 int CScript::insertAt(int i, const CActor &entry)
 {
     growArray();
+    CActor *s = m_script.get();
     for (int j = m_size; j > i; --j)
     {
-        m_script.get()[j] = m_script.get()[j - 1];
+        s[j] = s[j - 1];
     }
     m_script.get()[i] = entry;
     ++m_size;
@@ -158,18 +196,20 @@ int CScript::insertAt(int i, const CActor &entry)
 
 void CScript::removeAt(int i)
 {
+    CActor *s = m_script.get();
     for (int j = i; j < m_size - 1; ++j)
     {
-        m_script.get()[i] = m_script.get()[i + 1];
+        s[i] = s[i + 1];
     }
     --m_size;
 }
 
 int CScript::findPlayerIndex() const
 {
+    CActor *s = m_script.get();
     for (int i = 0; i < m_size; ++i)
     {
-        if (m_script.get()[i].type == TYPE_PLAYER)
+        if (s[i].type == TYPE_PLAYER)
         {
             return i;
         }
@@ -180,9 +220,10 @@ int CScript::findPlayerIndex() const
 int CScript::countType(uint8_t type) const
 {
     int count = 0;
+    CActor *s = m_script.get();
     for (int i = 0; i < m_size; ++i)
     {
-        if (m_script.get()[i].type == type)
+        if (s[i].type == type)
         {
             ++count;
         }
@@ -194,10 +235,11 @@ void CScript::sort()
 {
     std::unique_ptr<CActor[]> tmp = std::make_unique<CActor[]>(m_size);
     int j = 0;
+    CActor *s = m_script.get();
     CActor *t = tmp.get();
     for (int i = 0; i < m_size; ++i)
     {
-        const CActor &entry{(m_script.get())[i]};
+        const CActor &entry{s[i]};
         if (CScript::isBackgroundType(entry.type))
         {
             t[j++] = entry;
@@ -205,7 +247,7 @@ void CScript::sort()
     }
     for (int i = 0; i < m_size; ++i)
     {
-        const CActor &entry{(m_script.get())[i]};
+        const CActor &entry{s[i]};
         if (!CScript::isBackgroundType(entry.type))
         {
             t[j++] = entry;

@@ -45,7 +45,6 @@
 #define TYPE_LADDER 0x0d0
 #define TYPE_BRIDGE 0x0d2
 #define TYPE_LADDERDING 0x0d3
-
 #define TYPE_SAND 0x0dd
 #define TYPE_TOPWATER 0x0de
 #define TYPE_BOTTOMWATER 0x0df
@@ -55,6 +54,7 @@
 
 // filters
 
+#define TYPE_OBJECT_SUBGROUP 0x1f
 #define TYPE_FILTER_GROUP 0xf0
 #define TYPE_MONSTER_FILTER 0xc0
 

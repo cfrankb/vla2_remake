@@ -159,15 +159,15 @@ void CImsWrap::freeSto()
 
 bool CImsWrap::readSTO(const char *stoFilename)
 {
-    char imsName[16];
+    char imsName[IMSNAME_LENGTH];
     freeSto();
 
     FILE *sfileSTO = fopen(stoFilename, "rb");
     if (sfileSTO)
     {
         uint16_t dataLenght = 0;
-        fread(&dataLenght, 2, 1, sfileSTO);
-        fread(&imsName, 16, 1, sfileSTO);
+        fread(&dataLenght, sizeof(dataLenght), 1, sfileSTO);
+        fread(&imsName, sizeof(imsName), 1, sfileSTO);
         m_stoEntries = dataLenght / sizeof(stoEntry_t);
         m_stoData = new stoEntry_t[m_stoEntries];
         fread(m_stoData, dataLenght, 1, sfileSTO);
@@ -201,17 +201,18 @@ bool CImsWrap::readIMS(const char *imsFilename)
     if (imsFile)
     {
         m_imsTableLenght = 0;
-        fread(&m_tiles, 2, 1, imsFile);
-        fread(&m_imsTableLenght, 2, 1, imsFile);
+        m_tiles = 0;
+        fread(&m_tiles, sizeof(uint16_t), 1, imsFile);
+        fread(&m_imsTableLenght, sizeof(uint16_t), 1, imsFile);
 
         m_imsTable = new uint8_t[m_imsTableLenght];
-        fread(m_imsTable, m_imsTableLenght - 4, 1, imsFile);
+        fread(m_imsTable, m_imsTableLenght - IMSHEADER_SIZE, 1, imsFile);
         m_imgCount = getImageCount(m_imsTable);
         m_imsLookup = new imsLookup_t[m_imgCount + 1];
 
         m_tileData = new fntEntry_t[m_tiles];
         fread(m_tileData, m_tiles * sizeof(fntEntry_t), 1, imsFile);
-        fseek(imsFile, 2, SEEK_CUR); // skip reserved
+        fseek(imsFile, IMSHEADER_RESERVED, SEEK_CUR); // skip reserved
         fread(imsNames, IMSNAME_MAX, 1, imsFile);
         createImsIndex(m_imsTable, imsNames, m_imsLookup);
         fclose(imsFile);
@@ -275,14 +276,14 @@ const char *CImsWrap::getTypeName(int typeId)
 bool CImsWrap::readSCR(const char *scrFilename)
 {
     uint16_t dataLenght = 0;
-    char stoName[16];
+    char stoName[STONAME_LENGTH];
     freeScr();
 
     FILE *sfileSCR = fopen(scrFilename, "rb");
     if (sfileSCR)
     {
-        fread(&dataLenght, 2, 1, sfileSCR);
-        fread(&stoName, 16, 1, sfileSCR);
+        fread(&dataLenght, sizeof(dataLenght), 1, sfileSCR);
+        fread(&stoName, sizeof(stoName), 1, sfileSCR);
         m_stoName = stoName;
         m_entryCount = dataLenght / sizeof(scriptEntry_t);
         m_script = new scriptEntry_t[m_entryCount];
@@ -296,7 +297,7 @@ bool CImsWrap::readSCR(const char *scrFilename)
 const CImsWrap::rgba_t &CImsWrap::getPaletteColor(int i)
 {
     // original color palette
-    static const uint32_t colors[]{
+    static constexpr uint32_t colors[]{
         0x00000000, 0xffab0303, 0xff03ab03, 0xffabab03, 0xff0303ab, 0xffab03ab, 0xff0357ab, 0xffababab,
         0xff575757, 0xffff5757, 0xff57ff57, 0xffffff57, 0xff5757ff, 0xffff57ff, 0xff57ffff, 0xffffffff,
         0xff000000, 0xff171717, 0xff232323, 0xff2f2f2f, 0xff3b3b3b, 0xff474747, 0xff535353, 0xff636363,
@@ -411,7 +412,7 @@ void CImsWrap::toFrameSet(CFrameSet &frameSet, FILE *mapFile)
 
 void CImsWrap::drawScreen(CFrame &screen, CFrameSet &frameSet)
 {
-    screen.fill(0xff000000);
+    screen.fill(BLACK);
     for (int i = 0; i < m_entryCount; ++i)
     {
         const auto &entry = m_script[i];

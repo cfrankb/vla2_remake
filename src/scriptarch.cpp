@@ -20,8 +20,6 @@
 #include <cstdio>
 #include <cstring>
 
-constexpr static const char SIGNATURE[]{"SCRX"};
-
 CScriptArch::CScriptArch()
 {
     m_size = 0;
@@ -46,11 +44,11 @@ bool CScriptArch::read(const char *filename)
     if (sfile)
     {
         forget();
-        char signature[4]{0, 0, 0, 0};
+        char signature[SIGNATURE_SIZE]{0, 0, 0, 0};
         uint16_t version;
         uint16_t count;
         uint32_t indexPtr;
-        fread(signature, 4, 1, sfile);
+        fread(signature, SIGNATURE_SIZE, 1, sfile);
         fread(&version, sizeof(version), 1, sfile);
         if (memcmp(signature, SIGNATURE, sizeof(signature)) != 0)
         {
@@ -99,7 +97,7 @@ bool CScriptArch::write(const char *filename) const
     if (tfile)
     {
         uint16_t version = 0;
-        fwrite(SIGNATURE, strlen(SIGNATURE), 1, tfile);
+        fwrite(SIGNATURE, SIGNATURE_SIZE, 1, tfile);
         fwrite(&version, sizeof(version), 1, tfile);
         fwrite(&m_size, sizeof(uint16_t), 1, tfile);
         uint32_t tmp = 0;
@@ -136,7 +134,7 @@ void CScriptArch::add(CScript *script)
         {
             tmp[i] = m_scripts[i];
         }
-        m_scripts = std::move(tmp);
+        m_scripts.swap(tmp);
     }
     m_scripts[m_size] = script;
     ++m_size;
@@ -187,7 +185,7 @@ bool CScriptArch::indexFromFile(const char *filename, uint32_t *&index, uint32_t
     FILE *sfile = fopen(filename, "rb");
     if (sfile)
     {
-        char signature[4];
+        char signature[SIGNATURE_SIZE];
         uint16_t version = 0;
         uint16_t dwCount = 0;
         uint32_t indexOffset = 0;
@@ -214,6 +212,39 @@ bool CScriptArch::indexFromFile(const char *filename, uint32_t *&index, uint32_t
         fclose(sfile);
     }
     return sfile != nullptr;
+}
+
+bool CScriptArch::indexFromMemory(const uint8_t *data, uint32_t *&index, uint32_t &size)
+{
+    char signature[SIGNATURE_SIZE];
+    uint16_t version = 0;
+    uint16_t dwCount = 0;
+    uint32_t indexOffset = 0;
+    uint8_t *p = const_cast<uint8_t *>(data);
+    auto memread = [&p](auto __m__, auto __s__)
+    {
+        memcpy(p, __m__, __s__);
+        p += __s__;
+    };
+    memread(signature, sizeof(signature));
+    memread(&version, sizeof(version));
+    if (memcmp(signature, SIGNATURE, sizeof(signature)) != 0)
+    {
+        printf("invalid signature: %s\n", signature);
+        return false;
+    }
+    if (version > VERSION)
+    {
+        printf("invalid version: %d\n", version);
+        return false;
+    }
+    memread(&dwCount, sizeof(dwCount));
+    memread(&indexOffset, sizeof(indexOffset));
+    p = const_cast<uint8_t *>(data + indexOffset);
+    index = new uint32_t[dwCount];
+    memread(index, dwCount * sizeof(uint32_t));
+    size = dwCount;
+    return true;
 }
 
 CScript *CScriptArch::removeAt(int i)

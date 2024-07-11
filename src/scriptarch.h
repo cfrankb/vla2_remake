@@ -40,6 +40,7 @@ public:
     inline CScript *operator[](int i);
     inline CScript *at(int i);
     static bool indexFromFile(const char *filename, uint32_t *&index, uint32_t &size);
+    static bool indexFromMemory(const uint8_t *data, uint32_t *&index, uint32_t &size);
     CScript *removeAt(int i);
 
 private:
@@ -48,9 +49,10 @@ private:
         GROW_BY = 16,
         VERSION = 0,
         INDEXPTR_OFFSET = 8,
-        COUNT_OFFSET = 6
+        COUNT_OFFSET = 6,
+        SIGNATURE_SIZE = 4,
     };
-
+    constexpr static const char SIGNATURE[]{"SCRX"};
     uint32_t m_size;
     uint32_t m_max;
     std::unique_ptr<CScript *[]> m_scripts;

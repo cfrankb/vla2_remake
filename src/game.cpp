@@ -37,47 +37,32 @@ constexpr const char MaxHP[]{"MaxHP"};
 constexpr const char FlowerHpBonus[]{"FlowerHpBonus"};
 constexpr const char LevelCompletionBonus[]{"LevelCompletionBonus"};
 constexpr const char ShowPoints[]{"ShowPoints"};
+constexpr const char CANN_ID[] = "CANN";
+constexpr const char INMA_ID[] = "INMA";
+constexpr const char FISH_ID[] = "FISH";
+constexpr const char SLUG_ID[] = "SLUG";
+constexpr const char GOLD_ID[] = "GOLD";
 
 static CGame *g_game = nullptr;
 
-constexpr uint16_t g_points[]{
-    10,
-    15,
-    25,
-    50,
-    100,
-    200,
-    300,
-    400,
-    500,
-    1000,
-    2000,
-    5000,
-    10000,
+inline auto _L = [](auto _s_)
+{
+    return reinterpret_cast<const uint32_t *>(_s_);
 };
-
-constexpr int pointCount = sizeof(g_points) / sizeof(uint16_t);
-
-constexpr uint8_t AIMS[]{
-    CActor::AIM_UP,
-    CActor::AIM_DOWN,
-    CActor::AIM_LEFT,
-    CActor::AIM_RIGHT};
-
-#define _J(_s_, _a_)          \
-    {                         \
-        .seq = _s_,           \
-        .count = sizeof(_s_), \
-        .aim = _a_            \
-    }
-
-#define _L(_s_) reinterpret_cast<const uint32_t *>(_s_)
 
 using jumpSeq_t = struct
 {
     const uint8_t *seq;
     const int count;
     const uint8_t aim;
+};
+
+inline auto _J = [](auto _s_, auto _a_)
+{
+    return jumpSeq_t{
+        .seq = _s_,
+        .count = sizeof(_s_),
+        .aim = _a_};
 };
 
 enum
@@ -210,12 +195,12 @@ bool CGame::loadLevel(int i)
     if (sfile)
     {
         // seek to level offset
-        fseek(sfile, m_scriptIndex[i], SEEK_SET);
+        fseek(sfile, m_scriptIndex[i % m_scriptCount], SEEK_SET);
         // read level
         result = m_script->read(sfile);
         fclose(sfile);
         m_script->sort();
-        m_script->insertAt(0, CActor());
+        m_script->insertAt(0, CActor{});
         m_goals = m_script->countType(TYPE_FLOWER);
         // printf("flowers: %d\n", m_goals);
         int i = m_script->findPlayerIndex();
@@ -454,7 +439,6 @@ bool CGame::canMove(const CActor &actor, int aim)
             {
                 return false;
             }
-
             //  check map entries for inbound collisions
             if (mapEntry.player() || mapEntry.acEntry())
             {
@@ -613,7 +597,7 @@ CGame *CGame::getGame()
 {
     if (!g_game)
     {
-        g_game = new CGame();
+        g_game = new CGame{};
     }
     return g_game;
 }
@@ -664,7 +648,6 @@ bool CGame::manageJump(const uint8_t *joyState)
         {
             m_jumpIndex = 0;
             uint8_t newAim = NO_AIM;
-
             if (joyState[UP] && joyState[LEFT])
             {
                 newAim = UP_LEFT;
@@ -694,7 +677,6 @@ bool CGame::manageJump(const uint8_t *joyState)
                     }
                 }
             }
-
             if (newAim != NO_AIM)
             {
                 m_player->aim = g_jumpSeqs[newAim].aim;
@@ -709,7 +691,6 @@ bool CGame::manageJump(const uint8_t *joyState)
 
 void CGame::managePlayer(const uint8_t *joyState)
 {
-
     managePlayerOxygenControl();
 
     // animate player
@@ -728,12 +709,10 @@ void CGame::managePlayer(const uint8_t *joyState)
     }
 
     consumeAll();
-
     unmapEntry(NONE, *m_player);
     for (uint8_t i = 0; i < sizeof(AIMS); ++i)
     {
         const uint8_t aim = AIMS[i];
-
         if (joyState[aim])
         {
             bool ok = false;
@@ -767,7 +746,6 @@ void CGame::managePlayer(const uint8_t *joyState)
 void CGame::preloadAssets()
 {
     CFileWrap file;
-
     using asset_t = struct
     {
         const char *filename;
@@ -980,6 +958,7 @@ void CGame::manageFlyingPlatform(int i, CActor &actor)
 /// @brief
 void CGame::manageMonsters(uint32_t ticks)
 {
+    // compute all time slices
     bool speeds[speedCount];
     for (uint32_t i = 0; i < sizeof(speeds); ++i)
     {
@@ -1015,25 +994,25 @@ void CGame::manageMonsters(uint32_t ticks)
         switch (actor.type)
         {
         case TYPE_FISH:
-            manageDroneVariant(i, actor, "FISH", FishFrameCycle);
+            manageDroneVariant(i, actor, FISH_ID, FishFrameCycle);
             break;
         case TYPE_VAMPIREPLANT:
             manageVamplant(i, actor);
             break;
         case TYPE_VCREA:
-            manageVCreatureVariant(i, actor, nullptr, 0);
+            manageVCreatureVariant(i, actor, nullptr, VCreaFrameCycle);
             break;
         case TYPE_FLYPLAT:
             manageFlyingPlatform(i, actor);
             break;
         case TYPE_CANNIBAL:
-            manageVCreatureVariant(i, actor, "CANN", 3);
+            manageVCreatureVariant(i, actor, CANN_ID, CannibalFrameCycle);
             break;
         case TYPE_INMANGA:
-            manageDroneVariant(i, actor, "INMA", InMangaFrameCycle);
+            manageDroneVariant(i, actor, INMA_ID, InMangaFrameCycle);
             break;
         case TYPE_GREENFLEA:
-            manageVCreatureVariant(i, actor, "SLUG", 2);
+            manageVCreatureVariant(i, actor, SLUG_ID, FleaFrameCycle);
         };
     }
 }
@@ -1066,7 +1045,7 @@ void CGame::addToScore(int score)
     m_score += score;
 }
 
-void CGame::handleRemove(int j, CActor &entry)
+void CGame::handleRemove(int j, const CActor &entry)
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
@@ -1083,7 +1062,7 @@ void CGame::handleRemove(int j, CActor &entry)
     }
 }
 
-void CGame::handleChange(int j, CActor &entry)
+void CGame::handleChange(int j, const CActor &entry)
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
@@ -1101,7 +1080,7 @@ void CGame::handleChange(int j, CActor &entry)
     }
 }
 
-void CGame::handleTeleport(int j, CActor &entry)
+void CGame::handleTeleport(int j, const CActor &entry)
 {
     for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
     {
@@ -1165,7 +1144,7 @@ bool CGame::consumeObject(uint16_t j)
         break;
     case TYPE_DIAMOND:
         if ((entry.imageId != 0) &&
-            (entry.imageId == xdefine("GOLD")))
+            (entry.imageId == xdefine(GOLD_ID)))
         {
             points = _50pts;
             m_coins += 5;
@@ -1201,7 +1180,7 @@ bool CGame::consumeObject(uint16_t j)
         }
         break;
     case TYPE_MUSHROOM:
-        points = entry.imageId % pointCount;
+        points = entry.imageId % PointCount;
         break;
     case TYPE_MISC:
         if (entry.imageId == 5)
@@ -1237,7 +1216,7 @@ bool CGame::consumeObject(uint16_t j)
     }
     else
     {
-        addToScore(g_points[points]);
+        addToScore(m_pointValues[points]);
         entry.type = define(ShowPoints) ? TYPE_POINTS : TYPE_EMPTY;
         entry.imageId = points;
     }
@@ -1640,7 +1619,7 @@ void CGame::splitString(const std::string &str, StringVector &list)
     {
         if (isspace(str[j]))
         {
-            list.push_back(str.substr(i, j - i));
+            list.emplace_back(str.substr(i, j - i));
             while (isspace(str[j]) && j < str.length())
             {
                 ++j;
@@ -1650,7 +1629,7 @@ void CGame::splitString(const std::string &str, StringVector &list)
         }
         ++j;
     }
-    list.push_back(str.substr(i, j - i));
+    list.emplace_back(str.substr(i, j - i));
 }
 
 bool CGame::readConfig(const char *confName)
@@ -1812,7 +1791,6 @@ void CGame::debugFrameMap(const char *outFile)
             {
                 uint8_t c = *map++;
                 uint8_t *p = &m_fontData[c * FNT_BLOCK_SIZE];
-
                 for (int y = 0; y < FNT_BLOCK_SIZE; ++y)
                 {
                     uint8_t bits = p[y];
@@ -1884,7 +1862,6 @@ void CGame::debugLevel(const char *filename)
         }
         delete[] data;
     }
-
     printf("total images:%zu\n", imageNames.size());
 
     FILE *tfile = fopen(filename, "wb");
@@ -1892,7 +1869,6 @@ void CGame::debugLevel(const char *filename)
     {
         fprintf(tfile, "imsfilename: %s\n", m_loadedTileSet.c_str());
         fprintf(tfile, "tiles: %d\n\n", m_frameSet->getSize());
-
         for (int i = 0; i < m_script->getSize(); ++i)
         {
             const CActor &entry = (*m_script)[i];

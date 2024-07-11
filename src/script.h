@@ -41,6 +41,7 @@ public:
     void forget();
     bool write(FILE *tfile);
     bool read(FILE *sfile);
+    bool fromMemory(const uint8_t *data);
     std::string name() const;
     void setName(const std::string &name);
     std::string tileset() const;
@@ -75,7 +76,7 @@ public:
     }
     constexpr static inline bool isObjectType(const uint8_t type)
     {
-        return (type <= 0x1f) &&
+        return (type <= TYPE_OBJECT_SUBGROUP) &&
                (type != TYPE_PLAYER) &&
                (type != TYPE_BLANK);
     }
