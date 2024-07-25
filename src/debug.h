@@ -22,5 +22,6 @@ bool testArch();
 bool createScriptArch();
 void exportIms();
 void compositeAll();
+void generateSTX();
 
 #endif

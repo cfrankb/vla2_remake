@@ -38,7 +38,7 @@ def get_deps_blocks():
     deps_blocks.append('\n'.join(lines))
     lines = []
     lines.append('clean:')
-    lines.append("\trm -f $(BPATH)/*")
+    lines.append("\trm -rf $(BPATH)/*")
     deps_blocks.append('\n'.join(lines))
     return deps_blocks, objs
 
@@ -58,6 +58,7 @@ python bin/gen.py emsdl
 
 EMS_NAME = 'vlamits2'
 SDL_NAME = 'vlamits2-sdl'
+DEBUG = 0
 
 
 def main():
@@ -69,7 +70,7 @@ def main():
             'CXX=g++',
             'INC=',
             'LIBS=-lSDL2 -lz',
-            'CXXFLAGS=-O3',
+            'CXXFLAGS=-g3' if DEBUG else 'CXXFLAGS=-O3',
             'PARGS=',
             'BPATH=build', f'BNAME={SDL_NAME}', 'TARGET=$(BPATH)/$(BNAME)'
         ]
@@ -80,7 +81,7 @@ def main():
             'CXX=emcc',
             'INC=',
             'LIBS=',
-            'CXXFLAGS=-sUSE_SDL=2 -sUSE_ZLIB=1 -DWASM -O2',
+            'CXXFLAGS=-sUSE_SDL=2 -sUSE_ZLIB=1 -O2',
             'PARGS=--preload-file data --emrun -O2 -sWASM=1',
             'BPATH=build', f'BNAME={EMS_NAME}.html', 'TARGET=$(BPATH)/$(BNAME)'
         ]

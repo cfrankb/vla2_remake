@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "runtime.h"
-#ifdef WASM
+#ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
@@ -46,7 +46,7 @@ int main(int argc, char *args[])
     runtime.init(MAPARCH_FILE, CONFIG_FILE, startLevel);
     runtime.SDLInit();
     runtime.paint();
-#ifdef WASM
+#ifdef __EMSCRIPTEN__
     emscripten_set_main_loop_arg(loop_handler, &runtime, -1, 1);
 #else
     while (true)

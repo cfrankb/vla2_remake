@@ -20,6 +20,7 @@
 
 #include <cstdint>
 #include <string>
+#include <vector>
 
 class CFrameSet;
 class CFrame;
@@ -30,6 +31,13 @@ public:
     CImsWrap();
     ~CImsWrap();
 
+    using stoEntry_t = struct
+    {
+        uint8_t task;
+        uint8_t objtype;
+        uint16_t imageID;
+    };
+
     bool readIMS(const char *imsFilename);
     bool readSCR(const char *scrFilename);
     bool readSTO(const char *stoFilename);
@@ -38,18 +46,14 @@ public:
     void debug(const char *filename);
     const char *stoName();
     static const char *getTypeName(int typeId);
+    const stoEntry_t *stoData(int &count);
+    static const char *taskName(int i);
+    void toImageList(std::vector<std::string> &list);
 
 protected:
     using fntEntry_t = struct
     {
         uint8_t pixels[64];
-    };
-
-    using stoEntry_t = struct
-    {
-        uint8_t task;
-        uint8_t objtype;
-        uint16_t imageID;
     };
 
     using imsEntry_t = struct

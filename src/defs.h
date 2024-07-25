@@ -43,6 +43,7 @@
 #define TYPE_GREENFLEA 0x0cf
 
 #define TYPE_LADDER 0x0d0
+#define TYPE_TREE 0x0d1
 #define TYPE_BRIDGE 0x0d2
 #define TYPE_LADDERDING 0x0d3
 #define TYPE_SAND 0x0dd

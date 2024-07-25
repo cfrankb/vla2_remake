@@ -60,6 +60,7 @@ constexpr filedef_t filedefs[] = {
     {"oldvla.ims", "_leva2.scr", "amionoux truc"},
     {"oldvla.ims", "_leva1.scr", "le grand complexe_"},
     {"oldvla.ims", "_leva4.scr", "zoomy zoom zoom!"},
+    {"oldvla.ims", "_leva5.scr", "missing level"},
     {"oldvla.ims", "_leva6.scr", "whoops!"},
     {"oldvla.ims", "_leva7.scr", "***whoops!"},
 };
@@ -143,7 +144,7 @@ void compositeAll()
     for (size_t i = 0; i < count; ++i)
     {
         const filedef_t &def = filedefs[i];
-        const std::string scrFile = std::string("data/") + def.scrFile;
+        const std::string scrFile = std::string("techdocs/data/old/") + def.scrFile;
         const std::string imsFile = std::string("data/") + def.imsFile;
         char pngName[16];
         strcpy(pngName, def.scrFile);
@@ -169,7 +170,7 @@ bool createScriptArch()
     for (size_t i = 0; i < count; ++i)
     {
         const filedef_t &def = filedefs[i];
-        const std::string scrFile = std::string("data/") + def.scrFile;
+        const std::string scrFile = std::string("techdocs/data/old/") + def.scrFile;
         printf("file:%s\n", scrFile.c_str());
         FILE *sfileSCR = fopen(scrFile.c_str(), "rb");
         if (sfileSCR)
@@ -228,4 +229,67 @@ bool testArch()
         return false;
     }
     return true;
+}
+
+void generateSTX()
+{
+    const char *tilesets[] = {
+        "jungle",
+        "caves",
+        "ocean",
+        "oldvla",
+    };
+
+    for (uint32_t i = 0; i < sizeof(tilesets) / sizeof(tilesets[0]); ++i)
+    {
+        const std::string stoFile = std::string("techdocs/data/old/") + tilesets[i] + std::string(".sto");
+        const std::string imsFile = std::string("data/") + tilesets[i] + std::string(".ims");
+        const std::string stxFile = std::string("out/") + tilesets[i] + std::string(".stx");
+        CImsWrap wrap;
+        if (!wrap.readIMS(imsFile.c_str()))
+        {
+            printf("failed to read: %s\n", imsFile.c_str());
+            continue;
+        }
+        if (!wrap.readSTO(stoFile.c_str()))
+        {
+            printf("failed to read: %s\n", stoFile.c_str());
+            continue;
+        }
+
+        std::vector<std::string> imageList;
+
+        int count;
+        const CImsWrap::stoEntry_t *entries = wrap.stoData(count);
+        wrap.toImageList(imageList);
+
+        char tmp[1024];
+        CFileWrap file;
+        if (file.open(stxFile.c_str(), "wb"))
+        {
+            file += "[images]\n";
+            for (size_t i = 0; i < imageList.size(); ++i)
+            {
+                sprintf(tmp, "%.4x %s\n", i, imageList[i].c_str());
+                char *p;
+                while (p = strstr(tmp, "#"))
+                {
+                    *p = '_';
+                }
+                file += tmp;
+            }
+            file += "\n[types]\n";
+            for (int i = 0; i < count; ++i)
+            {
+                auto &cur = entries[i];
+                sprintf(tmp, "%.2x %.2x %.4x # %-16s %-20s %s\n",
+                        cur.task, cur.objtype, cur.imageID,
+                        CImsWrap::taskName(cur.task),
+                        CImsWrap::getTypeName(cur.objtype),
+                        cur.imageID < imageList.size() ? imageList[cur.imageID].c_str() : "???");
+                file += tmp;
+            }
+            file.close();
+        }
+    }
 }

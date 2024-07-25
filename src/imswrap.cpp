@@ -25,10 +25,9 @@
 #include "shared/FrameSet.h"
 #include "shared/Frame.h"
 
-#define _C(cl)  \
-    {           \
-        cl, #cl \
-    }
+#define _C(cl) \
+    {          \
+        cl, #cl}
 
 using typeDef_t = struct
 {
@@ -167,7 +166,7 @@ bool CImsWrap::readSTO(const char *stoFilename)
     {
         uint16_t dataLenght = 0;
         fread(&dataLenght, sizeof(dataLenght), 1, sfileSTO);
-        fread(&imsName, sizeof(imsName), 1, sfileSTO);
+        fread(imsName, sizeof(imsName), 1, sfileSTO);
         m_stoEntries = dataLenght / sizeof(stoEntry_t);
         m_stoData = new stoEntry_t[m_stoEntries];
         fread(m_stoData, dataLenght, 1, sfileSTO);
@@ -251,6 +250,7 @@ const char *CImsWrap::getTypeName(int typeId)
         _C(TYPE_GREENFLEA),
 
         _C(TYPE_LADDER),
+        _C(TYPE_TREE),
         _C(TYPE_BRIDGE),
         _C(TYPE_LADDERDING),
 
@@ -444,5 +444,38 @@ void CImsWrap::drawScreen(CFrame &screen, CFrameSet &frameSet)
                 }
             }
         }
+    }
+}
+
+const CImsWrap::stoEntry_t *CImsWrap::stoData(int &count)
+{
+    count = m_stoEntries;
+    return m_stoData;
+}
+
+const char *CImsWrap::taskName(int i)
+{
+    static const char *tasks[]{
+        "TASK_None",
+        "TASK_Remove",
+        "TASK_Source",
+        "TASK_Dest",
+        "TASK_Change",
+        "TASK_Messager",
+    };
+    return tasks[i];
+}
+
+void CImsWrap::toImageList(std::vector<std::string> &list)
+{
+    list.clear();
+    for (int i = 0; i < m_imgCount; ++i)
+    {
+        auto &lookup = m_imsLookup[i];
+        if (lookup.name[0] == '+')
+        {
+            break;
+        }
+        list.emplace_back(lookup.name);
     }
 }

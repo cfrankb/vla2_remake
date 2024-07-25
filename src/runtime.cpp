@@ -162,7 +162,7 @@ bool CRuntime::doInput()
             break;
 
         case SDL_QUIT:
-#ifndef WASM
+#ifndef __EMSCRIPTEN__
             return false;
 #endif
 

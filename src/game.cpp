@@ -1545,12 +1545,12 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
     char *e = strstr(p, "\n");
     if (e)
     {
-        *e = 0;
+        *e = '\0';
     }
     char *m = strstr(p, "\r");
     if (m)
     {
-        *m = 0;
+        *m = '\0';
     }
     if (m > e)
     {
@@ -1560,7 +1560,7 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
     char *c = strstr(p, "#");
     if (c)
     {
-        *c = 0;
+        *c = '\0';
     }
     int n = strlen(p);
     if (n)
@@ -1568,7 +1568,7 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
         char *t = p + n - 1;
         while (t > p && isspace(*t))
         {
-            *t = 0;
+            *t = '\0';
             --t;
         }
     }
@@ -1583,7 +1583,7 @@ char *CGame::parseLine(int &line, std::string &tileset, char *p)
         char *t = strstr(p, "]");
         if (t)
         {
-            *t = 0;
+            *t = '\0';
         }
         else
         {
