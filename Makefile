@@ -1,10 +1,10 @@
-CXX=g++
+CXX=emcc
 INC=
-LIBS=-lSDL2 -lz
-CXXFLAGS=-O3
-PARGS=
+LIBS=
+CXXFLAGS=-sUSE_SDL=2 -sUSE_ZLIB=1 -O2
+PARGS=--preload-file data --emrun -O2 -sWASM=1
 BPATH=build
-BNAME=vlamits2-sdl
+BNAME=vlamits2.html
 TARGET=$(BPATH)/$(BNAME)
 DEPS=$(BPATH)/script$(EXT) $(BPATH)/runtime$(EXT) $(BPATH)/main$(EXT) $(BPATH)/framemap$(EXT) $(BPATH)/game$(EXT) $(BPATH)/debug$(EXT) $(BPATH)/imswrap$(EXT) $(BPATH)/actor$(EXT) $(BPATH)/scriptarch$(EXT) $(BPATH)/mapentry$(EXT) $(BPATH)/FrameSet$(EXT) $(BPATH)/Frame$(EXT) $(BPATH)/DotArray$(EXT) $(BPATH)/helper$(EXT) $(BPATH)/PngMagic$(EXT) $(BPATH)/FileWrap$(EXT)
 EXT=.o

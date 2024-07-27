@@ -270,11 +270,12 @@ void generateSTX()
             file += "[images]\n";
             for (size_t i = 0; i < imageList.size(); ++i)
             {
-                sprintf(tmp, "%.4x %s\n", i, imageList[i].c_str());
-                char *p;
-                while (p = strstr(tmp, "#"))
+                sprintf(tmp, "%.4x %s\n", static_cast<uint32_t>(i), imageList[i].c_str());
+                char *p = strstr(tmp, "#");
+                while (p)
                 {
                     *p = '_';
+                    p = strstr(tmp, "#");
                 }
                 file += tmp;
             }

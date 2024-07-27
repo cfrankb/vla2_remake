@@ -29,6 +29,8 @@
     {          \
         cl, #cl}
 
+#define _N(__X) #__X
+
 using typeDef_t = struct
 {
     int typeId;
@@ -456,12 +458,12 @@ const CImsWrap::stoEntry_t *CImsWrap::stoData(int &count)
 const char *CImsWrap::taskName(int i)
 {
     static const char *tasks[]{
-        "TASK_None",
-        "TASK_Remove",
-        "TASK_Source",
-        "TASK_Dest",
-        "TASK_Change",
-        "TASK_Messager",
+        _N(TASK_NONE),
+        _N(TASK_REMOVE),
+        _N(TASK_SOURCE),
+        _N(TASK_DEST),
+        _N(TASK_CHANGE),
+        _N(TASK_MESSAGER),
     };
     return tasks[i];
 }

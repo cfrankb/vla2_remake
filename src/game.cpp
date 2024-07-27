@@ -65,7 +65,7 @@ inline auto _J = [](auto _s_, auto _a_)
         .aim = _a_};
 };
 
-enum
+enum : uint8_t
 {
     UP,
     DOWN,
@@ -88,7 +88,7 @@ constexpr uint8_t jumpUP_RIGHT[]{UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN,
 constexpr uint8_t jumpDOWN_LEFT[]{UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
 constexpr uint8_t jumpDOWN_RIGHT[]{UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
 
-constexpr jumpSeq_t g_jumpSeqs[]{
+const jumpSeq_t g_jumpSeqs[]{
     _J(jumpUP, UP),
     _J(jumpDOWN, DOWN),
     _J(jumpLEFT, LEFT),

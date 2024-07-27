@@ -33,6 +33,6 @@ TBD
 
 ### Play online
 
-Use cursor keys to move the player and SHIFT to jump.
+Use cursor keys to move the player and SHIFT/SPACE to jump.
 
 https://cfrankb.com/games/ems/vlamits2.html
