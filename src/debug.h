@@ -18,10 +18,17 @@
 #ifndef __DEBUG__H
 #define __DEBUG__H
 
+class CScript;
+class CFrameSet;
+class CFrameMap;
+#include <cstdint>
+
 bool testArch();
 bool createScriptArch();
 void exportIms();
 void compositeAll();
 void generateSTX();
+void debugLevel(const char *filename, const char *tileset, CScript *script);
+void debugFrameMap(const char *outFile, CFrameMap *frameMap, CFrameSet *frameSet, uint8_t *fontData);
 
 #endif

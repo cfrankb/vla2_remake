@@ -1778,44 +1778,6 @@ void CGame::managePlayerOxygenControl()
     }
 }
 
-void CGame::debugFrameMap(const char *outFile)
-{
-    CFrameSet fs;
-    for (int i = 0; i < m_frameSet->getSize(); ++i)
-    {
-        CFrame *frame = new CFrame((*m_frameSet)[i]);
-        uint8_t *map = m_frameMap->mapPtr(i);
-        for (int j = 0; j < frame->hei() / FNT_BLOCK_SIZE; ++j)
-        {
-            for (int k = 0; k < frame->len() / FNT_BLOCK_SIZE; ++k)
-            {
-                uint8_t c = *map++;
-                uint8_t *p = &m_fontData[c * FNT_BLOCK_SIZE];
-                for (int y = 0; y < FNT_BLOCK_SIZE; ++y)
-                {
-                    uint8_t bits = p[y];
-                    for (int x = 0; x < FNT_BLOCK_SIZE; ++x)
-                    {
-                        if (bits & 1)
-                        {
-                            frame->at(k * FNT_BLOCK_SIZE + x, j * FNT_BLOCK_SIZE + y) = 0xff00ffff;
-                        }
-                        bits = bits >> 1;
-                    }
-                }
-            }
-        }
-        fs.add(frame);
-    }
-
-    CFileWrap file;
-    if (file.open(outFile, "wb"))
-    {
-        fs.write(file);
-        file.close();
-    }
-}
-
 int CGame::findLevelHeight()
 {
     int len, hei;
@@ -1827,54 +1789,4 @@ int CGame::findLevelHeight()
         maxY = std::max(maxY, cur.y + hei);
     }
     return maxY;
-}
-
-void CGame::debugLevel(const char *filename)
-{
-    std::unordered_map<uint16_t, std::string> imageNames;
-    std::string mapFile = std::string("data/") + m_loadedTileSet + ".map";
-    printf("reading: %s\n", mapFile.c_str());
-    FILE *sfile = fopen(mapFile.c_str(), "rb");
-    if (sfile)
-    {
-        fseek(sfile, 0, SEEK_END);
-        size_t size = ftell(sfile);
-        fseek(sfile, 0, SEEK_SET);
-        char *data = new char[size + 1];
-        data[size] = 0;
-        fread(data, size, 1, sfile);
-        fclose(sfile);
-        char *p = data;
-        uint16_t i = 0;
-        while (p && *p)
-        {
-            char *e = strstr(p, "\n");
-            if (e)
-            {
-                *e = 0;
-            }
-            if (*p)
-            {
-                imageNames[i] = p;
-            }
-            ++i;
-            p = e ? ++e : nullptr;
-        }
-        delete[] data;
-    }
-    printf("total images:%zu\n", imageNames.size());
-
-    FILE *tfile = fopen(filename, "wb");
-    if (tfile)
-    {
-        fprintf(tfile, "imsfilename: %s\n", m_loadedTileSet.c_str());
-        fprintf(tfile, "tiles: %d\n\n", m_frameSet->getSize());
-        for (int i = 0; i < m_script->getSize(); ++i)
-        {
-            const CActor &entry = (*m_script)[i];
-            fprintf(tfile, "#%d attr %x type %.2x (%s)\n", i, entry.attr, entry.type, CImsWrap::getTypeName(entry.type));
-            fprintf(tfile, "    u1 %x u2 %x imageId %d (%s)\n", entry.u1, entry.u2, entry.imageId, imageNames[entry.imageId].c_str());
-            fprintf(tfile, "    x:%d y:%d \n\n", entry.x, entry.y);
-        }
-    }
 }

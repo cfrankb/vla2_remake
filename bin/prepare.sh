@@ -1,7 +1,7 @@
 #!/bin/bash
 BIN=vlamits2
 mkdir -p ./build/final
-rm ./build/final/*
+rm -f ./build/final/*
 cp ./build/$BIN.* ./build/final
 gzip  ./build/final/*.data ./build/final/*.wasm
 mv ./build/final/$BIN.data.gz ./build/final/$BIN.data

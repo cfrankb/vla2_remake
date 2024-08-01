@@ -52,8 +52,6 @@ public:
     bool manageJump(const uint8_t *joyState);
     void preloadAssets();
     void manageMonsters(uint32_t ticks);
-    void debugFrameMap(const char *outFile);
-    void debugLevel(const char *filename);
     void setLevel(int i);
     int level();
     int lives();
