@@ -27,6 +27,7 @@
 #include "imswrap.h"
 #include "framemap.h"
 #include "actor.h"
+#include "script.h"
 
 constexpr const char DEFAULT_ARCHFILE[]{"data/levels.scrx"};
 constexpr const char DefaultHp[]{"DefaultHp"};

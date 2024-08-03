@@ -33,25 +33,25 @@
 #define TYPE_POINTS 0x8e
 #define TYPE_EMPTY 0x8f
 
-#define TYPE_FISH 0x0c0
-#define TYPE_VCREA 0x0c1
-#define TYPE_VAMPIREPLANT 0x0c2
-#define TYPE_FLYPLAT 0x0c3
-#define TYPE_SPIDER 0x0c4
-#define TYPE_CANNIBAL 0x0c5
-#define TYPE_INMANGA 0x0c6
-#define TYPE_GREENFLEA 0x0cf
+#define TYPE_FISH 0xc0
+#define TYPE_VCREA 0xc1
+#define TYPE_VAMPIREPLANT 0xc2
+#define TYPE_FLYPLAT 0xc3
+#define TYPE_SPIDER 0xc4
+#define TYPE_CANNIBAL 0xc5
+#define TYPE_INMANGA 0xc6
+#define TYPE_GREENFLEA 0xcf
 
-#define TYPE_LADDER 0x0d0
-#define TYPE_TREE 0x0d1
-#define TYPE_BRIDGE 0x0d2
-#define TYPE_LADDERDING 0x0d3
-#define TYPE_SAND 0x0dd
-#define TYPE_TOPWATER 0x0de
-#define TYPE_BOTTOMWATER 0x0df
-#define TYPE_OBSTACLECLASS 0x0e0
-#define TYPE_STOPCLASS 0x0f0
-#define TYPE_LAVA 0x0ff
+#define TYPE_LADDER 0xd0
+#define TYPE_TREE 0xd1
+#define TYPE_BRIDGE 0xd2
+#define TYPE_LADDERDING 0xd3
+#define TYPE_SAND 0xdd
+#define TYPE_TOPWATER 0xde
+#define TYPE_BOTTOMWATER 0xdf
+#define TYPE_OBSTACLECLASS 0xe0
+#define TYPE_STOPCLASS 0xf0
+#define TYPE_LAVA 0xff
 
 // filters
 

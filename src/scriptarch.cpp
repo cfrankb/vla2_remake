@@ -19,6 +19,7 @@
 #include "script.h"
 #include <cstdio>
 #include <cstring>
+#include <string>
 
 CScriptArch::CScriptArch()
 {
@@ -52,12 +53,14 @@ bool CScriptArch::read(const char *filename)
         fread(&version, sizeof(version), 1, sfile);
         if (memcmp(signature, SIGNATURE, sizeof(signature)) != 0)
         {
+            m_lastError = "invalid signature";
             printf("invalid signature: %s\n", signature);
             fclose(sfile);
             return false;
         }
         if (version > VERSION)
         {
+            m_lastError = "invalid version";
             printf("invalid version: %d\n", version);
             fclose(sfile);
             return false;
@@ -65,25 +68,27 @@ bool CScriptArch::read(const char *filename)
         fread(&count, sizeof(count), 1, sfile);
         fread(&indexPtr, sizeof(indexPtr), 1, sfile);
 
-        printf("count: %d\n", count);
-        // read index
+        //  read index
         m_size = count;
         m_max = m_size;
         uint32_t *index = new uint32_t[m_size];
         fseek(sfile, indexPtr, SEEK_SET);
-        printf("indexPtr: %.8x\n", indexPtr);
         fread(index, sizeof(uint32_t) * m_size, 1, sfile);
         m_scripts = std::make_unique<CScript *[]>(m_size);
 
         // read individual scripts
         for (int i = 0; i < count; ++i)
         {
-            printf("--> script:%d [index: 0x%.8x]\n", i, index[i]);
+            m_scripts[i] = new CScript;
             fseek(sfile, index[i], SEEK_SET);
             m_scripts[i]->read(sfile);
         }
         delete[] index;
         fclose(sfile);
+    }
+    else
+    {
+        m_lastError = "can't open file";
     }
     return sfile != nullptr;
 }
@@ -91,7 +96,7 @@ bool CScriptArch::read(const char *filename)
 /// @brief
 /// @param filename
 /// @return
-bool CScriptArch::write(const char *filename) const
+bool CScriptArch::write(const char *filename)
 {
     FILE *tfile = fopen(filename, "wb");
     if (tfile)
@@ -105,7 +110,7 @@ bool CScriptArch::write(const char *filename) const
 
         uint32_t *index = new uint32_t[m_size];
         printf("count:%d\n", m_size);
-        for (int i = 0; i < m_size; ++i)
+        for (uint32_t i = 0; i < m_size; ++i)
         {
             CScript *script = m_scripts[i];
             index[i] = ftell(tfile);
@@ -120,7 +125,9 @@ bool CScriptArch::write(const char *filename) const
         fwrite(&indexPtr, sizeof(indexPtr), 1, tfile);
         delete[] index;
         fclose(tfile);
+        return true;
     }
+    m_lastError = "can't open file";
     return tfile != nullptr;
 }
 
@@ -130,7 +137,7 @@ void CScriptArch::add(CScript *script)
     {
         m_max += GROW_BY;
         std::unique_ptr<CScript *[]> tmp = std::make_unique<CScript *[]>(m_max);
-        for (int i = 0; i < m_size; ++i)
+        for (uint32_t i = 0; i < m_size; ++i)
         {
             tmp[i] = m_scripts[i];
         }
@@ -149,7 +156,7 @@ void CScriptArch::forget()
 {
     if (m_scripts)
     {
-        for (int i = 0; i < m_size; ++i)
+        for (uint32_t i = 0; i < m_size; ++i)
         {
             delete m_scripts[i];
         }
@@ -159,7 +166,7 @@ void CScriptArch::forget()
     m_max = 0;
 }
 
-int CScriptArch::getSize() const
+int CScriptArch::size() const
 {
     return m_size;
 }
@@ -216,7 +223,7 @@ bool CScriptArch::indexFromFile(const char *filename, uint32_t *&index, uint32_t
 
 bool CScriptArch::indexFromMemory(const uint8_t *data, uint32_t *&index, uint32_t &size)
 {
-    char signature[SIGNATURE_SIZE];
+    char signature[SIGNATURE_SIZE]{};
     uint16_t version = 0;
     uint16_t dwCount = 0;
     uint32_t indexOffset = 0;
@@ -250,10 +257,36 @@ bool CScriptArch::indexFromMemory(const uint8_t *data, uint32_t *&index, uint32_
 CScript *CScriptArch::removeAt(int i)
 {
     CScript *t = m_scripts[i];
-    for (int j = i; j < m_size - 1; ++j)
+    for (uint32_t j = i; j < m_size - 1; ++j)
     {
         m_scripts[j] = m_scripts[j + 1];
     }
     --m_size;
     return t;
+}
+
+const char *CScriptArch::lastError()
+{
+    return m_lastError.c_str();
+}
+
+void CScriptArch::insertAt(int i, CScript *script)
+{
+    if (m_size == m_max)
+    {
+        m_max += GROW_BY;
+        std::unique_ptr<CScript *[]> tmp = std::make_unique<CScript *[]>(m_max);
+        for (uint32_t i = 0; i < m_size; ++i)
+        {
+            tmp[i] = m_scripts[i];
+        }
+        m_scripts.swap(tmp);
+    }
+
+    for (int j = m_size; j > i; --j)
+    {
+        m_scripts[j] = m_scripts[j - 1];
+    }
+    m_scripts[i] = script;
+    ++m_size;
 }

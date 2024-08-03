@@ -19,7 +19,7 @@
 #define __FRAMEMAP_H
 
 #include <cstdint>
-
+#include <unordered_set>
 class CFrameSet;
 class CFrame;
 

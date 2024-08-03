@@ -18,9 +18,10 @@
 #ifndef __SCRIPTARCH
 #define __SCRIPTARCH
 
+#include <string>
 #include <cstdint>
+#include <string>
 #include <memory>
-#include "script.h"
 
 class CScript;
 class CActor;
@@ -32,16 +33,18 @@ public:
     ~CScriptArch();
 
     bool read(const char *filename);
-    bool write(const char *filename) const;
+    bool write(const char *filename);
     void add(std::unique_ptr<CActor[]> &scriptArray, uint32_t size);
     void add(CScript *script);
     void forget();
-    int getSize() const;
+    int size() const;
     inline CScript *operator[](int i);
-    inline CScript *at(int i);
+    CScript *at(int i);
     static bool indexFromFile(const char *filename, uint32_t *&index, uint32_t &size);
     static bool indexFromMemory(const uint8_t *data, uint32_t *&index, uint32_t &size);
     CScript *removeAt(int i);
+    void insertAt(int i, CScript *script);
+    const char *lastError();
 
 private:
     enum
@@ -53,6 +56,9 @@ private:
         SIGNATURE_SIZE = 4,
     };
     constexpr static const char SIGNATURE[]{"SCRX"};
+    std::string m_lastError;
+
+protected:
     uint32_t m_size;
     uint32_t m_max;
     std::unique_ptr<CScript *[]> m_scripts;

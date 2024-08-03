@@ -42,6 +42,11 @@ CScript::~CScript()
 
 void CScript::forget()
 {
+    if (m_script && m_script.get())
+    {
+        auto ptr = m_script.release(); // pointer to no-longer-managed object
+        delete[] ptr;
+    }
     m_script = nullptr;
     m_size = 0;
     m_max = 0;
@@ -69,7 +74,7 @@ bool CScript::write(FILE *tfile)
     //    printf("name: %s %d 0x%.2x\n", name, size + 1, size + 1);
     fwrite(&size, sizeof(uint8_t), 1, tfile);
     fwrite(name, size, 1, tfile);
-    auto padding = (4 - (1 + size) & 3) & 3;
+    auto padding = ((4 - (1 + size)) & 3) & 3;
     auto tmp = 0;
     //  printf("padding 0x%.2x\n", padding);
     fwrite(&tmp, padding, 1, tfile);
@@ -166,7 +171,7 @@ void CScript::growArray()
         std::unique_ptr<CActor[]> tmp = std::make_unique<CActor[]>(m_max);
         CActor *t = tmp.get();
         CActor *s = m_script.get();
-        for (int i = 0; i < m_size; ++i)
+        for (uint32_t i = 0; i < m_size; ++i)
         {
             t[i] = s[i];
         }
@@ -181,11 +186,11 @@ int CScript::add(const CActor &entry)
     return m_size++;
 }
 
-int CScript::insertAt(int i, const CActor &entry)
+int CScript::insertAt(uint32_t i, const CActor &entry)
 {
     growArray();
     CActor *s = m_script.get();
-    for (int j = m_size; j > i; --j)
+    for (uint32_t j = m_size; j > i; --j)
     {
         s[j] = s[j - 1];
     }
@@ -197,9 +202,9 @@ int CScript::insertAt(int i, const CActor &entry)
 void CScript::removeAt(int i)
 {
     CActor *s = m_script.get();
-    for (int j = i; j < m_size - 1; ++j)
+    for (uint32_t j = i; j < m_size - 1; ++j)
     {
-        s[i] = s[i + 1];
+        s[j] = s[j + 1];
     }
     --m_size;
 }
@@ -207,7 +212,7 @@ void CScript::removeAt(int i)
 int CScript::findPlayerIndex() const
 {
     CActor *s = m_script.get();
-    for (int i = 0; i < m_size; ++i)
+    for (uint32_t i = 0; i < m_size; ++i)
     {
         if (s[i].type == TYPE_PLAYER)
         {
@@ -221,7 +226,7 @@ int CScript::countType(uint8_t type) const
 {
     int count = 0;
     CActor *s = m_script.get();
-    for (int i = 0; i < m_size; ++i)
+    for (uint32_t i = 0; i < m_size; ++i)
     {
         if (s[i].type == type)
         {
@@ -237,7 +242,7 @@ void CScript::sort()
     int j = 0;
     CActor *s = m_script.get();
     CActor *t = tmp.get();
-    for (int i = 0; i < m_size; ++i)
+    for (uint32_t i = 0; i < m_size; ++i)
     {
         const CActor &entry{s[i]};
         if (CScript::isBackgroundType(entry.type))
@@ -245,7 +250,7 @@ void CScript::sort()
             t[j++] = entry;
         }
     }
-    for (int i = 0; i < m_size; ++i)
+    for (uint32_t i = 0; i < m_size; ++i)
     {
         const CActor &entry{s[i]};
         if (!CScript::isBackgroundType(entry.type))
@@ -254,4 +259,27 @@ void CScript::sort()
         }
     }
     m_script.swap(tmp);
+}
+
+void CScript::shift(int aim)
+{
+    CActor *s = m_script.get();
+    for (uint32_t i = 0; i < m_size; ++i)
+    {
+        CActor &entry{s[i]};
+        switch (aim)
+        {
+        case UP:
+            --entry.y;
+            break;
+        case DOWN:
+            ++entry.y;
+            break;
+        case LEFT:
+            --entry.x;
+            break;
+        case RIGHT:
+            ++entry.x;
+        }
+    }
 }
