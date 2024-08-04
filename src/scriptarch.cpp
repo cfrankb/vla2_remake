@@ -21,11 +21,14 @@
 #include <cstring>
 #include <string>
 
+static constexpr const char DEFAULT_GAMEID[] = {'?', '?', '?', '?'};
+
 CScriptArch::CScriptArch()
 {
     m_size = 0;
     m_max = GROW_BY;
     m_scripts = std::make_unique<CScript *[]>(m_max);
+    memcpy(m_gameID, DEFAULT_GAMEID, sizeof(DEFAULT_GAMEID));
 }
 
 CScriptArch::~CScriptArch()
@@ -67,6 +70,7 @@ bool CScriptArch::read(const char *filename)
         }
         fread(&count, sizeof(count), 1, sfile);
         fread(&indexPtr, sizeof(indexPtr), 1, sfile);
+        fread(m_gameID, sizeof(m_gameID), 1, sfile);
 
         //  read index
         m_size = count;
@@ -107,6 +111,7 @@ bool CScriptArch::write(const char *filename)
         fwrite(&m_size, sizeof(uint16_t), 1, tfile);
         uint32_t tmp = 0;
         fwrite(&tmp, sizeof(tmp), 1, tfile);
+        fwrite(m_gameID, sizeof(m_gameID), 1, tfile);
 
         uint32_t *index = new uint32_t[m_size];
         printf("count:%d\n", m_size);
@@ -289,4 +294,14 @@ void CScriptArch::insertAt(int i, CScript *script)
     }
     m_scripts[i] = script;
     ++m_size;
+}
+
+const char *CScriptArch::gameID()
+{
+    return m_gameID;
+}
+
+void CScriptArch::setGameID(const char *id)
+{
+    memcpy(m_gameID, id, sizeof(m_gameID));
 }

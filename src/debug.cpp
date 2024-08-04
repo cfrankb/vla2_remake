@@ -167,6 +167,7 @@ void compositeAll()
 bool createScriptArch()
 {
     CScriptArch arch;
+    arch.setGameID("VLA2");
     CImsWrap ims;
     constexpr size_t count = sizeof(filedefs) / sizeof(filedef_t);
     for (size_t i = 0; i < count; ++i)
@@ -185,13 +186,13 @@ bool createScriptArch()
             fread(scriptData.get(), dataLenght, 1, sfileSCR);
             fclose(sfileSCR);
             CScript *script = new CScript(scriptData, entryCount);
-            std::string tileset = def.imsFile;
+            std::string tileset = std::string("vl2") + def.imsFile;
             auto j = tileset.find(".");
             if (j != std::string::npos)
             {
                 tileset.resize(j);
             }
-            tileset.resize(8);
+            tileset.resize(CScript::TILESET_NAME_MAX);
             script->setName(def.name);
             script->setTileSet(tileset);
             arch.add(script);

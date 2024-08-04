@@ -4,18 +4,21 @@ file header
 2 version         
 2 script count
 4 index offset
+4 gameID        "VLA2" for vlamits2
 
 
 scripts 0...n 
 =====================================================================
-4 script size 
-8 tilesetname
+2 script size
+2 version
+4 rgba color (background)
+12 tilesetname
 
 0..n
     8 script entry data
     ...
 
-1 name lenght
+1 name lenght (up to 254)
 n script name (padded to an offset multiple of 4)
 
 

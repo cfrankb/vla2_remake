@@ -78,14 +78,14 @@ def main():
         ext = '.o'
     elif sys.argv[1] == 'emsdl':
         vars = [
-            'CXX=emcc',
+            'CXX=em++',
             'INC=',
             'LIBS=',
             'CXXFLAGS=-sUSE_SDL=2 -sUSE_ZLIB=1 -O2',
             'PARGS=--preload-file data --emrun -O2 -sWASM=1',
             'BPATH=build', f'BNAME={EMS_NAME}.html', 'TARGET=$(BPATH)/$(BNAME)'
         ]
-        print("type `emmake make` to generare binary.")
+        print("type `make` to generare binary.")
         ext = '.o'
 
     deps_blocks, objs = get_deps_blocks()
