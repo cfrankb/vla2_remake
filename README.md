@@ -29,7 +29,8 @@ $ emrun build/vlamits2.html
 
 ### Map Editor
 
-TBD
+Experimental
+https://github.com/cfrankb/ssv2-mapedit-qt 
 
 ### Play online
 
