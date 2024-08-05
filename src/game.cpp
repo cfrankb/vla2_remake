@@ -109,30 +109,13 @@ CGame::CGame()
     m_frameMap = new CFrameMap;
     m_scriptIndex = nullptr;
     m_loadedTileSet = "";
-    m_player = nullptr;
-    m_annie = nullptr;
-    m_points = nullptr;
+
     m_score = 0;
 }
 
 CGame::~CGame()
 {
     printf("deleting game singleton\n");
-
-    if (m_annie)
-    {
-        delete m_annie;
-    }
-
-    if (m_points)
-    {
-        delete m_points;
-    }
-
-    if (m_fontData)
-    {
-        delete[] m_fontData;
-    }
 
     if (m_frameSet)
     {
@@ -165,24 +148,6 @@ bool CGame::init(const char *archname, const char *configfile)
         printf("failed to read configfile.\n");
     }
 
-    return true;
-}
-
-bool CGame::loadTileset(const char *tileset)
-{
-    printf("loading tileset: %s\n", tileset);
-    std::string tilesetName = "data/" + std::string(tileset) + ".ims";
-    CImsWrap ims;
-    if (!ims.readIMS(tilesetName.c_str()))
-    {
-        m_lastError = "can't read tileset: " + tilesetName;
-        printf("%s\n", m_lastError.c_str());
-        m_loadedTileSet = "";
-        return false;
-    }
-    ims.toFrameSet(*m_frameSet, nullptr);
-    m_loadedTileSet = tileset;
-    m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
     return true;
 }
 
@@ -338,7 +303,7 @@ bool CGame::isPlayerThere(const CActor &actor, int aim)
     return false;
 }
 
-bool CGame::calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect)
+bool CGame::calcActorRect(const CActor &actor, int aim, rect_t &rect)
 {
     sizeFrame(actor, rect.len, rect.hei);
     rect.x = actor.x;
@@ -493,107 +458,6 @@ void CGame::setMode(int mode)
     m_mode = mode;
 }
 
-void CGame::drawScreen(CFrame &screen)
-{
-    const std::unordered_set<uint16_t> &hide = m_config[m_loadedTileSet].hide;
-    const int scrLen = screen.len();
-    const int scrHei = screen.hei();
-    const int rows = screen.hei() / FNT_BLOCK_SIZE;
-    const int cols = screen.len() / FNT_BLOCK_SIZE;
-    const int hx = cols / 2;
-    const int hy = rows / 2;
-    const int mx = m_player->x < hx ? 0 : m_player->x - hx;
-    const int my = m_player->y < hy ? 0 : m_player->y - hy;
-    for (int i = BASE_ENTRY; i < m_script->getSize(); ++i)
-    {
-        CFrame *frame{nullptr};
-        const auto &entry{(*m_script)[i]};
-        if (entry.type == TYPE_PLAYER)
-        {
-            frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE +
-                               m_playerFrameOffset];
-        }
-        else if (entry.type == TYPE_POINTS)
-        {
-            frame = (*m_points)[entry.imageId];
-        }
-        else if (entry.imageId >= m_frameSet->getSize() ||
-                 CScript::isSystemType(entry.type) ||
-                 hide.count(entry.imageId))
-        {
-            continue;
-        }
-        else
-        {
-            frame = (*m_frameSet)[entry.imageId];
-        }
-        const int fcols = frame->len() / FNT_BLOCK_SIZE;
-        const int frows = frame->hei() / FNT_BLOCK_SIZE;
-        const int rx = int(entry.x) - mx;
-        const int ry = int(entry.y) - my;
-        if ((rx < cols) &&
-            (rx + fcols > 0) &&
-            (ry < rows) &&
-            (ry + frows > 0))
-        {
-            const int offsetX = rx < 0 ? -rx : 0;
-            const int offsetY = ry < 0 ? -ry : 0;
-            const int flen = fcols - offsetX;
-            const int fhei = frows - offsetY;
-            const int sx = rx > 0 ? rx : 0;
-            const int sy = ry > 0 ? ry : 0;
-            for (int y = 0; y < fhei * FNT_BLOCK_SIZE; ++y)
-            {
-                if (sy * FNT_BLOCK_SIZE + y >= scrHei)
-                    break;
-                uint32_t *rgba = &screen.at(sx * FNT_BLOCK_SIZE, sy * FNT_BLOCK_SIZE + y);
-                const uint32_t *pixel = &frame->at(offsetX * FNT_BLOCK_SIZE, offsetY * FNT_BLOCK_SIZE + y);
-                for (int x = 0; x < flen * FNT_BLOCK_SIZE; ++x)
-                {
-                    if (sx * FNT_BLOCK_SIZE + x >= scrLen)
-                        break;
-                    if (pixel[x])
-                    {
-                        rgba[x] = pixel[x];
-                    }
-                }
-            }
-        }
-    }
-
-    // draw game status
-    char tmp[16];
-    uint16_t x = 0;
-    sprintf(tmp, "%.8d ", m_score);
-    drawText(screen, x, 0, tmp, WHITE);
-    x += strlen(tmp) * FONT_SIZE;
-
-    sprintf(tmp, "FLOWERS %.2d ", m_goals);
-    drawText(screen, x, 0, tmp, YELLOW);
-    x += strlen(tmp) * FONT_SIZE;
-
-    sprintf(tmp, "LIVES %.2d ", m_lives);
-    drawText(screen, x, 0, tmp, PINK);
-    x += strlen(tmp) * FONT_SIZE;
-
-    sprintf(tmp, "COINS %.2d", m_coins);
-    drawText(screen, x, 0, tmp, BLUE);
-    x += strlen(tmp) * FONT_SIZE;
-
-    // draw health bar
-    const int sectionHeight = HealthBarHeight + HealthBarOffset;
-    x = HealthBarOffset;
-    uint16_t y = screen.hei() - sectionHeight * 2;
-    rect_t rect{x, y, std::min(m_hp / 2, screen.len() - HealthBarOffset), HealthBarHeight};
-    drawRect(screen, rect, LIME, true);
-    drawRect(screen, rect, WHITE, false);
-    // draw oxygen bar
-    y += sectionHeight;
-    rect = {x, y, std::min(m_oxygen / 2, screen.len() - HealthBarOffset), HealthBarHeight};
-    drawRect(screen, rect, LIGHTGRAY, true);
-    drawRect(screen, rect, WHITE, false);
-}
-
 CGame *CGame::getGame()
 {
     if (!g_game)
@@ -742,51 +606,6 @@ void CGame::managePlayer(const uint8_t *joyState)
         }
     }
     mapEntry(NONE, *m_player);
-}
-
-void CGame::preloadAssets()
-{
-    CFileWrap file;
-    using asset_t = struct
-    {
-        const char *filename;
-        CFrameSet **frameset;
-    };
-
-    asset_t assets[] = {
-        {"data/annie.obl", &m_annie},
-        {"data/points.obl", &m_points},
-    };
-
-    for (size_t i = 0; i < sizeof(assets) / sizeof(asset_t); ++i)
-    {
-        asset_t &asset = assets[i];
-        *(asset.frameset) = new CFrameSet();
-        if (file.open(asset.filename, "rb"))
-        {
-            printf("reading %s\n", asset.filename);
-            if ((*(asset.frameset))->extract(file))
-            {
-                printf("extracted: %d\n", (*(asset.frameset))->getSize());
-            }
-            file.close();
-        }
-    }
-
-    const char fontName[] = "data/bitfont.bin";
-    int size = 0;
-    if (file.open(fontName, "rb"))
-    {
-        size = file.getSize();
-        m_fontData = new uint8_t[size];
-        file.read(m_fontData, size);
-        file.close();
-        printf("loaded %s: %d bytes\n", fontName, size);
-    }
-    else
-    {
-        printf("failed to open %s\n", fontName);
-    }
 }
 
 void CGame::killPlayer(const CActor &actor)
@@ -1015,29 +834,6 @@ void CGame::manageMonsters(uint32_t ticks)
         case TYPE_GREENFLEA:
             manageVCreatureVariant(i, actor, SLUG_ID, FleaFrameCycle);
         };
-    }
-}
-
-void CGame::drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color)
-{
-    uint32_t *rgba = frame.getRGB();
-    const int rowPixels = frame.len();
-    const int fontOffset = FONT_SIZE;
-    const int textSize = strlen(text);
-    for (int i = 0; i < textSize; ++i)
-    {
-        const uint8_t c{static_cast<uint8_t>(text[i] - ' ')};
-        uint8_t *font = m_fontData + c * fontOffset;
-        for (int yy = 0; yy < FONT_SIZE; ++yy)
-        {
-            uint8_t bitFilter{1};
-            for (int xx = 0; xx < FONT_SIZE; ++xx)
-            {
-                rgba[(yy + y) * rowPixels + xx + x] = font[yy] & bitFilter ? color : BLACK;
-                bitFilter = bitFilter << 1;
-            }
-        }
-        x += FONT_SIZE;
     }
 }
 
@@ -1277,7 +1073,7 @@ void CGame::consumeAll()
     }
 }
 
-void CGame::setLevel(int i)
+void CGame::setLevel(const int i)
 {
     m_level = i;
 }
@@ -1696,35 +1492,6 @@ uint32_t CGame::define(const char *name)
     }
 }
 
-void CGame::drawRect(CFrame &frame, const rect_t &rect, const uint32_t color, bool fill)
-{
-    uint32_t *rgba = frame.getRGB();
-    const int rowPixels = frame.len();
-    if (fill)
-    {
-        for (int y = 0; y < rect.hei; y++)
-        {
-            for (int x = 0; x < rect.len; x++)
-            {
-                rgba[(rect.y + y) * rowPixels + rect.x + x] = color;
-            }
-        }
-    }
-    else
-    {
-        for (int y = 0; y < rect.hei; y++)
-        {
-            for (int x = 0; x < rect.len; x++)
-            {
-                if (y == 0 || y == rect.hei - 1 || x == 0 || x == rect.len - 1)
-                {
-                    rgba[(rect.y + y) * rowPixels + rect.x + x] = color;
-                }
-            }
-        }
-    }
-}
-
 bool CGame::isUnderwater(const CActor &actor)
 {
     rect_t rect;
@@ -1790,4 +1557,72 @@ int CGame::findLevelHeight()
         maxY = std::max(maxY, cur.y + hei);
     }
     return maxY;
+}
+
+void CGame::setLives(const int val)
+{
+    m_lives = val;
+}
+
+CActor *CGame::player()
+{
+    return m_player;
+}
+
+int CGame::coins()
+{
+    return m_coins;
+}
+
+int CGame::score()
+{
+    return m_score;
+}
+
+bool CGame::loadTileset(const char *tileset)
+{
+    printf("loading tileset: %s\n", tileset);
+    std::string tilesetName = "data/" + std::string(tileset) + ".ims";
+    CImsWrap ims;
+    if (!ims.readIMS(tilesetName.c_str()))
+    {
+        m_lastError = "can't read tileset: " + tilesetName;
+        printf("%s\n", m_lastError.c_str());
+        m_loadedTileSet = "";
+        return false;
+    }
+    ims.toFrameSet(*m_frameSet, nullptr);
+    m_loadedTileSet = tileset;
+    m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
+    return true;
+}
+
+int CGame::playerFrameOffset()
+{
+    return m_playerFrameOffset;
+}
+
+CFrameSet *CGame::tiles()
+{
+    return m_frameSet;
+}
+
+CScript *CGame::script()
+{
+    return m_script;
+}
+
+int CGame::hp()
+{
+    return m_hp;
+}
+
+int CGame::oxygen()
+{
+    return m_oxygen;
+}
+
+const std::unordered_set<uint16_t> &CGame::hideList()
+{
+    return m_config[m_loadedTileSet].hide;
 }

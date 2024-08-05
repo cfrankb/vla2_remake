@@ -33,7 +33,13 @@ class CActor;
 
 using StringVector = std::vector<std::string>;
 using PairMap = std::unordered_map<uint16_t, uint16_t>;
-
+using rect_t = struct
+{
+    uint16_t x;
+    uint16_t y;
+    int len;
+    int hei;
+};
 class CGame
 {
 public:
@@ -44,19 +50,21 @@ public:
     bool init(const char *archname, const char *configfile);
     int mode();
     void setMode(int mode);
-    void drawScreen(CFrame &screen);
+    bool loadTileset(const char *tileset);
     static CGame *getGame();
     int playerSpeed();
     bool isPlayerDead();
     void managePlayer(const uint8_t *joyState);
     bool manageJump(const uint8_t *joyState);
-    void preloadAssets();
     void manageMonsters(uint32_t ticks);
-    void setLevel(int i);
+    void setLevel(const int i);
     int level();
     int lives();
+    CActor *player();
+    void setLives(const int val);
     int goals();
-    void drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color);
+    int coins();
+    int score();
     void startGame();
     void restartGame();
     void restartLevel();
@@ -64,21 +72,23 @@ public:
     void manageGravity();
     void animator(uint32_t ticks);
     uint32_t define(const char *name);
+    int playerFrameOffset();
+    CFrameSet *tiles();
+    CScript *script();
+    int hp();
+    int oxygen();
+    const std::unordered_set<uint16_t> &hideList();
 
-    enum
+    enum GameMode
     {
         MODE_INTRO = 0,
         MODE_LEVEL = 1,
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
-        BLACK = 0xff000000,
-        WHITE = 0xffffffff,
-        PINK = 0xffd187e8,
-        YELLOW = 0xff34ebeb,
-        GREEN = 0xff009000,
-        LIME = 0xff00ffbf,
-        LIGHTGRAY = 0xffd3d3d3,
-        BLUE = 0xffff901e,
+        MODE_CLICKSTART,
+        MODE_HISCORES,
+        MODE_IDLE,
+        MODE_HELP,
     };
 
 private:
@@ -86,19 +96,18 @@ private:
     enum
     {
         HERE = 255,
+        PLAYER_MOVE_FRAMES = 7,
         PLAYER_RECT = 2,
         FNT_BLOCK_SIZE = 8,
         BASE_ENTRY = 1,
         MAX_POS = 255,
         NONE = 0,
-        PLAYER_FRAME_CYCLE = 8,
-        PLAYER_MOVE_FRAMES = 7,
         PLAYER_HIT_FRAME = 7,
         FONT_SIZE = 8,
         INVALID = -1,
         KILL_PLAYER = -1,
         BUTTON = 4,
-        NOT_FOUND = 255
+        NOT_FOUND = 255,
     };
 
     enum // bonus points
@@ -163,17 +172,8 @@ private:
         CannibalFrameCycle = 3,
         CanmibalDamage = 16,
         PlayerHitDuration = 2,
-        HealthBarHeight = 8,
-        HealthBarOffset = 4,
         Coins4Life = 100,
         OxygenLostDelay = 10,
-    };
-    using rect_t = struct
-    {
-        uint16_t x;
-        uint16_t y;
-        int len;
-        int hei;
     };
 
     using config_t = struct
@@ -201,10 +201,7 @@ private:
     std::unordered_map<std::string, uint32_t> m_defines;
     std::unordered_map<std::string, config_t> m_config;
     std::string m_loadedTileSet;
-    CActor *m_player;
-    uint8_t *m_fontData;
-    CFrameSet *m_annie;
-    CFrameSet *m_points;
+
     int m_goals;
     int m_score;
     int m_hp;
@@ -221,8 +218,8 @@ private:
     int m_playerHitCountdown;
     int m_underwaterCounter;
     int m_levelHeight;
+    CActor *m_player = nullptr;
 
-    bool loadTileset(const char *tileset);
     void mapScript(CScript *script);
     int findLevelHeight();
     bool mapEntry(int i, const CActor &actor, bool removed = false);
@@ -244,7 +241,7 @@ private:
     void addToScore(int score);
     inline CMapEntry &mapAt(int x, int y);
     inline void sizeFrame(const CActor &entry, int &len, int &hei) const;
-    inline bool calcActorRect(const CActor &actor, int aim, CGame::rect_t &rect);
+    inline bool calcActorRect(const CActor &actor, int aim, rect_t &rect);
     void attackPlayer(const CActor &actor);
     void killPlayer(const CActor &actor);
     void killPlayer();
@@ -258,7 +255,6 @@ private:
     void parseGeneralOptions(const StringVector &list, int line);
     void parseTilesetOptions(std::string tileset, const StringVector &list, int line);
     void splitString(const std::string &str, StringVector &list);
-    void drawRect(CFrame &frame, const rect_t &rect, const uint32_t color, bool fill);
     uint16_t xdefine(const char *sig);
 
     friend class CActor;

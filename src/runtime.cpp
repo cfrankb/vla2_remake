@@ -28,13 +28,9 @@ constexpr const char JumpSpeed[] = "JumpSpeed";
 constexpr const char Gravity[] = "Gravity";
 constexpr const char Animator[] = "Animator";
 
-CRuntime::CRuntime()
+CRuntime::CRuntime() : CGameMixin()
 {
     memset(&m_app, 0, sizeof(App));
-    m_game = CGame::getGame();
-    m_assetPreloaded = false;
-    m_ticks = 0;
-    memset(m_joyState, 0, sizeof(m_joyState));
 }
 
 CRuntime::~CRuntime()
@@ -198,13 +194,8 @@ void CRuntime::drawLevelIntro(CFrame &screen)
 
     int x = (WIDTH - strlen(t) * FONT_SIZE) / 2;
     int y = (HEIGHT - FONT_SIZE) / 2;
-    screen.fill(CGame::BLACK);
-    CGame::getGame()->drawText(screen, x, y, t, CGame::WHITE);
-}
-
-void CRuntime::drawScreen(CFrame &screen)
-{
-    m_game->drawScreen(screen);
+    screen.fill(BLACK);
+    drawText(screen, x, y, t, WHITE);
 }
 
 void CRuntime::mainLoop()
@@ -287,13 +278,14 @@ bool CRuntime::init(const char *filearch, const char *configfile, int startLevel
 {
     if (!m_assetPreloaded)
     {
-        m_game->preloadAssets();
+        preloadAssets();
         m_assetPreloaded = true;
     }
 
     m_game->setMode(CGame::MODE_INTRO);
     m_game->setLevel(startLevel);
     bool result = m_game->init(filearch, configfile);
+
     if (result)
     {
         int level = m_game->level();

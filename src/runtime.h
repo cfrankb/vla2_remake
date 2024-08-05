@@ -18,11 +18,13 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 
+#include "gamemixin.h"
+
 class CGame;
 class CFrame;
 class CFrameSet;
 
-class CRuntime
+class CRuntime : public CGameMixin
 {
 public:
     CRuntime();
@@ -35,21 +37,6 @@ public:
     bool init(const char *filearch, const char *configfile, int startLevel = 0);
 
 private:
-    enum
-    {
-        AIM_UP,
-        AIM_DOWN,
-        AIM_LEFT,
-        AIM_RIGHT,
-        BUTTON,
-        JOY_STATES = 8,
-        WIDTH = 320,
-        HEIGHT = 240,
-        KEY_PRESSED = 1,
-        KEY_RELEASED = 0,
-        FONT_SIZE = 8,
-    };
-
     using App = struct
     {
         SDL_Renderer *renderer;
@@ -58,15 +45,8 @@ private:
     };
 
     App m_app;
-    CGame *m_game;
-    uint8_t m_joyState[JOY_STATES];
-
-    bool m_assetPreloaded;
-    uint32_t m_ticks;
-    uint32_t m_countdown;
 
     static void cleanup();
     void drawLevelIntro(CFrame &screen);
-    void drawScreen(CFrame &screen);
     void mainLoop();
 };
