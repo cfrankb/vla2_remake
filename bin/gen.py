@@ -58,7 +58,7 @@ python bin/gen.py emsdl
 
 EMS_NAME = 'vlamits2'
 SDL_NAME = 'vlamits2-sdl'
-DEBUG = 0
+DEBUG = False
 
 
 def main():

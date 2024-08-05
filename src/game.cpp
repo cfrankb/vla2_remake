@@ -24,7 +24,6 @@
 #include "shared/Frame.h"
 #include "shared/FileWrap.h"
 #include "scriptarch.h"
-#include "imswrap.h"
 #include "framemap.h"
 #include "actor.h"
 #include "script.h"
@@ -1582,16 +1581,20 @@ int CGame::score()
 bool CGame::loadTileset(const char *tileset)
 {
     printf("loading tileset: %s\n", tileset);
-    std::string tilesetName = "data/" + std::string(tileset) + ".ims";
-    CImsWrap ims;
-    if (!ims.readIMS(tilesetName.c_str()))
+    std::string tilesetName = "data/" + std::string(tileset) + ".obl";
+    CFileWrap file;
+    if (file.open(tilesetName.c_str(), "rb"))
+    {
+        m_frameSet->read(file);
+        file.close();
+    }
+    else
     {
         m_lastError = "can't read tileset: " + tilesetName;
         printf("%s\n", m_lastError.c_str());
         m_loadedTileSet = "";
         return false;
     }
-    ims.toFrameSet(*m_frameSet, nullptr);
     m_loadedTileSet = tileset;
     m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
     return true;
