@@ -108,6 +108,7 @@ private:
         KILL_PLAYER = -1,
         BUTTON = 4,
         NOT_FOUND = 255,
+        JUMP_SEQ_MAX = 14,
     };
 
     enum // bonus points
@@ -176,7 +177,21 @@ private:
         OxygenLostDelay = 10,
     };
 
-    using config_t = struct
+    enum : uint8_t
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT,
+        UP_LEFT,
+        UP_RIGHT,
+        DOWN_LEFT,
+        DOWN_RIGHT,
+        NO_AIM = 255,
+        AIM_NONE = 255,
+    };
+
+    struct config_t
     {
         std::unordered_map<uint32_t, uint16_t> xdef;
         std::unordered_set<uint16_t> hide;
@@ -184,9 +199,20 @@ private:
         PairMap swap;
     };
 
-    using type_t = struct
+    struct type_t
     {
         uint8_t speed;
+    };
+
+    struct jumpSeq_t
+    {
+        const uint8_t seq[JUMP_SEQ_MAX];
+        const uint8_t count;
+        const uint8_t aim;
+        template <typename... T>
+        jumpSeq_t(const uint8_t _aim, T... _list) : seq{_list...}, aim{_aim}, count{sizeof...(T)}
+        {
+        }
     };
 
     CFrameSet *m_frameSet;
@@ -201,7 +227,6 @@ private:
     std::unordered_map<std::string, uint32_t> m_defines;
     std::unordered_map<std::string, config_t> m_config;
     std::string m_loadedTileSet;
-
     int m_goals;
     int m_score;
     int m_hp;

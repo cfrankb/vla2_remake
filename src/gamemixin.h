@@ -97,7 +97,7 @@ protected:
         HealthBarOffset = 4,
     };
 
-    using hiscore_t = struct
+    struct hiscore_t
     {
         int score;
         int level;
@@ -131,7 +131,6 @@ protected:
     void clearScores();
     void clearKeyStates();
     void clearJoyStates();
-    void manageGamePlay();
     void handleFunctionKeys();
     bool handlePrompts();
     virtual void drawHelpScreen(CFrame &bitmap);

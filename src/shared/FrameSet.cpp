@@ -332,9 +332,9 @@ CFrame *CFrameSet::operator[](int n) const
 void CFrameSet::copyTags(CFrameSet &src)
 {
     m_tags.clear();
-    for (auto &kv : src.m_tags)
+    for (auto &[key, value] : src.m_tags)
     {
-        m_tags[kv.first] = kv.second;
+        m_tags[key] = value;
     }
 }
 

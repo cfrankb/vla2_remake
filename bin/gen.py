@@ -17,7 +17,7 @@ def prepare_deps(deps, fname):
     if os.path.isfile(fname_h):
         ref += f' {fname_h}'
     lines.append(f'$(BPATH)/{name}$(EXT): {ref}')
-    lines.append(f'\t$(CXX) $(CXXFLAGS) -c $< $(INC) -o $@')
+    lines.append(f'\t$(CXX) $(STD) $(CXXFLAGS) -c $< $(INC) -o $@')
     deps.append(f'{name}')
     return '\n'.join(lines)
 
@@ -34,7 +34,10 @@ def get_deps_blocks():
     objs = ' '.join(f'$(BPATH)/{x}$(EXT)' for x in deps)
     lines = []
     lines.append(f'$(TARGET): $(DEPS)')
-    lines.append(f'\t$(CXX) $(CXXFLAGS) $(DEPS) $(LIBS) $(PARGS) -o $@')
+    # lines.append(f'\t$(CXX) $(STD) $(CXXFLAGS) $(DEPS) $(LIBS) $(PARGS) -o $@')
+    lines.append(
+        f'\t$(CXX) $(CXXFLAGS) $(DEPS) $(LIBS) $(PARGS) -o $@ $(TEMPLATE)')
+
     deps_blocks.append('\n'.join(lines))
     lines = []
     lines.append('clean:')
@@ -68,22 +71,26 @@ def main():
     elif sys.argv[1] == 'sdl':
         vars = [
             'CXX=g++',
+            'STD=-std=c++17',
             'INC=',
             'LIBS=-lSDL2 -lz',
             'CXXFLAGS=-g3' if DEBUG else 'CXXFLAGS=-O3',
             'PARGS=',
-            'BPATH=build', f'BNAME={SDL_NAME}', 'TARGET=$(BPATH)/$(BNAME)'
+            'BPATH=build', 'BNAME=' +
+            SDL_NAME, 'TARGET=$(BPATH)/$(BNAME)',  'TEMPLATE='
         ]
         print("type `make` to generare binary.")
         ext = '.o'
     elif sys.argv[1] == 'emsdl':
         vars = [
             'CXX=em++',
+            'STD=-std=c++17',
             'INC=',
             'LIBS=',
             'CXXFLAGS=-sUSE_SDL=2 -sUSE_ZLIB=1 -O2',
             'PARGS=--preload-file data --emrun -O2 -sWASM=1',
-            'BPATH=build', f'BNAME={EMS_NAME}.html', 'TARGET=$(BPATH)/$(BNAME)'
+            'BPATH=build', f'BNAME=' + EMS_NAME +
+            '.html', 'TARGET=$(BPATH)/$(BNAME)', 'TEMPLATE=--shell-file src/template/body.html'
         ]
         print("type `make` to generare binary.")
         ext = '.o'

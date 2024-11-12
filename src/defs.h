@@ -18,7 +18,8 @@
 #ifndef __DEFS_H
 #define __DEFS_H
 
-// classes
+// types
+
 #define TYPE_BLANK 0x0
 #define TYPE_PLAYER 0x1
 #define TYPE_OXYGEN 0x3

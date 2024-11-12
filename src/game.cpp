@@ -50,55 +50,6 @@ inline auto _L = [](auto _s_)
     return reinterpret_cast<const uint32_t *>(_s_);
 };
 
-using jumpSeq_t = struct
-{
-    const uint8_t *seq;
-    const int count;
-    const uint8_t aim;
-};
-
-inline auto _J = [](auto _s_, auto _a_)
-{
-    return jumpSeq_t{
-        .seq = _s_,
-        .count = sizeof(_s_),
-        .aim = _a_};
-};
-
-enum : uint8_t
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    UP_LEFT,
-    UP_RIGHT,
-    DOWN_LEFT,
-    DOWN_RIGHT,
-    NO_AIM = 255,
-    AIM_NONE = 255,
-};
-
-constexpr uint8_t jumpUP[]{UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN};
-constexpr uint8_t jumpDOWN[]{};
-constexpr uint8_t jumpLEFT[]{UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN};
-constexpr uint8_t jumpRIGHT[]{UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN};
-constexpr uint8_t jumpUP_LEFT[]{UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN};
-constexpr uint8_t jumpUP_RIGHT[]{UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN};
-constexpr uint8_t jumpDOWN_LEFT[]{UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN};
-constexpr uint8_t jumpDOWN_RIGHT[]{UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN};
-
-const jumpSeq_t g_jumpSeqs[]{
-    _J(jumpUP, UP),
-    _J(jumpDOWN, DOWN),
-    _J(jumpLEFT, LEFT),
-    _J(jumpRIGHT, RIGHT),
-    _J(jumpUP_LEFT, LEFT),
-    _J(jumpUP_RIGHT, RIGHT),
-    _J(jumpDOWN_LEFT, LEFT),
-    _J(jumpDOWN_RIGHT, RIGHT),
-};
-
 CGame::CGame()
 {
     printf("creating game singleton\n");
@@ -108,7 +59,6 @@ CGame::CGame()
     m_frameMap = new CFrameMap;
     m_scriptIndex = nullptr;
     m_loadedTileSet = "";
-
     m_score = 0;
 }
 
@@ -478,6 +428,17 @@ bool CGame::isPlayerDead()
 
 bool CGame::manageJump(const uint8_t *joyState)
 {
+    static const jumpSeq_t g_jumpSeqs[]{
+        {UP, UP, UP, UP, UP, DOWN, DOWN, DOWN, DOWN},                  // up
+        {DOWN},                                                        // down
+        {LEFT, UP, LEFT, UP, LEFT, LEFT, DOWN, LEFT, DOWN},            // left
+        {RIGHT, UP, RIGHT, UP, RIGHT, RIGHT, DOWN, RIGHT, DOWN},       // right
+        {LEFT, UP, UP, UP, UP, LEFT, LEFT, DOWN, DOWN, DOWN, DOWN},    // up left
+        {RIGHT, UP, UP, UP, UP, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN}, // up right
+        {LEFT, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN, DOWN},            // down left
+        {RIGHT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN},       // down right
+    };
+
     if (m_jumpCooldown)
     {
         --m_jumpCooldown;
@@ -609,7 +570,7 @@ void CGame::managePlayer(const uint8_t *joyState)
 
 void CGame::killPlayer(const CActor &actor)
 {
-    m_hp = 0;
+    killPlayer();
 }
 
 void CGame::killPlayer()
@@ -647,7 +608,7 @@ void CGame::attackPlayer(const CActor &actor)
         damage = NeedleDrain;
         break;
     default:
-        printf("type=%d no damage defined\n", actor.type);
+        printf("type=0x%.2x no damage defined\n", actor.type);
     };
 
     m_playerHitCountdown = PlayerHitDuration;
@@ -901,6 +862,8 @@ void CGame::handleTrigger(int j, CActor &entry)
 {
     switch (entry.task)
     {
+    case TASK_NONE:
+        break;
     case TASK_CHANGE:
         handleChange(j, entry);
         break;
