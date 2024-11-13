@@ -76,8 +76,9 @@ def main():
             'LIBS=-lSDL2 -lz',
             'CXXFLAGS=-g3' if DEBUG else 'CXXFLAGS=-O3',
             'PARGS=',
-            'BPATH=build', 'BNAME=' +
-            SDL_NAME, 'TARGET=$(BPATH)/$(BNAME)',  'TEMPLATE='
+            'BPATH=build', f"BNAME={SDL_NAME}",
+            'TARGET=$(BPATH)/$(BNAME)',
+            'TEMPLATE='
         ]
         print("type `make` to generare binary.")
         ext = '.o'
@@ -89,8 +90,9 @@ def main():
             'LIBS=',
             'CXXFLAGS=-sUSE_SDL=2 -sUSE_ZLIB=1 -O2',
             'PARGS=--preload-file data --emrun -O2 -sWASM=1',
-            'BPATH=build', f'BNAME=' + EMS_NAME +
-            '.html', 'TARGET=$(BPATH)/$(BNAME)', 'TEMPLATE=--shell-file src/template/body.html'
+            'BPATH=build', f"BNAME={EMS_NAME}.html",
+            'TARGET=$(BPATH)/$(BNAME)',
+            'TEMPLATE=--shell-file src/template/body.html'
         ]
         print("type `make` to generare binary.")
         ext = '.o'
