@@ -455,8 +455,11 @@ void CGameMixin::drawScreen(CFrame &screen)
         const auto &entry{(*m_game->script())[i]};
         if (entry.type == TYPE_PLAYER)
         {
-            frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE +
-                               m_game->playerFrameOffset()];
+            uint16_t frameOffset = m_game->playerHitCountdown() &&
+                                           !m_game->playerFrameOffset()
+                                       ? CGame::PLAYER_HIT_FRAME
+                                       : m_game->playerFrameOffset();
+            frame = (*m_annie)[entry.aim * PLAYER_FRAME_CYCLE + frameOffset];
         }
         else if (entry.type == TYPE_POINTS)
         {

@@ -72,12 +72,13 @@ public:
     void manageGravity();
     void animator(uint32_t ticks);
     uint32_t define(const char *name);
-    int playerFrameOffset();
+    inline int playerFrameOffset() { return m_playerFrameOffset; }
     CFrameSet *tiles();
     CScript *script();
     int hp();
     int oxygen();
     const std::unordered_set<uint16_t> &hideList();
+    inline int playerHitCountdown() { return m_playerHitCountdown; }
 
     enum GameMode
     {
@@ -91,8 +92,6 @@ public:
         MODE_HELP,
     };
 
-private:
-    CGame();
     enum
     {
         HERE = 255,
@@ -110,6 +109,9 @@ private:
         NOT_FOUND = 255,
         JUMP_SEQ_MAX = 14,
     };
+
+private:
+    CGame();
 
     enum // bonus points
     {

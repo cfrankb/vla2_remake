@@ -522,9 +522,8 @@ void CGame::managePlayer(const uint8_t *joyState)
     if (m_playerHitCountdown)
     {
         --m_playerHitCountdown;
-        m_playerFrameOffset = PLAYER_HIT_FRAME;
     }
-    else if (*reinterpret_cast<const uint32_t *>(joyState))
+    if (*reinterpret_cast<const uint32_t *>(joyState))
     {
         m_playerFrameOffset = (m_playerFrameOffset + 1) % PLAYER_MOVE_FRAMES;
     }
@@ -1561,11 +1560,6 @@ bool CGame::loadTileset(const char *tileset)
     m_loadedTileSet = tileset;
     m_frameMap->fromFrameSet(*m_frameSet, m_config[m_loadedTileSet].xmap);
     return true;
-}
-
-int CGame::playerFrameOffset()
-{
-    return m_playerFrameOffset;
 }
 
 CFrameSet *CGame::tiles()
