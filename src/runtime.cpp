@@ -36,6 +36,18 @@ const char SAVEGAME_FILE[] = "savegame.dat";
 
 CRuntime::CRuntime() : CGameMixin()
 {
+#ifdef __EMSCRIPTEN__
+    EM_ASM(
+        // Make a directory other than '/'
+        FS.mkdir('/offline');
+        // Then mount with IDBFS type
+        FS.mount(IDBFS, {autoPersist : true}, '/offline');
+
+        // Then sync
+        FS.syncfs(true, function(err) {
+            console.log(FS.readdir('/offline'));
+            err ? console.log(err) : null; }));
+#endif
     memset(&m_app, 0, sizeof(App));
 }
 

@@ -23,7 +23,6 @@
 #include <emscripten.h>
 #endif
 
-constexpr int FPS = 30;
 constexpr const char MAPARCH_FILE[] = "data/levels.scrx";
 constexpr const char CONFIG_FILE[] = "data/vlamits2.cfg";
 
@@ -32,7 +31,7 @@ bool g_exitRequested = false;
 void loop_handler(void *arg)
 {
     CRuntime *runtime = reinterpret_cast<CRuntime *>(arg);
-    usleep(1000 / FPS * 1000);
+    usleep(1000 / CRuntime::TICK_RATE * 1000);
     g_exitRequested = !runtime->doInput();
     runtime->paint();
     runtime->run();

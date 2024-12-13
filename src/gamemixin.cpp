@@ -36,6 +36,9 @@ CGameMixin::CGameMixin()
     m_assetPreloaded = false;
     m_ticks = 0;
     clearJoyStates();
+    clearScores();
+    clearKeyStates();
+    enableHiScore();
     m_annie = nullptr;
     m_points = nullptr;
 }
@@ -650,15 +653,37 @@ void CGameMixin::mainLoop()
         }
         if (game.mode() == CGame::MODE_GAMEOVER)
         {
+            if (!m_hiscoreEnabled)
+            {
+                game.restartGame();
+                return;
+            }
+
+            game.setMode(CGame::MODE_HISCORES);
+            if (!m_scoresLoaded)
+            {
+                m_scoresLoaded = loadScores();
+            }
+            m_scoreRank = rankScore();
+            m_recordScore = m_scoreRank != INVALID;
             m_countdown = game.define(IntroCountdown);
-            game.restartGame();
+            // m_countdown = HISCORE_DELAY;
+            return;
+        }
+        else if (game.mode() == CGame::MODE_HISCORES)
+        {
+            if (!m_recordScore)
+            {
+                m_countdown = game.define(IntroCountdown);
+                game.restartGame();
+            }
+            return;
         }
         else
         {
             game.setMode(CGame::MODE_LEVEL);
         }
         break;
-
     case CGame::MODE_IDLE:
     case CGame::MODE_CLICKSTART:
         return;
@@ -681,8 +706,23 @@ void CGameMixin::mainLoop()
         return;
     }
 
-    ///////////////////////////////////////////
-    // resume game play
+    manageGamePlay();
+}
+
+void CGameMixin::manageGamePlay()
+{
+    CGame &game = *CGame::getGame();
+
+    if (!m_paused && handlePrompts())
+    {
+        return;
+    }
+
+    handleFunctionKeys();
+    if (m_paused)
+    {
+        return;
+    }
 
     game.manageMonsters(m_ticks);
 
@@ -733,14 +773,33 @@ void CGameMixin::mainLoop()
 
 void CGameMixin::drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color)
 {
+    static uint8_t caret[8]{
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+        0xff,
+    };
     uint32_t *rgba = frame.getRGB();
     const int rowPixels = frame.len();
     const int fontOffset = FONT_SIZE;
     const int textSize = strlen(text);
     for (int i = 0; i < textSize; ++i)
     {
-        const uint8_t c{static_cast<uint8_t>(text[i] - ' ')};
-        uint8_t *font = m_fontData + c * fontOffset;
+        uint8_t *font = nullptr;
+        if (static_cast<uint8_t>(text[i]) == CARET)
+        {
+            font = caret;
+        }
+        else
+        {
+            const uint8_t c = static_cast<uint8_t>(text[i]) - ' ';
+            font = m_fontData + c * fontOffset;
+        }
+
         for (int yy = 0; yy < FONT_SIZE; ++yy)
         {
             uint8_t bitFilter{1};

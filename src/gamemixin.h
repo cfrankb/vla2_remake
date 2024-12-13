@@ -25,6 +25,10 @@ class CGameMixin
 {
 public:
     ~CGameMixin();
+    enum
+    {
+        TICK_RATE = 30
+    };
 
 protected:
     CGameMixin();
@@ -111,6 +115,7 @@ protected:
         FONT_SIZE = 8,
         HealthBarHeight = 8,
         HealthBarOffset = 4,
+        HISCORE_DELAY = 5 * TICK_RATE,
     };
 
     struct hiscore_t
@@ -139,6 +144,7 @@ protected:
     CFrameSet *m_annie;
     CFrameSet *m_points;
     std::string m_lastError;
+    bool m_scoresLoaded = false;
 
     void enableHiScore();
     int rankScore();
@@ -163,6 +169,7 @@ protected:
 
     void drawLevelIntro(CFrame &screen);
     void mainLoop();
+    void manageGamePlay();
     void drawPreScreen(CFrame &bitmap);
     virtual void save();
     virtual void load();
