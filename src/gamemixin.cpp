@@ -1,3 +1,20 @@
+/*
+    vlamits2-runtime-sdl
+    Copyright (C) 2024 Francois Blanchette
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "gamemixin.h"
 #include <cstring>
 #include <string.h>
@@ -6,6 +23,11 @@
 #include "shared/FrameSet.h"
 #include "defs.h"
 #include "shared/FileWrap.h"
+
+constexpr const char IntroCountdown[] = "IntroCountdown";
+constexpr const char JumpSpeed[] = "JumpSpeed";
+constexpr const char Gravity[] = "Gravity";
+constexpr const char Animator[] = "Animator";
 
 CGameMixin::CGameMixin()
 {
@@ -510,27 +532,60 @@ void CGameMixin::drawScreen(CFrame &screen)
     }
 
     // draw game status
-    char tmp[16];
-    uint16_t x = 0;
-    sprintf(tmp, "%.8d ", m_game->score());
-    drawText(screen, x, 0, tmp, WHITE);
-    x += strlen(tmp) * FONT_SIZE;
+    char tmp[32];
+    if (m_paused)
+    {
+        drawText(screen, 0, Y_STATUS, "PRESS [F4] TO RESUME PLAYING...", LIGHTGRAY);
+    }
+    else if (m_prompt == PROMPT_ERASE_SCORES)
+    {
+        drawText(screen, 0, Y_STATUS, "ERASE HIGH SCORES, CONFIRM (Y/N)?", LIGHTGRAY);
+    }
+    else if (m_prompt == PROMPT_RESTART_GAME)
+    {
+        drawText(screen, 0, Y_STATUS, "RESTART GAME, CONFIRM (Y/N)?", LIGHTGRAY);
+    }
+    else if (m_prompt == PROMPT_LOAD)
+    {
+        drawText(screen, 0, Y_STATUS, "LOAD PREVIOUS SAVEGAME, CONFIRM (Y/N)?", LIGHTGRAY);
+    }
+    else if (m_prompt == PROMPT_SAVE)
+    {
+        drawText(screen, 0, Y_STATUS, "SAVE GAME, CONFIRM (Y/N)?", LIGHTGRAY);
+    }
+    else if (m_prompt == PROMPT_HARDCORE)
+    {
+        drawText(screen, 0, Y_STATUS, "HARDCORE MODE, CONFIRM (Y/N)?", LIGHTGRAY);
+    }
+    else if (m_prompt == PROMPT_TOGGLE_MUSIC)
+    {
+        drawText(screen, 0, Y_STATUS,
+                 m_musicMuted ? "PLAY MUSIC, CONFIRM (Y/N)?"
+                              : "MUTE MUSIC, CONFIRM (Y/N)?",
+                 LIGHTGRAY);
+    }
+    else
+    {
+        uint16_t x = 0;
+        sprintf(tmp, "%.8d ", m_game->score());
+        drawText(screen, x, 0, tmp, WHITE);
+        x += strlen(tmp) * FONT_SIZE;
 
-    sprintf(tmp, "FLOWERS %.2d ", m_game->goals());
-    drawText(screen, x, 0, tmp, YELLOW);
-    x += strlen(tmp) * FONT_SIZE;
+        sprintf(tmp, "FLOWERS %.2d ", m_game->goals());
+        drawText(screen, x, 0, tmp, YELLOW);
+        x += strlen(tmp) * FONT_SIZE;
 
-    sprintf(tmp, "LIVES %.2d ", m_game->lives());
-    drawText(screen, x, 0, tmp, PINK);
-    x += strlen(tmp) * FONT_SIZE;
+        sprintf(tmp, "LIVES %.2d ", m_game->lives());
+        drawText(screen, x, 0, tmp, PINK);
+        x += strlen(tmp) * FONT_SIZE;
 
-    sprintf(tmp, "COINS %.2d", m_game->coins());
-    drawText(screen, x, 0, tmp, BLUE);
-    x += strlen(tmp) * FONT_SIZE;
-
+        sprintf(tmp, "COINS %.2d", m_game->coins());
+        drawText(screen, x, 0, tmp, BLUE);
+        x += strlen(tmp) * FONT_SIZE;
+    }
     // draw health bar
     const int sectionHeight = HealthBarHeight + HealthBarOffset;
-    x = HealthBarOffset;
+    uint16_t x = HealthBarOffset;
     uint16_t y = screen.hei() - sectionHeight * 2;
     rect_t rect{x, y, std::min(m_game->hp() / 2, screen.len() - HealthBarOffset), HealthBarHeight};
     drawRect(screen, rect, LIME, true);
@@ -540,6 +595,140 @@ void CGameMixin::drawScreen(CFrame &screen)
     rect = {x, y, std::min(m_game->oxygen() / 2, screen.len() - HealthBarOffset), HealthBarHeight};
     drawRect(screen, rect, LIGHTGRAY, true);
     drawRect(screen, rect, WHITE, false);
+}
+
+void CGameMixin::drawLevelIntro(CFrame &screen)
+{
+    char t[32];
+    switch (m_game->mode())
+    {
+    case CGame::MODE_INTRO:
+        sprintf(t, "LEVEL %.2d", m_game->level() + 1);
+        break;
+    case CGame::MODE_RESTART:
+        if (m_game->lives() > 1)
+        {
+            sprintf(t, "LIVES LEFT %.2d", m_game->lives());
+        }
+        else
+        {
+            strcpy(t, "LAST LIFE LEFT");
+        }
+        break;
+    case CGame::MODE_GAMEOVER:
+        strcpy(t, "GAME OVER");
+    };
+
+    int x = (WIDTH - strlen(t) * FONT_SIZE) / 2;
+    int y = (HEIGHT - FONT_SIZE) / 2;
+    screen.fill(BLACK);
+    drawText(screen, x, y, t, WHITE);
+}
+
+void CGameMixin::mainLoop()
+{
+    CGame &game = *CGame::getGame();
+    if (m_countdown > 0)
+    {
+        --m_countdown;
+    }
+
+    switch (game.mode())
+    {
+    case CGame::MODE_HISCORES:
+        if (m_recordScore && inputPlayerName())
+        {
+            m_recordScore = false;
+            saveScores();
+        }
+    case CGame::MODE_INTRO:
+    case CGame::MODE_RESTART:
+    case CGame::MODE_GAMEOVER:
+        if (m_countdown)
+        {
+            return;
+        }
+        if (game.mode() == CGame::MODE_GAMEOVER)
+        {
+            m_countdown = game.define(IntroCountdown);
+            game.restartGame();
+        }
+        else
+        {
+            game.setMode(CGame::MODE_LEVEL);
+        }
+        break;
+
+    case CGame::MODE_IDLE:
+    case CGame::MODE_CLICKSTART:
+        return;
+    case CGame::MODE_HELP:
+        if (!m_keyStates[Key_F1])
+        {
+            // keyup
+            m_keyRepeters[Key_F1] = 0;
+        }
+        else if (m_keyRepeters[Key_F1])
+        {
+            // avoid keys repeating
+            return;
+        }
+        else
+        {
+            m_game->setMode(CGame::MODE_LEVEL);
+            m_keyRepeters[Key_F1] = 1;
+        }
+        return;
+    }
+
+    ///////////////////////////////////////////
+    // resume game play
+
+    game.manageMonsters(m_ticks);
+
+    if (m_ticks % game.define(Gravity) == 0)
+    {
+        game.manageGravity();
+    }
+
+    if (m_ticks % game.define(Animator) == 0)
+    {
+        game.animator(m_ticks);
+    }
+
+    if (game.isPlayerDead())
+    {
+        m_countdown = game.define(IntroCountdown);
+        if (game.lives() == 0)
+        {
+            m_countdown = game.define(IntroCountdown);
+            game.setMode(CGame::MODE_GAMEOVER);
+        }
+        else
+        {
+            game.restartLevel();
+        }
+    }
+    else
+    {
+        if (m_ticks % game.playerSpeed() == 0)
+        {
+            game.managePlayer(m_joyState);
+        }
+
+        if (m_ticks % game.define(JumpSpeed) == 0)
+        {
+            game.manageJump(m_joyState);
+        }
+
+        if (game.goals() == 0)
+        {
+            m_countdown = game.define(IntroCountdown);
+            game.nextLevel();
+        }
+    }
+
+    ++m_ticks;
 }
 
 void CGameMixin::drawText(CFrame &frame, int x, int y, const char *text, const uint32_t color)

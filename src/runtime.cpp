@@ -24,9 +24,15 @@
 
 constexpr const char WINDOW_TITLE[] = "The Vlamits2 Runtime";
 constexpr const char IntroCountdown[] = "IntroCountdown";
-constexpr const char JumpSpeed[] = "JumpSpeed";
-constexpr const char Gravity[] = "Gravity";
-constexpr const char Animator[] = "Animator";
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+const char HISCORE_FILE[] = "/offline/hiscores.dat";
+const char SAVEGAME_FILE[] = "/offline/savegame.dat";
+#else
+const char HISCORE_FILE[] = "hiscores.dat";
+const char SAVEGAME_FILE[] = "savegame.dat";
+#endif
 
 CRuntime::CRuntime() : CGameMixin()
 {
@@ -58,6 +64,15 @@ void CRuntime::paint()
         break;
     case CGame::MODE_LEVEL:
         drawScreen(bitmap);
+        break;
+    case CGame::MODE_HISCORES:
+        drawScores(bitmap);
+        break;
+    case CGame::MODE_CLICKSTART:
+        drawPreScreen(bitmap);
+        break;
+    case CGame::MODE_HELP:
+        drawHelpScreen(bitmap);
     }
 
     SDL_UpdateTexture(m_app.texture, NULL, bitmap.getRGB(), WIDTH * sizeof(uint32_t));
@@ -129,6 +144,7 @@ bool CRuntime::doInput()
         case SDL_KEYDOWN:
             keyState = KEY_PRESSED;
         case SDL_KEYUP:
+            keyReflector(event.key.keysym.sym, keyState);
             switch (event.key.keysym.sym)
             {
             case SDLK_UP:
@@ -170,110 +186,6 @@ bool CRuntime::doInput()
     return true;
 }
 
-void CRuntime::drawLevelIntro(CFrame &screen)
-{
-    char t[32];
-    switch (m_game->mode())
-    {
-    case CGame::MODE_INTRO:
-        sprintf(t, "LEVEL %.2d", m_game->level() + 1);
-        break;
-    case CGame::MODE_RESTART:
-        if (m_game->lives() > 1)
-        {
-            sprintf(t, "LIVES LEFT %.2d", m_game->lives());
-        }
-        else
-        {
-            strcpy(t, "LAST LIFE LEFT");
-        }
-        break;
-    case CGame::MODE_GAMEOVER:
-        strcpy(t, "GAME OVER");
-    };
-
-    int x = (WIDTH - strlen(t) * FONT_SIZE) / 2;
-    int y = (HEIGHT - FONT_SIZE) / 2;
-    screen.fill(BLACK);
-    drawText(screen, x, y, t, WHITE);
-}
-
-void CRuntime::mainLoop()
-{
-    CGame &game = *CGame::getGame();
-    if (m_countdown > 0)
-    {
-        --m_countdown;
-    }
-
-    switch (game.mode())
-    {
-    case CGame::MODE_INTRO:
-    case CGame::MODE_RESTART:
-    case CGame::MODE_GAMEOVER:
-        if (m_countdown)
-        {
-            return;
-        }
-        if (game.mode() == CGame::MODE_GAMEOVER)
-        {
-            m_countdown = game.define(IntroCountdown);
-            game.restartGame();
-        }
-        else
-        {
-            game.setMode(CGame::MODE_LEVEL);
-        }
-        break;
-    }
-
-    game.manageMonsters(m_ticks);
-
-    if (m_ticks % game.define(Gravity) == 0)
-    {
-        game.manageGravity();
-    }
-
-    if (m_ticks % game.define(Animator) == 0)
-    {
-        game.animator(m_ticks);
-    }
-
-    if (game.isPlayerDead())
-    {
-        m_countdown = game.define(IntroCountdown);
-        if (game.lives() == 0)
-        {
-            m_countdown = game.define(IntroCountdown);
-            game.setMode(CGame::MODE_GAMEOVER);
-        }
-        else
-        {
-            game.restartLevel();
-        }
-    }
-    else
-    {
-        if (m_ticks % game.playerSpeed() == 0)
-        {
-            game.managePlayer(m_joyState);
-        }
-
-        if (m_ticks % game.define(JumpSpeed) == 0)
-        {
-            game.manageJump(m_joyState);
-        }
-
-        if (game.goals() == 0)
-        {
-            m_countdown = game.define(IntroCountdown);
-            game.nextLevel();
-        }
-    }
-
-    ++m_ticks;
-}
-
 bool CRuntime::init(const char *filearch, const char *configfile, int startLevel)
 {
     if (!m_assetPreloaded)
@@ -295,4 +207,86 @@ bool CRuntime::init(const char *filearch, const char *configfile, int startLevel
     m_countdown = m_game->define(IntroCountdown);
 
     return result;
+}
+
+void CRuntime::keyReflector(SDL_Keycode key, uint8_t keyState)
+{
+    auto range = [](auto keyCode, auto start, auto end)
+    {
+        return keyCode >= start && keyCode <= end;
+    };
+
+    uint16_t result;
+    if (range(key, SDLK_0, SDLK_9))
+    {
+        result = key - SDLK_0 + Key_0;
+    }
+    else if (range(key, SDLK_a, SDLK_z))
+    {
+        result = key - SDLK_a + Key_A;
+    }
+    else if (range(key, SDLK_F1, SDLK_F12))
+    {
+        result = key - SDLK_F1 + Key_F1;
+    }
+    else
+    {
+        switch (key)
+        {
+        case SDLK_SPACE:
+            result = Key_Space;
+            break;
+        case SDLK_BACKSPACE:
+            result = Key_BackSpace;
+            break;
+        case SDLK_RETURN:
+            result = Key_Enter;
+            break;
+        default:
+            return;
+        }
+    }
+    m_keyStates[result] = keyState;
+}
+
+bool CRuntime::loadScores()
+{
+    printf("reading %s\n", HISCORE_FILE);
+    CFileWrap file;
+    if (file.open(HISCORE_FILE, "rb"))
+    {
+        if (file.getSize() == sizeof(m_hiscores))
+        {
+            file.read(m_hiscores, sizeof(m_hiscores));
+            file.close();
+        }
+        else
+        {
+            printf("size mismatch. resetting to default.\n");
+            clearScores();
+        }
+        return true;
+    }
+    printf("can't read %s\n", HISCORE_FILE);
+    return false;
+}
+
+bool CRuntime::saveScores()
+{
+    CFileWrap file;
+    if (file.open(HISCORE_FILE, "wb"))
+    {
+        file.write(m_hiscores, sizeof(m_hiscores));
+        file.close();
+#ifdef __EMSCRIPTEN__
+        EM_ASM(
+            FS.syncfs(function(err) {
+                // Error
+                err ? console.log(err) : null;
+            }));
+#endif
+        return true;
+    }
+    printf("can't write %s\n", HISCORE_FILE);
+    return false;
 }

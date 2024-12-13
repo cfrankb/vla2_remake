@@ -44,6 +44,7 @@ constexpr const char SLUG_ID[] = "SLUG";
 constexpr const char GOLD_ID[] = "GOLD";
 
 static CGame *g_game = nullptr;
+#define typeref(__ref, __var) static_cast<decltype(__ref)>(__var)
 
 inline auto _L = [](auto _s_)
 {
@@ -895,7 +896,7 @@ bool CGame::consumeObject(uint16_t j)
     {
     case TYPE_OXYGEN:
         points = _10pts;
-        m_oxygen += OxygenBonus;
+        m_oxygen = std::min(m_oxygen + OxygenBonus, typeref(m_oxygen, MaxOxygen));
         break;
     case TYPE_TRANSPORTER:
         consumed = false;

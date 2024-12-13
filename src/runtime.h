@@ -17,8 +17,9 @@
 */
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-
 #include "gamemixin.h"
+
+#pragma once
 
 class CGame;
 class CFrame;
@@ -37,6 +38,7 @@ public:
     bool init(const char *filearch, const char *configfile, int startLevel = 0);
 
 private:
+    void keyReflector(SDL_Keycode key, uint8_t keyState);
     using App = struct
     {
         SDL_Renderer *renderer;
@@ -45,8 +47,7 @@ private:
     };
 
     App m_app;
-
+    virtual bool loadScores() override;
+    virtual bool saveScores() override;
     static void cleanup();
-    void drawLevelIntro(CFrame &screen);
-    void mainLoop();
 };

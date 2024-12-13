@@ -15,8 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __GAME_H
-#define __GAME_H
+#pragma once
+
 #include <string>
 #include <cstdint>
 #include <unordered_map>
@@ -153,7 +153,7 @@ private:
         CActor::AIM_LEFT,
         CActor::AIM_RIGHT};
 
-    enum // game constants
+    enum : int // game constants
     {
         NeedleDrain = 32,
         HpBonus = 4,
@@ -286,5 +286,3 @@ private:
 
     friend class CActor;
 };
-
-#endif
