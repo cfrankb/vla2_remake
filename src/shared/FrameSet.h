@@ -16,8 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _FrameSet_H
-#define _FrameSet_H
+#pragma once
 
 #include <string>
 #include <unordered_map>
@@ -102,4 +101,3 @@ protected:
     std::unordered_map<std::string, std::string> m_tags;
     friend class CFrameArray;
 };
-#endif

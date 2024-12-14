@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __STRUCT_H
-#define __STRUCT_H
+#pragma once
 #include <cstdint>
 
 using scriptEntry_t = struct
@@ -29,5 +28,3 @@ using scriptEntry_t = struct
     uint8_t x;
     uint8_t y;
 };
-
-#endif

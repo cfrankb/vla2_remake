@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __DEFS_H
-#define __DEFS_H
+#pragma once
 
 // types
 
@@ -68,5 +67,3 @@
 #define TASK_DEST 3
 #define TASK_CHANGE 4
 #define TASK_MESSAGER 5
-
-#endif

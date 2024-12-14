@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __SCRIPTARCH
-#define __SCRIPTARCH
+#pragma once
 
 #include <string>
 #include <cstdint>
@@ -67,5 +66,3 @@ protected:
     uint32_t m_max;
     std::unique_ptr<CScript *[]> m_scripts;
 };
-
-#endif

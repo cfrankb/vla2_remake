@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef PNGMAGIC_H
-#define PNGMAGIC_H
+#pragma once
 
 #include <stdint.h>
 class CFrame;
@@ -63,5 +62,3 @@ private:
         const uint8_t trns[],
         int offsetY);
 };
-
-#endif // PNGMAGIC_H

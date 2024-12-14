@@ -16,9 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef FILEWRAP_H
-#define FILEWRAP_H
-
+#pragma once
 #include <string>
 #include "IFile.h"
 
@@ -69,5 +67,3 @@ protected:
 
     MEMFILE *findFile(const char *fileName);
 };
-
-#endif // FILEWRAP_H

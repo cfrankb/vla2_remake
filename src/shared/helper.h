@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __HELPER_H__LGCK
-#define __HELPER_H__LGCK
+#pragma once
 #include <string>
 #include <list>
 const char *toUpper(char *s);
@@ -30,4 +29,3 @@ int upperClean(int c);
 // #include <linux/limits.h>
 #endif
 int compressData(unsigned char *in_data, unsigned long in_size, unsigned char **out_data, unsigned long &out_size);
-#endif

@@ -15,9 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __IMSWRAP_H
-#define __IMSWRAP_H
-
+#pragma once
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -122,5 +120,3 @@ protected:
     stoEntry_t *m_stoData;
     uint8_t *m_imsTable;
 };
-
-#endif

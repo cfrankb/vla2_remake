@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __MAPENTRY_H
-#define __MAPENTRY_H
+#pragma once
 #include "mapentry.h"
 #include <cstdint>
 
@@ -119,4 +118,3 @@ public:
 
     void debug() const;
 };
-#endif

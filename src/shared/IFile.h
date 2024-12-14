@@ -16,15 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef IFILE_H
-#define IFILE_H
+#pragma once
 
 #include <string>
 
 class IFile
 {
 public:
-    virtual ~IFile(){};
+    virtual ~IFile() {};
 
     virtual IFile &operator>>(std::string &str) = 0;
     virtual IFile &operator<<(const std::string &str) = 0;
@@ -46,5 +45,3 @@ public:
     virtual void seek(long i) = 0;
     virtual long tell() = 0;
 };
-
-#endif // IFILE_H

@@ -15,8 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __DEBUG__H
-#define __DEBUG__H
+#pragma once
 
 class CScript;
 class CFrameSet;
@@ -30,5 +29,3 @@ void compositeAll();
 void generateSTX();
 void debugLevel(const char *filename, const char *tileset, CScript *script);
 void debugFrameMap(const char *outFile, CFrameMap *frameMap, CFrameSet *frameSet, uint8_t *fontData);
-
-#endif
