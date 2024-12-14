@@ -382,56 +382,13 @@ void CGameMixin::clearJoyStates()
 
 bool CGameMixin::read(FILE *sfile, std::string &name)
 {
-    /*
-    auto readfile = [sfile](auto ptr, auto size)
-    {
-        return fread(ptr, size, 1, sfile) == 1;
-    };
-    if (!m_game->read(sfile))
-    {
-        return false;
-    }
-    clearJoyStates();
-    clearKeyStates();
-    m_paused = false;
-    m_prompt = PROMPT_NONE;
-    readfile(&m_ticks, sizeof(m_ticks));
-    readfile(&m_playerFrameOffset, sizeof(m_playerFrameOffset));
-    readfile(&m_healthRef, sizeof(m_healthRef));
-    readfile(&m_countdown, sizeof(m_countdown));
-
-    size_t ptr = 0;
-    fseek(sfile, SAVENAME_PTR_OFFSET, SEEK_SET);
-    readfile(&ptr, sizeof(uint32_t));
-    fseek(sfile, ptr, SEEK_SET);
-    size_t size = 0;
-    readfile(&size, sizeof(uint16_t));
-    char *tmp = new char[size];
-    readfile(tmp, size);
-    name = tmp;
-    delete[] tmp;*/
+    printf("must be reimplemented in child class");
     return true;
 }
 
 bool CGameMixin::write(FILE *tfile, std::string &name)
 {
-    /*
-    auto writefile = [tfile](auto ptr, auto size)
-    {
-        return fwrite(ptr, size, 1, tfile) == 1;
-    };
-    m_game->write(tfile);
-    writefile(&m_ticks, sizeof(m_ticks));
-    writefile(&m_playerFrameOffset, sizeof(m_playerFrameOffset));
-    writefile(&m_healthRef, sizeof(m_healthRef));
-    writefile(&m_countdown, sizeof(m_countdown));
-
-    size_t ptr = ftell(tfile);
-    size_t size = name.size();
-    writefile(&size, sizeof(uint16_t));
-    writefile(name.c_str(), name.size());
-    fseek(tfile, SAVENAME_PTR_OFFSET, SEEK_SET);
-    writefile(&ptr, sizeof(uint32_t));*/
+    printf("must be reimplemented in child class");
     return true;
 }
 
@@ -655,6 +612,7 @@ void CGameMixin::mainLoop()
         {
             if (!m_hiscoreEnabled)
             {
+                m_countdown = game.define(IntroCountdown);
                 game.restartGame();
                 return;
             }

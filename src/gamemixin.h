@@ -115,7 +115,6 @@ protected:
         FONT_SIZE = 8,
         HealthBarHeight = 8,
         HealthBarOffset = 4,
-        HISCORE_DELAY = 5 * TICK_RATE,
     };
 
     struct hiscore_t

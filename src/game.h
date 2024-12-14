@@ -79,6 +79,9 @@ public:
     int oxygen();
     const std::unordered_set<uint16_t> &hideList();
     inline int playerHitCountdown() { return m_playerHitCountdown; }
+    bool read(FILE *sfile);
+    bool write(FILE *tfile);
+    bool readyLevel();
 
     enum GameMode
     {
@@ -86,10 +89,10 @@ public:
         MODE_LEVEL = 1,
         MODE_RESTART = 2,
         MODE_GAMEOVER = 3,
-        MODE_CLICKSTART,
-        MODE_HISCORES,
-        MODE_IDLE,
-        MODE_HELP,
+        MODE_CLICKSTART = 4,
+        MODE_HISCORES = 5,
+        MODE_IDLE = 6,
+        MODE_HELP = 7,
     };
 
     enum
@@ -108,6 +111,7 @@ public:
         BUTTON = 4,
         NOT_FOUND = 255,
         JUMP_SEQ_MAX = 14,
+        VERSION = 0
     };
 
 private:

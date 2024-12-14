@@ -39,6 +39,10 @@ public:
 
 private:
     void keyReflector(SDL_Keycode key, uint8_t keyState);
+    virtual bool read(FILE *sfile, std::string &name) override;
+    virtual bool write(FILE *sfile, std::string &name) override;
+    virtual void save() override;
+    virtual void load() override;
     using App = struct
     {
         SDL_Renderer *renderer;

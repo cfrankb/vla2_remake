@@ -42,6 +42,7 @@ constexpr const char INMA_ID[] = "INMA";
 constexpr const char FISH_ID[] = "FISH";
 constexpr const char SLUG_ID[] = "SLUG";
 constexpr const char GOLD_ID[] = "GOLD";
+constexpr const char GAME_SIGNATURE[] = {'V', 'L', 'A', '2'};
 
 static CGame *g_game = nullptr;
 #define typeref(__ref, __var) static_cast<decltype(__ref)>(__var)
@@ -115,25 +116,6 @@ bool CGame::loadLevel(int i)
         // read level
         result = m_script->read(sfile);
         fclose(sfile);
-        m_script->sort();
-        m_script->insertAt(0, CActor{});
-        m_goals = m_script->countType(TYPE_FLOWER);
-        // printf("flowers: %d\n", m_goals);
-        int i = m_script->findPlayerIndex();
-        if (i != CScript::NOT_FOUND)
-        {
-            CActor &entry = (*m_script)[i];
-            m_player = &entry;
-            entry.aim = CActor::AIM_DOWN;
-            //  printf("player found at: x=%d y=%d\n", entry.x, entry.y);
-        }
-        else
-        {
-            m_player = nullptr;
-            m_lastError = "no player found";
-            printf("%s\n", m_lastError.c_str());
-            return false;
-        }
     }
     else
     {
@@ -142,19 +124,43 @@ bool CGame::loadLevel(int i)
         return false;
     }
 
+    return readyLevel();
+}
+
+bool CGame::readyLevel()
+{
+    m_script->sort();
+    m_script->insertAt(0, CActor{});
+    m_goals = m_script->countType(TYPE_FLOWER);
+    // printf("flowers: %d\n", m_goals);
+    int i = m_script->findPlayerIndex();
+    if (i != CScript::NOT_FOUND)
+    {
+        CActor &entry = (*m_script)[i];
+        m_player = &entry;
+        entry.aim = CActor::AIM_DOWN;
+        //  printf("player found at: x=%d y=%d\n", entry.x, entry.y);
+    }
+    else
+    {
+        m_player = nullptr;
+        m_lastError = "no player found";
+        printf("%s\n", m_lastError.c_str());
+        return false;
+    }
+
     // load tileset
     const std::string tileset{m_script->tileset()};
-    if (result &&
-        (m_loadedTileSet != tileset) &&
+    if ((m_loadedTileSet != tileset) &&
         !loadTileset(tileset.c_str()))
     {
-        result = false;
         m_lastError = "loadTileset failed";
+        return false;
     }
     // map script
     mapScript(m_script);
     m_levelHeight = findLevelHeight();
-    return result;
+    return true;
 }
 
 const char *CGame::lastError()
@@ -1586,4 +1592,91 @@ int CGame::oxygen()
 const std::unordered_set<uint16_t> &CGame::hideList()
 {
     return m_config[m_loadedTileSet].hide;
+}
+
+bool CGame::read(FILE *sfile)
+{
+    auto readfile = [sfile](auto ptr, auto size)
+    {
+        return fread(ptr, size, 1, sfile) == 1;
+    };
+
+    // check signature/version
+    uint32_t signature = 0;
+    readfile(&signature, sizeof(signature));
+    uint32_t version = 0;
+    readfile(&version, sizeof(version));
+    if (memcmp(GAME_SIGNATURE, &signature, sizeof(GAME_SIGNATURE)) != 0)
+    {
+        char sig[5] = {0, 0, 0, 0, 0};
+        memcpy(sig, &signature, sizeof(signature));
+        printf("savegame signature mismatched: %s\n", sig);
+        return false;
+    }
+    if (version != VERSION)
+    {
+        printf("savegame version mismatched: 0x%.8x\n", version);
+        return false;
+    }
+
+    // ptr
+    uint32_t indexPtr = 0;
+    readfile(&indexPtr, sizeof(indexPtr));
+
+    // general information
+    m_script->read(sfile);
+
+    readfile(&m_goals, sizeof(m_goals));
+    readfile(&m_score, sizeof(m_score));
+    readfile(&m_hp, sizeof(m_hp));
+    readfile(&m_lives, sizeof(m_lives));
+    readfile(&m_oxygen, sizeof(m_oxygen));
+    readfile(&m_coins, sizeof(m_coins));
+    readfile(&m_level, sizeof(m_level));
+    readfile(&m_jumpFlag, sizeof(m_jumpFlag));
+    readfile(&m_jumpSeq, sizeof(m_jumpSeq));
+    readfile(&m_jumpIndex, sizeof(m_jumpIndex));
+    readfile(&m_playerFrameOffset, sizeof(m_playerFrameOffset));
+    readfile(&m_playerHitCountdown, sizeof(m_playerHitCountdown));
+    readfile(&m_underwaterCounter, sizeof(m_underwaterCounter));
+    readfile(&m_levelHeight, sizeof(m_levelHeight));
+
+    return true;
+}
+
+bool CGame::write(FILE *tfile)
+{
+    auto writefile = [tfile](auto ptr, auto size)
+    {
+        return fwrite(ptr, size, 1, tfile) == 1;
+    };
+
+    // writing signature/version
+    writefile(&GAME_SIGNATURE, sizeof(GAME_SIGNATURE));
+    uint32_t version = VERSION;
+    writefile(&version, sizeof(version));
+
+    // ptr
+    uint32_t indexPtr = 0;
+    writefile(&indexPtr, sizeof(indexPtr));
+
+    // general information
+    m_script->write(tfile);
+
+    writefile(&m_goals, sizeof(m_goals));
+    writefile(&m_score, sizeof(m_score));
+    writefile(&m_hp, sizeof(m_hp));
+    writefile(&m_lives, sizeof(m_lives));
+    writefile(&m_oxygen, sizeof(m_oxygen));
+    writefile(&m_coins, sizeof(m_coins));
+    writefile(&m_level, sizeof(m_level));
+    writefile(&m_jumpFlag, sizeof(m_jumpFlag));
+    writefile(&m_jumpSeq, sizeof(m_jumpSeq));
+    writefile(&m_jumpIndex, sizeof(m_jumpIndex));
+    writefile(&m_playerFrameOffset, sizeof(m_playerFrameOffset));
+    writefile(&m_playerHitCountdown, sizeof(m_playerHitCountdown));
+    writefile(&m_underwaterCounter, sizeof(m_underwaterCounter));
+    writefile(&m_levelHeight, sizeof(m_levelHeight));
+
+    return true;
 }

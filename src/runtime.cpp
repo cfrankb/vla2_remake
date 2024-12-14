@@ -302,3 +302,108 @@ bool CRuntime::saveScores()
     printf("can't write %s\n", HISCORE_FILE);
     return false;
 }
+
+bool CRuntime::read(FILE *sfile, std::string &name)
+{
+    auto readfile = [sfile](auto ptr, auto size)
+    {
+        return fread(ptr, size, 1, sfile) == 1;
+    };
+
+    printf("reading savegame");
+
+    if (!m_game->read(sfile))
+    {
+        return false;
+    }
+    clearJoyStates();
+    clearKeyStates();
+    m_paused = false;
+    m_prompt = PROMPT_NONE;
+    readfile(&m_ticks, sizeof(m_ticks));
+    readfile(&m_countdown, sizeof(m_countdown));
+
+    size_t ptr = 0;
+    fseek(sfile, SAVENAME_PTR_OFFSET, SEEK_SET);
+    readfile(&ptr, sizeof(uint32_t));
+    fseek(sfile, ptr, SEEK_SET);
+    size_t size = 0;
+    readfile(&size, sizeof(uint16_t));
+    char *tmp = new char[size];
+    readfile(tmp, size);
+    name = tmp;
+    delete[] tmp;
+    return m_game->readyLevel();
+}
+
+bool CRuntime::write(FILE *tfile, std::string &name)
+{
+    auto writefile = [tfile](auto ptr, auto size)
+    {
+        return fwrite(ptr, size, 1, tfile) == 1;
+    };
+
+    printf("writing savegame");
+
+    m_game->write(tfile);
+    writefile(&m_ticks, sizeof(m_ticks));
+    writefile(&m_countdown, sizeof(m_countdown));
+
+    size_t ptr = ftell(tfile);
+    size_t size = name.size();
+    writefile(&size, sizeof(uint16_t));
+    writefile(name.c_str(), name.size());
+    fseek(tfile, SAVENAME_PTR_OFFSET, SEEK_SET);
+    writefile(&ptr, sizeof(uint32_t));
+    return true;
+}
+
+void CRuntime::save()
+{
+    if (m_game->mode() != CGame::MODE_LEVEL)
+    {
+        printf("cannot save while not playing\n");
+        return;
+    }
+
+    printf("writing: %s\n", SAVEGAME_FILE);
+    std::string name{"Testing123"};
+    FILE *tfile = fopen(SAVEGAME_FILE, "wb");
+    if (tfile)
+    {
+        write(tfile, name);
+        fclose(tfile);
+#ifdef __EMSCRIPTEN__
+        EM_ASM(
+            FS.syncfs(function(err) {
+                // Error
+                err ? console.log(err) : null;
+            }));
+#endif
+    }
+    else
+    {
+        printf("can't write:%s\n", SAVEGAME_FILE);
+    }
+}
+
+void CRuntime::load()
+{
+    m_game->setMode(CGame::MODE_IDLE);
+    std::string name;
+    printf("reading: %s\n", SAVEGAME_FILE);
+    FILE *sfile = fopen(SAVEGAME_FILE, "rb");
+    if (sfile)
+    {
+        if (!read(sfile, name))
+        {
+            printf("incompatible file\n");
+        }
+        fclose(sfile);
+    }
+    else
+    {
+        printf("can't read:%s\n", SAVEGAME_FILE);
+    }
+    m_game->setMode(CGame::MODE_LEVEL);
+}
