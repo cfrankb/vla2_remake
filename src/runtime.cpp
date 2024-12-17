@@ -1,5 +1,5 @@
 /*
-    vlamits-runtime-sdl
+    vlamits2-runtime-sdl
     Copyright (C) 2024  Francois Blanchette
 
     This program is free software: you can redistribute it and/or modify
@@ -310,8 +310,6 @@ bool CRuntime::read(FILE *sfile, std::string &name)
         return fread(ptr, size, 1, sfile) == 1;
     };
 
-    printf("reading savegame");
-
     if (!m_game->read(sfile))
     {
         return false;
@@ -342,8 +340,6 @@ bool CRuntime::write(FILE *tfile, std::string &name)
     {
         return fwrite(ptr, size, 1, tfile) == 1;
     };
-
-    printf("writing savegame");
 
     m_game->write(tfile);
     writefile(&m_ticks, sizeof(m_ticks));
