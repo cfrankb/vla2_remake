@@ -27,11 +27,11 @@ constexpr const char IntroCountdown[] = "IntroCountdown";
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-const char HISCORE_FILE[] = "/offline/hiscores.dat";
-const char SAVEGAME_FILE[] = "/offline/savegame.dat";
+const char HISCORE_FILE[] = "/offline/hiscores-vl2.dat";
+const char SAVEGAME_FILE[] = "/offline/savegame-vl2.dat";
 #else
-const char HISCORE_FILE[] = "hiscores.dat";
-const char SAVEGAME_FILE[] = "savegame.dat";
+const char HISCORE_FILE[] = "hiscores-vl2.dat";
+const char SAVEGAME_FILE[] = "savegame-vl2.dat";
 #endif
 
 CRuntime::CRuntime() : CGameMixin()
