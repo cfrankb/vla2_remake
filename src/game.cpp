@@ -656,11 +656,11 @@ void CGame::manageDroneVariant(int i, CActor &actor, const char *signcall, int f
     mapEntry(i, actor);
 }
 
-void CGame::manageVamplant(int i, CActor &actor)
+void CGame::manageVamplant(const int i, CActor &actor)
 {
     for (uint8_t j = 0; j < sizeof(AIMS); ++j)
     {
-        uint8_t aim = AIMS[j];
+        const uint8_t aim = AIMS[j];
         if (isPlayerThere(actor, aim))
         {
             actor.attackPlayer();
@@ -669,11 +669,11 @@ void CGame::manageVamplant(int i, CActor &actor)
     }
 }
 
-void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, int frameCount)
+void CGame::manageVCreatureVariant(const int i, CActor &actor, const char *signcall, const int frameCount, const bool ableToLeap)
 {
     for (uint8_t j = 0; j < sizeof(AIMS); ++j)
     {
-        uint8_t aim = AIMS[j];
+        const uint8_t aim = AIMS[j];
         if (isPlayerThere(actor, aim))
         {
             actor.attackPlayer();
@@ -682,9 +682,14 @@ void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, i
     }
 
     unmapEntry(i, actor);
-    int aim = actor.findNextDir();
+    int aim = actor.findNextDir(ableToLeap);
     if (aim != AIM_NONE)
     {
+        if (aim & CActor::AIM_LEAP)
+        {
+            aim ^= CActor::AIM_LEAP;
+            actor.move(UP);
+        }
         actor.move(aim);
         actor.aim = aim;
     }
@@ -699,7 +704,7 @@ void CGame::manageVCreatureVariant(int i, CActor &actor, const char *signcall, i
     mapEntry(i, actor);
 }
 
-void CGame::manageFlyingPlatform(int i, CActor &actor)
+void CGame::manageFlyingPlatform(const int i, CActor &actor)
 {
     uint8_t aim{actor.aim};
     uint8_t pAim{NOT_FOUND};
@@ -742,7 +747,7 @@ void CGame::manageFlyingPlatform(int i, CActor &actor)
 }
 
 /// @brief
-void CGame::manageMonsters(uint32_t ticks)
+void CGame::manageMonsters(const uint32_t ticks)
 {
     // compute all time slices
     bool speeds[speedCount];
@@ -786,19 +791,19 @@ void CGame::manageMonsters(uint32_t ticks)
             manageVamplant(i, actor);
             break;
         case TYPE_VCREA:
-            manageVCreatureVariant(i, actor, nullptr, VCreaFrameCycle);
+            manageVCreatureVariant(i, actor, nullptr, VCreaFrameCycle, false);
             break;
         case TYPE_FLYPLAT:
             manageFlyingPlatform(i, actor);
             break;
         case TYPE_CANNIBAL:
-            manageVCreatureVariant(i, actor, CANN_ID, CannibalFrameCycle);
+            manageVCreatureVariant(i, actor, CANN_ID, CannibalFrameCycle, true);
             break;
         case TYPE_INMANGA:
             manageDroneVariant(i, actor, INMA_ID, InMangaFrameCycle);
             break;
         case TYPE_GREENFLEA:
-            manageVCreatureVariant(i, actor, SLUG_ID, FleaFrameCycle);
+            manageVCreatureVariant(i, actor, SLUG_ID, FleaFrameCycle, true);
         };
     }
 }

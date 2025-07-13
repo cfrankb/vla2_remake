@@ -31,6 +31,10 @@ public:
         AIM_DOWN,
         AIM_LEFT,
         AIM_RIGHT,
+        AIM_FILTER = 3,
+        AIM_LEAP = 4,
+        AIM_LEAP_LEFT = AIM_LEAP | AIM_LEFT,
+        AIM_LEAP_RIGHT = AIM_LEAP | AIM_RIGHT,
         BUTTON,
         TOTAL_AIMS = 4,
         AIM_NONE = 255
@@ -59,17 +63,17 @@ public:
     uint8_t x;
     uint8_t y;
 
-    bool canMove(int aim) const;
-    bool canLeap(int aim) const;
-    bool isPlayerThere(int aim) const;
-    bool move(int aim);
+    bool canMove(const int aim) const;
+    bool canLeap(const int aim) const;
+    bool isPlayerThere(const int aim) const;
+    bool move(const int aim);
     bool canFall() const;
     void debug() const;
     void clear();
     void attackPlayer() const;
     void killPlayer() const;
     void flipDir();
-    int findNextDir() const;
-    bool testAim(int aim) const;
-    bool isFalling(int aim) const;
+    int findNextDir(const bool ableToLeap) const;
+    bool testAim(const int aim) const;
+    bool isFalling(const int aim) const;
 };

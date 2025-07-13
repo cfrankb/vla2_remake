@@ -28,17 +28,17 @@ CActor::~CActor()
 {
 }
 
-bool CActor::canMove(int aim) const
+bool CActor::canMove(const int aim) const
 {
     return CGame::getGame()->canMove(*this, aim);
 }
 
-bool CActor::canLeap(int aim) const
+bool CActor::canLeap(const int aim) const
 {
     return CGame::getGame()->canLeap(*this, aim);
 }
 
-bool CActor::move(int aim)
+bool CActor::move(const int aim)
 {
     switch (aim)
     {
@@ -71,7 +71,7 @@ void CActor::clear()
     memset(this, 0, sizeof(CActor));
 }
 
-bool CActor::isPlayerThere(int aim) const
+bool CActor::isPlayerThere(const int aim) const
 {
     return CGame::getGame()->isPlayerThere(*this, aim);
 }
@@ -96,7 +96,7 @@ bool CActor::canFall() const
     return CGame::getGame()->canFall(*this);
 }
 
-int CActor::findNextDir() const
+int CActor::findNextDir(const bool ableToLeap) const
 {
     constexpr static uint8_t AIMS[] = {
         AIM_DOWN, AIM_RIGHT, AIM_UP, AIM_LEFT,
@@ -107,8 +107,17 @@ int CActor::findNextDir() const
     int i = TOTAL_AIMS - 1;
     while (i >= 0)
     {
-        int newAim = AIMS[aim * TOTAL_AIMS + i];
-        if (testAim(newAim))
+        const int newAim = AIMS[aim * TOTAL_AIMS + i];
+        bool ok = testAim(newAim);
+        if (!ok && ableToLeap &&
+            (newAim == AIM_LEFT || newAim == AIM_RIGHT))
+        {
+            if (ok = canLeap(newAim))
+            {
+                return AIM_LEAP | newAim;
+            }
+        }
+        else if (ok)
         {
             return newAim;
         }
@@ -117,12 +126,12 @@ int CActor::findNextDir() const
     return AIM_NONE;
 }
 
-bool CActor::testAim(int aim) const
+bool CActor::testAim(const int aim) const
 {
     return CGame::getGame()->testAim(*this, aim);
 }
 
-bool CActor::isFalling(int aim) const
+bool CActor::isFalling(const int aim) const
 {
     return CGame::getGame()->isFalling(*this, aim);
 }

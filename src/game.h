@@ -56,7 +56,7 @@ public:
     bool isPlayerDead();
     void managePlayer(const uint8_t *joyState);
     bool manageJump(const uint8_t *joyState);
-    void manageMonsters(uint32_t ticks);
+    void manageMonsters(const uint32_t ticks);
     void setLevel(const int i);
     int level();
     int lives();
@@ -276,10 +276,10 @@ private:
     void attackPlayer(const CActor &actor);
     void killPlayer(const CActor &actor);
     void killPlayer();
-    void manageVamplant(int i, CActor &actor);
-    void manageVCreatureVariant(int i, CActor &actor, const char *signcall, int frameCount);
-    void manageFlyingPlatform(int i, CActor &actor);
-    void manageDroneVariant(int i, CActor &actor, const char *signcall, int frameCount);
+    void manageVamplant(const int i, CActor &actor);
+    void manageVCreatureVariant(const int i, CActor &actor, const char *signcall, const int frameCount, const bool ableToLeap);
+    void manageFlyingPlatform(const int i, CActor &actor);
+    void manageDroneVariant(const int i, CActor &actor, const char *signcall, const int frameCount);
     void managePlayerOxygenControl();
     bool readConfig(const char *confName);
     char *parseLine(int &line, std::string &tileset, char *p);
