@@ -68,6 +68,7 @@ public:
     bool isPlayerThere(const int aim) const;
     bool move(const int aim);
     bool canFall() const;
+    int fallHeight() const;
     void debug() const;
     void clear();
     void attackPlayer() const;

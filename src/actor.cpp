@@ -96,32 +96,66 @@ bool CActor::canFall() const
     return CGame::getGame()->canFall(*this);
 }
 
+int CActor::fallHeight() const
+{
+    int h = 0;
+    CActor tmp{*this};
+    while (tmp.canFall() && (h < 100))
+    {
+        tmp.move(AIM_DOWN);
+        ++h;
+    }
+    return h;
+}
+
 int CActor::findNextDir(const bool ableToLeap) const
 {
-    constexpr static uint8_t AIMS[] = {
+    constexpr uint8_t AIMS[] = {
         AIM_DOWN, AIM_RIGHT, AIM_UP, AIM_LEFT,
         AIM_UP, AIM_LEFT, AIM_DOWN, AIM_RIGHT,
         AIM_RIGHT, AIM_UP, AIM_LEFT, AIM_DOWN,
         AIM_LEFT, AIM_DOWN, AIM_RIGHT, AIM_UP};
 
-    int i = TOTAL_AIMS - 1;
-    while (i >= 0)
+    for (int i = TOTAL_AIMS - 1; i >= 0; --i)
     {
         const int newAim = AIMS[aim * TOTAL_AIMS + i];
-        bool ok = testAim(newAim);
-        if (!ok && ableToLeap &&
+        if (ableToLeap &&
             (newAim == AIM_LEFT || newAim == AIM_RIGHT))
         {
-            if (ok = canLeap(newAim))
+            if (canMove(newAim))
             {
-                return AIM_LEAP | newAim;
+                CActor tmp{*this};
+                tmp.move(newAim);
+                if (tmp.fallHeight() > 2)
+                    continue;
+
+                if (canMove(newAim))
+                    tmp.move(newAim);
+                else
+                    continue;
+
+                if (tmp.fallHeight() > 2)
+                    continue;
+                return newAim;
+            }
+            else if (canLeap(newAim))
+            {
+                CActor tmp{*this};
+                tmp.move(AIM_UP);
+                tmp.move(newAim);
+                if (tmp.fallHeight() < 3)
+                {
+                    return AIM_LEAP | newAim;
+                }
             }
         }
-        else if (ok)
+        else
         {
-            return newAim;
+            if (testAim(newAim))
+            {
+                return newAim;
+            }
         }
-        --i;
     }
     return AIM_NONE;
 }
